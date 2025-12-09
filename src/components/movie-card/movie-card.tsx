@@ -1,27 +1,51 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Card } from "react-native-elements";
+import type { Movie } from "@/src/redux/types";
 import styles from "./styles";
 
-export default function MovieCard({movie}) {
-    return (
-        <TouchableOpacity style={styles.card}>
-            <Card>
-                <Card.Image
-                source={{uri:movie.poster}}
-                style={styles.poster}
-                resizeMode="cover"
-                />
-            
-            <Text style={styles.title} numberOfLines={1}>{movie.title} </Text>
-            <Text style={styles.year}>{movie.year}</Text>
+interface MovieCardProps {
+  movie: Movie;
+}
 
-            {movie.genres && movie.genres.length > 0 && (
-            <View style={styles.badge}>
-                <Text style={styles.badgeText}>{movie.genres[0].Name}</Text>
-            </View>
-            )}
-            </Card>
-        </TouchableOpacity>
-    );
+export default function MovieCard({ movie }: MovieCardProps) {
+  // FIX: Extract the genre NAME from the genre object
+  const getFirstGenre = () => {
+    if (!movie.genres || movie.genres.length === 0) {
+      return "Unknown";
+    }
+    
+    // The API has a weird tab character in the key name
+    const genre = movie.genres[0];
+    return genre["NameEN\t"] || genre.Name || "Unknown";
+  };
+
+  const handlePress = () => {
+    console.log("Movie pressed:", movie.title);
+    // TODO: Navigate to movie detail
+    // navigation.navigate('MovieDetail', { movieId: movie.id });
+  };
+
+  return (
+    <TouchableOpacity style={styles.card} onPress={handlePress}>
+      <Card>
+        <Card.Image
+          source={{ uri: movie.poster }}
+          style={styles.poster}
+          resizeMode="cover"
+        />
+
+        <Text style={styles.title} numberOfLines={1}>
+          {movie.title}
+        </Text>
+        
+        <Text style={styles.year}>{movie.year}</Text>
+        
+        {/* FIX: Display the genre NAME, not the object */}
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{getFirstGenre()}</Text>
+        </View>
+      </Card>
+    </TouchableOpacity>
+  );
 }

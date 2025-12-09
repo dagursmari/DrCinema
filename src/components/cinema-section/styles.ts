@@ -17,5 +17,12 @@ export default StyleSheet.create({
     color: "black",
     padding:10,
     marginLeft:15,
-  }
+  },
+  section: {
+    marginBottom: 24,
+    paddingVertical: 12,
+  },
+  moviesList: {
+    paddingHorizontal: 12,
+  },
 });
