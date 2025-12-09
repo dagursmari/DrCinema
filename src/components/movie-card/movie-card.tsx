@@ -12,10 +12,11 @@ export default function MovieCard({movie}) {
                 style={styles.poster}
                 resizeMode="cover"
                 />
-            <Text style={styles.title}>{movie.title}</Text>
+            
+            <Text style={styles.title} numberOfLines={1}>{movie.title} </Text>
             <Text style={styles.year}>{movie.year}</Text>
             <View style={styles.badge}>
-            <Text style={styles.badgeText}>{movie.genres}</Text>
+            <Text style={styles.badgeText}>{movie.genres[0]}</Text>
             </View>
             </Card>
         </TouchableOpacity>

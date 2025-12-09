@@ -2,8 +2,15 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   card: {
-    width: 160,
+    width: 220,
+    height: 380,
     marginRight: 16,
+    justifyContent: "space-between",
+  },
+
+  content: {
+    flex: 1,
+    justifyContent: "flex-end",
   },
 
   poster: {
