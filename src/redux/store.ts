@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 // Import all the reducers (warehouse workers)
 import moviesReducer from './slices/movies-slice';
 import favoritesReducer from './slices/favorites-slice';
+import cinemasReducer from "./slices/cinemas-slice"
 // TODO: Import cinemasReducer, upcomingReducer, genresReducer when you create them
 
 /**
@@ -13,8 +14,8 @@ export const store = configureStore({
   reducer: {
     movies: moviesReducer,       // Movies shelf
     favorites: favoritesReducer, // Favorites shelf
+    cinemas: cinemasReducer,
     // TODO: Add other reducers here
-    // cinemas: cinemasReducer,
     // upcoming: upcomingReducer,
     // genres: genresReducer,
   },
