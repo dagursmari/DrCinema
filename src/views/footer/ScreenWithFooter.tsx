@@ -8,19 +8,18 @@ import styles from "./styles";
 type ScreenWithFooterProps = {
   children: ReactNode;
 };
-
-export const ScreenWithFooter: React.FC<ScreenWithFooterProps> = ({ children }) => {
+export const ScreenWithFooter = ({ children }: { children: React.ReactNode }) => {
   return (
     <View style={styles.root}>
-      {/* Content (top/side safe area only) */}
-      <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
+      {/* no "top" here → header handles the top already */}
+      <SafeAreaView style={styles.safeArea} edges={["left", "right", "bottom"]}>
         {children}
       </SafeAreaView>
 
-      {/* Footer overlaid on top, stuck to the very bottom */}
       <View pointerEvents="box-none" style={styles.footerOverlay}>
         <Footer />
       </View>
     </View>
   );
 };
+
