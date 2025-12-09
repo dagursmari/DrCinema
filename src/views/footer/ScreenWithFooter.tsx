@@ -1,5 +1,7 @@
+// src/views/footer/ScreenWithFooter.tsx
 import React, { ReactNode } from "react";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "@/src/components/footer/Footer";
 import styles from "./styles";
 
@@ -10,13 +12,15 @@ type ScreenWithFooterProps = {
 export const ScreenWithFooter: React.FC<ScreenWithFooterProps> = ({ children }) => {
   return (
     <View style={styles.root}>
-      {/* Safe area only for the content */}
-      <SafeAreaView style={styles.safeArea}>
+      {/* Content (top/side safe area only) */}
+      <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
         {children}
       </SafeAreaView>
 
-      {/* Footer always at the bottom */}
-      <Footer />
+      {/* Footer overlaid on top, stuck to the very bottom */}
+      <View pointerEvents="box-none" style={styles.footerOverlay}>
+        <Footer />
+      </View>
     </View>
   );
 };

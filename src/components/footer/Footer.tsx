@@ -41,7 +41,7 @@ export default function Footer() {
           >
             <Ionicons
               name={tab.icon}
-              size={22}
+              size={28}
               style={styles.icon}
               color={isActive ? "#FF748B" : "#C4C4C4"}
             />
