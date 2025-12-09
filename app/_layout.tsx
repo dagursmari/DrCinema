@@ -22,7 +22,7 @@ export default function RootLayout() {
       <Stack.Screen 
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "DrCinema"
         }}
         />
