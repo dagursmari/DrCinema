@@ -1,32 +1,10 @@
 import { StyleSheet } from "react-native";
-import { white, shadow, mainPink } from "@/src/styles/colors";
+import { mainPink, shadow, white } from "@/src/styles/colors";
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: white,
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingTop: 150,
-        paddingBottom: 60,
-        paddingHorizontal: 40,
-    },
-
-    logoContainer: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
-    logo: {
-        width: 600,
-        height: 600,
-    },
-
-    buttonsContainer: {
         width: "100%",
         gap: 16,
-        paddingBottom: 20,
     },
 
     signupButton: {
@@ -35,7 +13,7 @@ export default StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 25,
         alignItems: "center",
-        shadowColor: mainPink,
+        shadowColor: shadow,
         shadowOffset: {
             width: 0,
             height: 4,
@@ -74,6 +52,24 @@ export default StyleSheet.create({
         color: mainPink,
         fontSize: 18,
         fontWeight: "bold",
+        textAlign: "center",
+    },
+
+    testButton: {
+        backgroundColor: "#F8F9FA",
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 20,
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#E9ECEF",
+        marginTop: 8,
+    },
+
+    testButtonText: {
+        color: "#6c757d",
+        fontSize: 14,
+        fontWeight: "600",
         textAlign: "center",
     },
 });

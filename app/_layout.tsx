@@ -30,31 +30,31 @@ export default function RootLayout() {
         <Stack.Screen 
         name="home-screen"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Home Screen"
         }}
         />
 
         <Stack.Screen 
-        name="Signup"
+        name="signup"
         options={{
-          headerShown: true,
-          title: "Signup Screen"
+          headerShown: false,
+          title: "Sign Up"
         }}
         />
 
         <Stack.Screen 
-        name="Login"
+        name="login"
         options={{
-          headerShown: true,
-          title: "Login Screen"
+          headerShown: false,
+          title: "Login"
         }}
         />
 
         <Stack.Screen 
         name="cinemas-screen"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Cinemas Screen"
         }}
         />

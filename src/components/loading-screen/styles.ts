@@ -5,12 +5,17 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: white,
+        alignItems: "center",
+        justifyContent: "center",
     },
 
-    scrollContainer: {
-        flexGrow: 1,
+    logoContainer: {
+        alignItems: "center",
         justifyContent: "center",
-        paddingHorizontal: 40,
-        paddingVertical: 40,
+    },
+
+    logo: {
+        width: 600,
+        height: 600,
     },
 });

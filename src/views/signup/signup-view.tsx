@@ -1,9 +1,43 @@
-import { Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
+import { SignupForm } from "@/src/components/signup-form/signup-form";
+import styles from "./styles";
 
 export function SignupView() {
-    return( 
-        <View>
-        <Text>Signup Screen View</Text>
-        </View>
+    const router = useRouter();
+
+    const handleSuccess = () => {
+        router.replace("/home-screen");
+    };
+
+    const handleContinueAsGuest = () => {
+        router.replace("/home-screen");
+    };
+
+    return (
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <ScrollView
+                contentContainerStyle={styles.scrollContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+            >
+                <SignupForm 
+                    onSuccess={handleSuccess}
+                    onContinueAsGuest={handleContinueAsGuest}
+                />
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
+// import { Text, View } from "react-native";
+
+// export function SignupView() {
+//     return( 
+//         <View>
+//         <Text>Signup Screen View</Text>
+//         </View>
+//     );
+// }
