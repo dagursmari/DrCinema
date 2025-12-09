@@ -15,10 +15,13 @@ export default function MovieCard({movie}) {
             
             <Text style={styles.title} numberOfLines={1}>{movie.title} </Text>
             <Text style={styles.year}>{movie.year}</Text>
+
+            {movie.genres && movie.genres.length > 0 && (
             <View style={styles.badge}>
-            <Text style={styles.badgeText}>{movie.genres[0]}</Text>
+                <Text style={styles.badgeText}>{movie.genres[0].Name}</Text>
             </View>
+            )}
             </Card>
         </TouchableOpacity>
-    )
+    );
 }
