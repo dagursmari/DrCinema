@@ -7,7 +7,7 @@ import { fetchMovies } from "@/src/redux/slices/movies-slice";
 import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
 import { CinemaSectionComp } from "@/src/components/cinema-section/cinema-section";
 import SearchBarComp from "@/src/components/searchbar/searchbar";
-import { ScreenWithFooter } from "../footer/footer";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 import styles from "./styles";
 import type { Cinema, Movie } from "@/src/redux/types";
 
