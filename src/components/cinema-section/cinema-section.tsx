@@ -1,5 +1,5 @@
 import type { Cinema, Movie } from "@/src/redux/types";
-import { default as React, default as React } from "react";
+import React from "react";
 import { FlatList, Text, View } from "react-native";
 import MovieCard from "../movie-card/movie-card";
 import styles from "./styles";
