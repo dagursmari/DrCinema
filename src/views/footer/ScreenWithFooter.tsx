@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { SafeAreaView, View } from "react-native";
-import  Footer  from "@/src/components/footer/Footer"; // adjust path if default export
+import Footer from "@/src/components/footer/Footer";
+import styles from "./styles";
 
 type ScreenWithFooterProps = {
   children: ReactNode;
@@ -8,11 +9,14 @@ type ScreenWithFooterProps = {
 
 export const ScreenWithFooter: React.FC<ScreenWithFooterProps> = ({ children }) => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
+    <View style={styles.root}>
+      {/* Safe area only for the content */}
+      <SafeAreaView style={styles.safeArea}>
         {children}
-      </View>
+      </SafeAreaView>
+
+      {/* Footer always at the bottom */}
       <Footer />
-    </SafeAreaView>
+    </View>
   );
 };
