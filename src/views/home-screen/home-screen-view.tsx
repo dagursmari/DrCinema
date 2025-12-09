@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
-import { ScreenWithFooter } from "../footer/footer";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 
 export function HomeScreenView({ movies }) {
