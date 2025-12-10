@@ -7,9 +7,10 @@ import styles from "./styles";
 
 interface MovieCardProps {
   movie: Movie;
+  cinema: Cinema
 }
 
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({ movie, cinema }: MovieCardProps) {
   // FIX: Extract the genre NAME from the genre object
   const getFirstGenre = () => {
     if (!movie.genres || movie.genres.length === 0) {
@@ -21,13 +22,9 @@ export default function MovieCard({ movie }: MovieCardProps) {
     return genre["NameEN\t"] || genre.Name || "Unknown";
   };
 
-  const movieId = useLocalSearchParams()
-
   const handlePress = () => {
-    console.log("Movie pressed:", movie.id);
-    // TODO: Navigate to movie detail
     router.push(
-        `/movie-screen?id=${movie.id}`
+        `/movie-screen?id=${movie.id}&cinemaId=${cinema.id}`
     );
   };
 

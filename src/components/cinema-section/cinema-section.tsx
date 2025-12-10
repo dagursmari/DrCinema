@@ -7,10 +7,9 @@ import styles from "./styles";
 interface CinemaSectionProps {
   cinema: Cinema;
   movies: Movie[];
-  onMoviePress: (movieId: number) => void;
 }
 
-export function CinemaSectionComp({ cinema, movies, onMoviePress}: CinemaSectionProps) {
+export function CinemaSectionComp({ cinema, movies, }: CinemaSectionProps) {
     
 
   return (
@@ -28,7 +27,7 @@ export function CinemaSectionComp({ cinema, movies, onMoviePress}: CinemaSection
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.8}>
-            <MovieCard movie={item} />             
+            <MovieCard movie={item} cinema={cinema} />             
           </TouchableOpacity>
         )}
       />
