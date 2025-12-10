@@ -1,118 +1,201 @@
 import { useAppSelector } from "@/src/redux/hooks";
-import { useLocalSearchParams } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { RatingsSection } from "../ratings/rating-section";
 import { ShowtimesSection } from "../showtimes/showtimes-section";
 import { TrailerPlayer } from "../trailer/trailerplayer";
 import styles from "./styles";
 
-export default function MovieDetailsComp () {
+export default function MovieDetailsComp() {
+  const router = useRouter();
+  const { id, cinemaId } = useLocalSearchParams<{ id: string; cinemaId: string }>();
 
-    const {id, cinemaId} = useLocalSearchParams<{ id: string; cinemaId: string }>()
+  const movie = useAppSelector((state) =>
+    state.movies.movies.find((m) => m.id === Number(id))
+  );
+
+  if (!movie) {
+    return <Text>Movie not found</Text>;
+  }
+
+  const omdbData = movie.omdb?.[0];
+  const writers = omdbData?.Writer ? omdbData.Writer.split(",").map((w) => w.trim()) : [];
+
+  const cinemaShowtime = movie.showtimes?.find(
+    (st) => st.cinema.id === Number(cinemaId)
+  );
+
+  const trailers = movie.trailers?.[0]?.results ?? [];
+
+  const officialTrailer =
+    trailers.find((trailer) => trailer.name.toLowerCase().includes("official trailer")) ?? null;
+
+  const handleFavoritePress = () => {
+    console.log("Favorite button pressed - functionality coming soon!");
+  };
+
+  const handleBackPress = () => {
+    router.back();
+  };
+
+  // Get certificate/rating - show N/A if not available
+  const certificate = movie.omdb?.[0]?.Rated || "PG - N/A";
+
+  // Calculate average rating from all sources
+  const calculateAverageRating = (): string => {
+    const ratings = [];
     
-      const movie = useAppSelector((state) => 
-        state.movies.movies.find(m => m.id === Number(id))
-      );
+    // IMDB rating (out of 10)
+    if (movie.ratings?.imdb && typeof movie.ratings.imdb === 'number') {
+      ratings.push(movie.ratings.imdb);
+    }
+    
+    // Rotten Tomatoes (convert from percentage to 10 scale)
+    if (movie.ratings && 'rottenTomatoes' in movie.ratings && typeof movie.ratings.rottenTomatoes === 'number') {
+      ratings.push(movie.ratings.rottenTomatoes / 10);
+    }
+    
+    // Metacritic (convert from 100 scale to 10 scale)
+    if (movie.ratings && 'metacritic' in movie.ratings && typeof movie.ratings.metacritic === 'number') {
+      ratings.push(movie.ratings.metacritic / 10);
+    }
 
-      const omdbData = movie.omdb?.[0];
-        const writers = omdbData?.Writer 
-        ? omdbData.Writer.split(',').map(w => w.trim())
-       : [];
+    if (ratings.length === 0) {
+      return "N/A";
+    }
 
-       const cinemaShowtime = movie.showtimes?.find(
-            st => st.cinema.id === Number(cinemaId)
-        ); 
+    const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    return average.toFixed(1);
+  };
 
-        const trailers = movie.trailers?.[0]?.results ?? [];
+  const averageRating = calculateAverageRating();
 
-        const officialTrailer = trailers.find(trailer =>
-        trailer.name.toLowerCase().includes("official trailer")
-        ) ?? null;
-        
-      if (!movie) {
-      return <Text>Movie not found</Text>;
-      }
+  return (
+    <View style={styles.container}>
+      {/* Back and Favorite buttons */}
+      <View style={styles.headerButtons}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+          <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+        </TouchableOpacity>
 
-    return (
-        <View>
+        <TouchableOpacity style={styles.favoriteButton} onPress={handleFavoritePress}>
+          <Ionicons name="heart-outline" size={28} color="#E94560" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Poster */}
+      <View style={styles.posterContainer}>
         <Image style={styles.poster} source={{ uri: movie.poster }} />
-              <Text style={styles.title}>{movie.title}</Text>
+      </View>
 
-              <View style={styles.infoBox}>
-                <View style={styles.infoItem}>
-                    <Text style={styles.infoNumber}>{movie.durationMinutes}</Text>
-                    <Text style={styles.infoLabel}>Minútur</Text>
-                </View>
-
-                <View style={styles.infoItem}>
-                    <Text style={styles.infoNumber}>{movie.ratings?.average || "N/A"}</Text>
-                    <Text style={styles.infoLabel}>Rating</Text>
-                </View>
-
-                <View style={styles.infoItem}>
-                    <Text style={styles.infoNumber}>{movie.year}</Text>
-                    <Text style={styles.infoLabel}>Year</Text>
-                </View>
-                </View>
-
-              <Text style={styles.subheader}>Plot</Text>
-              <Text style={styles.subtext}>{movie.plot}</Text>
-
-              <Text style={styles.subheader}>Credits</Text>
-              <Text style={styles.subtext}>Director: {movie.directors_abridged?.map((director, index) => (
-                <Text key={index}>
-                    {director.name}{index < movie.directors_abridged.length - 1 ? ', ' : ''}
-                    </Text>
-              ))}</Text>
-              <Text style={styles.subtext}>Writers: {writers.join(", " || "N/A" )}</Text>
-              <Text style={styles.subtext}>
-                Starring: {movie.actors_abridged?.map((actor, index) => (
-                    <Text key={index}>
-                    {actor.name}{index < movie.actors_abridged.length - 1 ? ', ' : ''}
-                    </Text>
-                ))}
-                </Text>
-              <Text style={styles.subtext}>Country: {movie.omdb?.[0]?.Country ?? "N/A"}</Text>
-
-              <Text style={styles.subheader}>Ratings</Text>
-              <View style={styles.ratings}>
-                <RatingsSection ratings={movie.ratings} />
-              </View>
-
-              <Text style={styles.subheader}>Genres</Text>
-                <View style={styles.badgeContainer}>
-                {movie.genres?.map((genre, index) => (
-                    <View style={styles.badge} key={index}>
-                    <Text style={styles.badgeText}>{genre.Name}</Text>
-                    </View>
-                ))}
-                </View>
-            
-            
-
-              <Text style={styles.subheader}>Showtimes</Text>
-            <View style={styles.showtimesection}>
-            {cinemaShowtime ? (
-            <>
-                <ShowtimesSection 
-                showtimes={[
-                    {
-                    cinema: cinemaShowtime.cinema,
-                    schedule: cinemaShowtime.schedule
-                    }
-                ]}
-                />
-            </>
-            ) : (
-            <Text>No showtimes available for this cinema</Text>
-            )}
-
-            </View>
-
-            <Text style={styles.subheader}>Watch Trailer</Text>
-
-            <TrailerPlayer trailer={officialTrailer}/>
-          
+      {/* Title and Certificate */}
+      <View style={styles.titleSection}>
+        <Text style={styles.title}>{movie.title}</Text>
+        <View style={styles.certificateBadge}>
+          <Text style={styles.certificateText}>{certificate}</Text>
         </View>
-    );
+      </View>
+
+      {/* Info Box - with average rating */}
+      <View style={styles.infoBox}>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoNumber}>{movie.durationMinutes}</Text>
+          <Text style={styles.infoLabel}>Minutes</Text>
+        </View>
+
+        <View style={styles.infoItem}>
+          <Text style={styles.infoNumber}>{averageRating}</Text>
+          <Text style={styles.infoLabel}>Rating</Text>
+        </View>
+
+        <View style={styles.infoItem}>
+          <Text style={styles.infoNumber}>{movie.year}</Text>
+          <Text style={styles.infoLabel}>Year</Text>
+        </View>
+      </View>
+
+      {/* Plot */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Plot</Text>
+        <Text style={styles.sectionText}>{movie.plot}</Text>
+      </View>
+
+      {/* Credits */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Credits</Text>
+        <View style={styles.creditRow}>
+          <Text style={styles.creditLabel}>Director:</Text>
+          <Text style={styles.creditValue}>
+            {movie.directors_abridged?.map((director, index) => (
+              <Text key={index}>
+                {director.name}
+                {index < movie.directors_abridged.length - 1 ? ", " : ""}
+              </Text>
+            ))}
+          </Text>
+        </View>
+        <View style={styles.creditRow}>
+          <Text style={styles.creditLabel}>Writers:</Text>
+          <Text style={styles.creditValue}>{writers.join(", ") || "N/A"}</Text>
+        </View>
+        <View style={styles.creditRow}>
+          <Text style={styles.creditLabel}>Starring:</Text>
+          <Text style={styles.creditValue}>
+            {movie.actors_abridged?.map((actor, index) => (
+              <Text key={index}>
+                {actor.name}
+                {index < movie.actors_abridged.length - 1 ? ", " : ""}
+              </Text>
+            ))}
+          </Text>
+        </View>
+        <View style={styles.creditRow}>
+          <Text style={styles.creditLabel}>Country:</Text>
+          <Text style={styles.creditValue}>{movie.omdb?.[0]?.Country ?? "N/A"}</Text>
+        </View>
+      </View>
+
+      {/* Ratings */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Ratings</Text>
+        <RatingsSection ratings={movie.ratings} />
+      </View>
+
+      {/* Genres */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Genres</Text>
+        <View style={styles.genresContainer}>
+          {movie.genres?.map((genre, index) => (
+            <View style={styles.genreBadge} key={index}>
+              <Text style={styles.genreBadgeText}>{genre.Name}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      {/* Showtimes */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Showtimes</Text>
+        {cinemaShowtime ? (
+          <ShowtimesSection
+            showtimes={[
+              {
+                cinema: cinemaShowtime.cinema,
+                schedule: cinemaShowtime.schedule,
+              },
+            ]}
+          />
+        ) : (
+          <Text style={styles.noShowtimesText}>No showtimes available for this cinema</Text>
+        )}
+      </View>
+
+      {/* Trailer */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Watch Trailer</Text>
+        <TrailerPlayer trailer={officialTrailer} />
+      </View>
+    </View>
+  );
 }
