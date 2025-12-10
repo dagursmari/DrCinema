@@ -20,9 +20,6 @@ export const store = configureStore({
   },
 });
 
-// ==========================================
-// TypeScript Magic
-// ==========================================
-// These types let TypeScript know the shape of your store
+// These types let TypeScript know the shape of the store
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
