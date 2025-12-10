@@ -99,6 +99,15 @@ export default function RootLayout() {
         }}
         />
 
+        <Stack.Screen 
+        name="upcoming"
+        options={{
+          headerShown: true,
+          title: "Upcoming Movies",
+          headerBackVisible: false,
+        }}
+        />
+
 
 
     </Stack>

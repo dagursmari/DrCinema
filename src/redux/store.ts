@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import moviesReducer from "./slices/movies-slice";
 import favoritesReducer from "./slices/favorites-slice";
 import cinemasReducer from "./slices/cinemas-slice"
+import upcomingReducer from "./slices/upcomming-slice"
 // TODO: Import upcomingReducer, genresReducer
 
 //This is the STORE - the main warehouse
@@ -14,6 +15,7 @@ export const store = configureStore({
     movies: moviesReducer,       // Movies shelf
     favorites: favoritesReducer, // Favorites shelf
     cinemas: cinemasReducer,
+    upcoming: upcomingReducer,
     // TODO: Add other reducers here
     // upcoming: upcomingReducer,
     // genres: genresReducer,
