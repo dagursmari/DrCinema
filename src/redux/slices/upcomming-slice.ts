@@ -9,6 +9,20 @@ const initialState: UpcomingState = {
   error: null,         // No errors
 };
 
+//Remove duplicate movies by ID
+const deduplicateMovies = (movies: UpcomingMovie[]): UpcomingMovie[] => {
+  const uniqueMap = new Map<number, UpcomingMovie>();
+  
+  movies.forEach(movie => {
+    // Only keep the first occurrence of each movie ID
+    if (!uniqueMap.has(movie.id)) {
+      uniqueMap.set(movie.id, movie);
+    }
+  });
+  
+  return Array.from(uniqueMap.values());
+};
+
 
 //Fetch upcomming movies from the API
 //Sort by release date (soonest first)
@@ -21,8 +35,11 @@ export const fetchUpcomingMovies = createAsyncThunk(
       // Call the API
       const upcomingMovies = await apiService.getUpcomingMovies();
       
+      // Deduplicate movies (in case API returns duplicates)
+      const uniqueMovies = deduplicateMovies(upcomingMovies);
+
       // Sort by release date (soonest first) 
-      const sortedMovies = upcomingMovies.sort((a, b) => {
+      const sortedMovies = uniqueMovies.sort((a, b) => {
         const dateA = new Date(a["release-dateIS"]).getTime();
         const dateB = new Date(b["release-dateIS"]).getTime();
         return dateA - dateB; // Ascending order (soonest first)
