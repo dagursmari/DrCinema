@@ -1,7 +1,8 @@
+import type { Movie } from "@/src/redux/types";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Card } from "react-native-elements";
-import type { Movie } from "@/src/redux/types";
 import styles from "./styles";
 
 interface MovieCardProps {
@@ -20,10 +21,14 @@ export default function MovieCard({ movie }: MovieCardProps) {
     return genre["NameEN\t"] || genre.Name || "Unknown";
   };
 
+  const movieId = useLocalSearchParams()
+
   const handlePress = () => {
-    console.log("Movie pressed:", movie.title);
+    console.log("Movie pressed:", movie.id);
     // TODO: Navigate to movie detail
-    // navigation.navigate('MovieDetail', { movieId: movie.id });
+    router.push(
+        `/movie-screen?id=${movie.id}`
+    );
   };
 
   return (

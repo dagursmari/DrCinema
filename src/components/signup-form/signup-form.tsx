@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { 
-    Text, 
-    View, 
-    TextInput, 
-    TouchableOpacity, 
-    Alert,
-    ActivityIndicator
-} from "react-native";
 import { AuthService } from "@/src/services/auth-service";
+import { router } from "expo-router";
+import { useState } from "react";
+import {
+    ActivityIndicator,
+    Alert,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 import styles from "./styles";
 
 interface SignupFormProps {
@@ -130,7 +131,7 @@ export function SignupForm({ onSuccess, onRouteBack }: SignupFormProps) {
             <TouchableOpacity
             // TODO: laga þannig að hann redirecti yfir a loading page
                 style={styles.cancelButton}
-                onPress={onRouteBack}
+                onPress={() => router.push("/")}
                 activeOpacity={0.8}
             >
                 <Text style={styles.cancelButtonText}>Cancel</Text>
