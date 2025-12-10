@@ -39,6 +39,7 @@ export default function RootLayout() {
           headerShown: true,
           title: "Home Screen",
           headerBackVisible: false,
+          gestureEnabled: false,
         }}
         />
 
@@ -64,6 +65,7 @@ export default function RootLayout() {
           headerShown: true,
           title: "Cinemas Screen",
           headerBackVisible: false,
+          gestureEnabled: false,
         }}
         />
 
@@ -105,6 +107,7 @@ export default function RootLayout() {
           headerShown: true,
           title: "Upcoming Movies",
           headerBackVisible: false,
+          gestureEnabled: false,
         }}
         />
 

@@ -44,7 +44,9 @@ export default function Footer() {
 
   const handlePress = (route: string) => {
     if (pathname === route) return;
-    router.push(route as any);
+
+    // ✅ IMPORTANT FIX: replace instead of push
+    router.replace(route as any);
   };
 
   return (
