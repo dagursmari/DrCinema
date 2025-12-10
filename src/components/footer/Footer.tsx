@@ -32,7 +32,7 @@ const TABS: FooterTab[] = [
   },
   {
     label: "Upcoming",
-    route: "/upcoming",
+    route: "/upcoming-screen",
     icon: "clock",
     iconSet: "Feather",
   },
