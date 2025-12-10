@@ -1,2 +1,2 @@
-import { CinemaDetailsView } from "@/src/views/cinema-details/cinema-details-view";
-export default CinemaDetailsView;
+import { CinemaDetailsScreenView } from "@/src/views/cinema-details/cinema-details-view";
+export default CinemaDetailsScreenView;
