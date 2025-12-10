@@ -1,32 +1,40 @@
 import { StyleSheet } from "react-native";
+import { white, mainPink } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: white,
+    paddingTop: 10,
   },
+
   list: {
     flex: 1,
   },
+
   centerContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
+
   loadingText: {
-    color: '#fff',
+    color: "#6c757d",
     fontSize: 16,
     marginTop: 12,
   },
+
   errorText: {
-    color: '#e50914',
+    color: mainPink,
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
+    fontWeight: 600,
   },
+
   emptyText: {
-    color: '#999',
+    color: "#6c757d",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

@@ -1,48 +1,62 @@
 import { StyleSheet } from "react-native";
+import { shadow, mainPink, black } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   card: {
-    width: 220,
-    height: 380,
-    marginRight: 16,
-    justifyContent: "space-between",
+    width: 160,
+    marginRight: 18,
+    backgroundColor: "transparent",
   },
 
-  content: {
-    flex: 1,
-    justifyContent: "flex-end",
+  posterContainer: {
+    width: 160,
+    height: 240,
+    borderRadius: 12,
+    shadowColor: shadow,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    marginBottom: 10,
   },
 
   poster: {
-    width: "100%",
-    height: 220,
+    width: 160,
+    height: 240,
     borderRadius: 12,
+  },
+
+  content: {
+    paddingHorizontal: 4,
   },
 
   title: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#000",
+    fontSize: 15,
+    fontWeight: 700,
+    color: black,
+    marginBottom: 4,
+    lineHeight: 20,
   },
 
   year: {
-    fontSize: 14,
-    opacity: 0.6,
-    marginBottom: 4,
+    fontSize: 13,
+    color: black,
+    marginBottom: 8,
   },
 
   badge: {
-    backgroundColor: "rgba(255, 182, 193, 0.3)", 
+    backgroundColor: "rgba(233, 69, 96, 0.1)",
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingVertical: 5,
+    borderRadius: 6,
     alignSelf: "flex-start",
   },
 
   badgeText: {
-    color: "#E46C8A", 
+    color: mainPink,
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: 700,
   },
 });

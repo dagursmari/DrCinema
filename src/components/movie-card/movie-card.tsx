@@ -1,53 +1,49 @@
-import type { Movie } from "@/src/redux/types";
-import { router, useLocalSearchParams } from "expo-router";
+import type { Movie, Cinema } from "@/src/redux/types";
+import { router } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { Card } from "react-native-elements";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 import styles from "./styles";
 
 interface MovieCardProps {
   movie: Movie;
-  cinema: Cinema
+  cinema: Cinema;
 }
 
 export default function MovieCard({ movie, cinema }: MovieCardProps) {
-  // FIX: Extract the genre NAME from the genre object
   const getFirstGenre = () => {
     if (!movie.genres || movie.genres.length === 0) {
       return "Unknown";
     }
     
-    // The API has a weird tab character in the key name
     const genre = movie.genres[0];
     return genre["NameEN\t"] || genre.Name || "Unknown";
   };
 
   const handlePress = () => {
-    router.push(
-        `/movie-screen?id=${movie.id}&cinemaId=${cinema.id}`
-    );
+    router.push(`/movie-screen?id=${movie.id}&cinemaId=${cinema.id}`);
   };
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress}>
-      <Card>
-        <Card.Image
+    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.9}>
+      <View style={styles.posterContainer}>
+        <Image
           source={{ uri: movie.poster }}
           style={styles.poster}
           resizeMode="cover"
         />
-
-        <Text style={styles.title} numberOfLines={1}>
+      </View>
+      
+      <View style={styles.content}>
+        <Text style={styles.title} numberOfLines={2}>
           {movie.title}
         </Text>
         
         <Text style={styles.year}>{movie.year}</Text>
         
-        {/* FIX: Display the genre NAME, not the object */}
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{getFirstGenre()}</Text>
         </View>
-      </Card>
+      </View>
     </TouchableOpacity>
   );
 }

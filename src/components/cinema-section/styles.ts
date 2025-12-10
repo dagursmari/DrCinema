@@ -1,28 +1,22 @@
 import { StyleSheet } from "react-native";
+import { black } from "@/src/styles/colors";
+
 
 export default StyleSheet.create({
-  container: {
-    marginBottom: 24,
-    flex: 1,
+  section: {
+    marginBottom: 32,
   },
 
-  title: {
-    fontSize: 26,
-    fontWeight: "800",
-    marginBottom: 12,
-  },
   cinemaName: {
-    fontSize:24,
-    fontWeight:"700",
-    color: "black",
-    padding:10,
-    marginLeft:15,
+    fontSize: 22,
+    fontWeight: 800,
+    color: black,
+    paddingHorizontal: 20,
+    marginBottom: 16,
+    marginTop: 8,
   },
-  section: {
-    marginBottom: 24,
-    paddingVertical: 12,
-  },
+
   moviesList: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 20,
   },
 });

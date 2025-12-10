@@ -11,7 +11,6 @@ import { FlatList } from "react-native-gesture-handler";
 import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 import styles from "./styles";
 
-// Type for cinema with its movies
 interface CinemaWithMovies {
   cinema: Cinema;
   movies: Movie[];
@@ -21,7 +20,6 @@ export function HomeScreenView() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  // Get data from Redux
   const { movies, loading: moviesLoading, error: moviesError } = useAppSelector(
     (state) => state.movies
   );
@@ -29,17 +27,14 @@ export function HomeScreenView() {
     (state) => state.cinemas
   );
 
-  // Local state for search
   const [searchText, setSearchText] = useState("");
 
-  // Fetch data on mount
   useEffect(() => {
     console.log("🏠 HomeScreen: Fetching data...");
     dispatch(fetchMovies());
     dispatch(fetchCinemas());
   }, [dispatch]);
 
-  // Group movies by cinema and apply search filter
   const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
     const lowerSearch = searchText.toLowerCase().trim();
 
@@ -53,7 +48,8 @@ export function HomeScreenView() {
           if (!hasShowtimeAtCinema) return false;
 
           if (lowerSearch) {
-            return movie.title.toLowerCase().includes(lowerSearch);
+            const movieTitle = movie.title.toLowerCase();
+            return movieTitle.startsWith(lowerSearch);
           }
 
           return true;
@@ -75,19 +71,23 @@ export function HomeScreenView() {
   const filteredCinemas = getFilteredCinemasWithMovies();
 
   const handleSearch = (text: string) => {
+    console.log("Search text:", text);
     setSearchText(text);
+  };
+
+  const handleFilterPress = () => {
+    // TODO: Implement filter functionality
+    console.log("Filter pressed - functionality coming soon!");
   };
 
   const isLoading = moviesLoading || cinemasLoading;
   const error = moviesError || cinemasError;
 
-  // ---------- RENDER ----------
-
   if (isLoading) {
     return (
       <ScreenWithFooter>
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#e50914" />
+          <ActivityIndicator size="large" color="#E94560" />
           <Text style={styles.loadingText}>Loading movies...</Text>
         </View>
       </ScreenWithFooter>
@@ -98,7 +98,7 @@ export function HomeScreenView() {
     return (
       <ScreenWithFooter>
         <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>❌ Error: {error}</Text>
+          <Text style={styles.errorText}>⚠️ Error: {error}</Text>
         </View>
       </ScreenWithFooter>
     );
@@ -108,7 +108,10 @@ export function HomeScreenView() {
     return (
       <ScreenWithFooter>
         <View style={styles.container}>
-          <SearchBarComp onSearch={handleSearch} />
+          <SearchBarComp 
+            onSearch={handleSearch}
+            onFilterPress={handleFilterPress}
+          />
           <View style={styles.centerContainer}>
             <Text style={styles.emptyText}>
               {searchText ? `No movies found for "${searchText}"` : "No movies available"}
@@ -119,22 +122,27 @@ export function HomeScreenView() {
     );
   }
 
-  // Success
   return (
     <ScreenWithFooter>
       <View style={styles.container}>
-        <SearchBarComp onSearch={handleSearch} />
+        <SearchBarComp 
+          onSearch={handleSearch}
+          onFilterPress={handleFilterPress}
+        />
         <FlatList
           data={filteredCinemas}
           renderItem={({ item }) => (
             <CinemaSectionComp 
-            cinema={item.cinema} 
-            movies={item.movies}
+              cinema={item.cinema} 
+              movies={item.movies}
             />
           )}
           keyExtractor={(item) => item.cinema.id.toString()}
           style={styles.list}
-          contentContainerStyle={{ paddingTop: 0, paddingBottom: 16 }} // small gap above footer
+          contentContainerStyle={{ 
+            paddingBottom: 100,
+          }}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </ScreenWithFooter>
