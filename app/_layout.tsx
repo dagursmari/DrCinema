@@ -82,6 +82,7 @@ export default function RootLayout() {
         options={{
           headerShown: true,
           title: "Movie",
+          headerBackVisible: false,
         }}
         />
 
