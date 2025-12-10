@@ -30,6 +30,10 @@ export default StyleSheet.create({
 
     },
 
+    trailer:{
+
+    },
+
     subheader: {
         fontSize:20,
         fontWeight:"700",

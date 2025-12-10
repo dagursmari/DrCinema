@@ -3,11 +3,10 @@ import { useLocalSearchParams } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { RatingsSection } from "../ratings/rating-section";
 import { ShowtimesSection } from "../showtimes/showtimes-section";
+import { TrailerPlayer } from "../trailer/trailerplayer";
 import styles from "./styles";
 
 export default function MovieDetailsComp () {
-
-    
 
     const {id, cinemaId} = useLocalSearchParams<{ id: string; cinemaId: string }>()
     
@@ -22,11 +21,13 @@ export default function MovieDetailsComp () {
 
        const cinemaShowtime = movie.showtimes?.find(
             st => st.cinema.id === Number(cinemaId)
-        );
+        ); 
 
-        console.log('Found cinema showtime:', cinemaShowtime);
-        console.log("Raw cinemaId:", cinemaId);
-        console.log("Parsed cinemaId:", Number(cinemaId));  
+        const trailers = movie.trailers?.[0]?.results ?? [];
+
+        const officialTrailer = trailers.find(trailer =>
+        trailer.name.toLowerCase().includes("official trailer")
+        ) ?? null;
         
       if (!movie) {
       return <Text>Movie not found</Text>;
@@ -71,7 +72,7 @@ export default function MovieDetailsComp () {
                     </Text>
                 ))}
                 </Text>
-              <Text style={styles.subtext}>Country: {movie.omdb[0].Country || "N/A"}</Text>
+              <Text style={styles.subtext}>Country: {movie.omdb?.[0]?.Country ?? "N/A"}</Text>
 
               <Text style={styles.subheader}>Ratings</Text>
               <View style={styles.ratings}>
@@ -108,12 +109,10 @@ export default function MovieDetailsComp () {
 
             </View>
 
+            <Text style={styles.subheader}>Watch Trailer</Text>
 
-              <Text style={styles.subheader}>Watch Trailer</Text>
-
-              
-
-
+            <TrailerPlayer trailer={officialTrailer}/>
+          
         </View>
     );
 }
