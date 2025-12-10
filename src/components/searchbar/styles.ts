@@ -10,6 +10,12 @@ export default StyleSheet.create({
     paddingVertical: 16,
     gap: 12,
     backgroundColor: white,
+    flex:1,
+  },
+
+  clearButton:{
+    padding: 4,
+    marginLeft: 8,
   },
 
   searchContainer: {
