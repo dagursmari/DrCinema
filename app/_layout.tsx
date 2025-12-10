@@ -1,7 +1,8 @@
+import { store } from '@/src/redux/store';
 import { Stack } from "expo-router";
+import { Image } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as StoreProvider } from 'react-redux';
-import { store } from '@/src/redux/store';
 
 export default function RootLayout() {
   
@@ -15,7 +16,12 @@ export default function RootLayout() {
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
-        }
+        },
+        headerTitle: () => (
+          <Image
+          source={require("@/assets/images/DrCinemaLogo.png")}
+          style={{width:184, height:60}}/>
+        )
         
       }}>
 
@@ -30,7 +36,7 @@ export default function RootLayout() {
         <Stack.Screen 
         name="home-screen"
         options={{
-          headerShown: false,
+          headerShown: true,
           title: "Home Screen"
         }}
         />

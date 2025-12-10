@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator, Text } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { fetchMovies } from "@/src/redux/slices/movies-slice";
-import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
 import { CinemaSectionComp } from "@/src/components/cinema-section/cinema-section";
 import SearchBarComp from "@/src/components/searchbar/searchbar";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
+import { fetchMovies } from "@/src/redux/slices/movies-slice";
+import type { Cinema, Movie } from "@/src/redux/types";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 import styles from "./styles";
-import type { Cinema, Movie } from "@/src/redux/types";
 
 // Type for cinema with its movies
 interface CinemaWithMovies {
@@ -18,6 +19,7 @@ interface CinemaWithMovies {
 
 export function HomeScreenView() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // Get data from Redux
   const { movies, loading: moviesLoading, error: moviesError } = useAppSelector(
@@ -122,11 +124,13 @@ export function HomeScreenView() {
     <ScreenWithFooter>
       <View style={styles.container}>
         <SearchBarComp onSearch={handleSearch} />
-
         <FlatList
           data={filteredCinemas}
           renderItem={({ item }) => (
-            <CinemaSectionComp cinema={item.cinema} movies={item.movies} />
+            <CinemaSectionComp 
+            cinema={item.cinema} 
+            movies={item.movies}
+            />
           )}
           keyExtractor={(item) => item.cinema.id.toString()}
           style={styles.list}
