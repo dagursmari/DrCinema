@@ -37,7 +37,8 @@ export default function RootLayout() {
         name="home-screen"
         options={{
           headerShown: true,
-          title: "Home Screen"
+          title: "Home Screen",
+          headerBackVisible: false,
         }}
         />
 
@@ -60,8 +61,9 @@ export default function RootLayout() {
         <Stack.Screen 
         name="cinemas-screen"
         options={{
-          headerShown: false,
-          title: "Cinemas Screen"
+          headerShown: true,
+          title: "Cinemas Screen",
+          headerBackVisible: false,
         }}
         />
 

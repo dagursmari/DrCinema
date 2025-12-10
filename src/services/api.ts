@@ -50,6 +50,7 @@ class ApiClient {
       
       console.log("Auth header:", `Basic ${base64Credentials.substring(0, 20)}...`);
       
+      //Send a post request to API to getu auth key
       const response = await fetch(`${API_BASE_URL}/authenticate`, {
         method: "POST",
         headers: {
@@ -73,9 +74,11 @@ class ApiClient {
         throw new Error(data.message || "No token received");
       }
 
+    //Store new token in cache
       this.token = data.token;
-      const expiryTime = Date.now() + (24 * 60 * 60 * 1000);
+      const expiryTime = Date.now() + (24 * 60 * 60 * 1000); //Runs out in 24h
       
+      //Store in AsyncStorage
       await AsyncStorage.setItem(TOKEN_KEY, data.token);
       await AsyncStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
 
