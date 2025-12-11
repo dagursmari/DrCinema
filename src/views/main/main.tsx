@@ -5,29 +5,23 @@ import styles from "./styles";
 
 export function Main() {
     const router = useRouter();
-    const [showButtons, setShowButtons] = useState(false);
 
-    const logoScale = useRef(new Animated.Value(0.3)).current;
     const logoOpacity = useRef(new Animated.Value(0)).current;
+    const buttonsOpacity = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        Animated.sequence([
-            Animated.parallel([
-                Animated.timing(logoOpacity, {
-                    toValue: 1,
-                    duration: 800,
-                    useNativeDriver: true,
-                }),
-                Animated.spring(logoScale, {
-                    toValue: 1,
-                    tension: 50,
-                    friction: 7,
-                    useNativeDriver: true,
-                }),
-            ]),
-            Animated.delay(400),
-        ]).start(() => {
-            setShowButtons(true);
+        // Fade in logo first
+        Animated.timing(logoOpacity, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start(() => {
+            // Fade in buttons after logo
+            Animated.timing(buttonsOpacity, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            }).start();
         });
     }, []);
 
@@ -39,12 +33,8 @@ export function Main() {
         router.push("/home-screen");
     };
 
-    const handleTestMovies = () => {
-        router.push("/test-movie");
-    };
-
-    const handleTestAuth = () => {
-        router.push("/test-auth");
+    const handleLogin = () => {
+        router.push("/login"); 
     };
 
     return (
@@ -55,7 +45,6 @@ export function Main() {
                     styles.logoContainer,
                     {
                         opacity: logoOpacity,
-                        transform: [{ scale: logoScale }],
                     },
                 ]}
             >
@@ -67,14 +56,20 @@ export function Main() {
             </Animated.View>
 
             {/* Buttons Section */}
-            {showButtons && (
-                <View style={styles.buttonsContainer}>
+            <Animated.View 
+                style={[
+                    styles.buttonsContainer,
+                    {
+                        opacity: buttonsOpacity,
+                    },
+                ]}
+            >
                     <TouchableOpacity
-                        onPress={handleSignup}
+                        onPress={handleLogin}
                         style={styles.signupButton}
                         activeOpacity={0.8}
                     >
-                        <Text style={styles.signupButtonText}>Sign up</Text>
+                        <Text style={styles.signupButtonText}>Log in</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -85,22 +80,12 @@ export function Main() {
                         <Text style={styles.guestButtonText}>Continue as guest</Text>
                     </TouchableOpacity>
 
-                    {/* Test buttons */}
                     <TouchableOpacity
-                        onPress={handleTestMovies}
-                        style={styles.testButton}
+                        onPress={handleSignup}
                     >
-                        <Text style={styles.testButtonText}>Test Movies</Text>
+                        <Text style={styles.subtitle}>Dont have an account? Sign up here</Text>
                     </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={handleTestAuth}
-                        style={styles.testButton}
-                    >
-                        <Text style={styles.testButtonText}>Test Auth</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
+                </Animated.View>
         </View>
     );
 }

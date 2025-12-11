@@ -236,3 +236,43 @@ export interface MovieFilters {
   director?: string;
   certificate?: string;     // "12"
 }
+
+// Auth Types
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  profileImage?: string;
+  createdAt?: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+  confirmPassword?: string;
+  profileImage?: string;
+}
+
+export interface UpdateProfileData {
+  name?: string;
+  profileImage?: string;
+}
+
+export interface UserStats {
+  favoritesCount: number;
+  bookingsCount: number;
+}

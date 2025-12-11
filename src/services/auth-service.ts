@@ -1,169 +1,285 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LoginCredentials, RegisterData, User, UpdateProfileData } from '../redux/types';
 
-const USERS_KEY = '@dr_cinema_users';
-const CURRENT_USER_KEY = '@dr_cinema_current_user';
+// AsyncStorage Keys
+const AUTH_TOKEN_KEY = '@dr_cinema_auth_token';
+const USER_DATA_KEY = '@dr_cinema_user_data';
+const USERS_DB_KEY = '@dr_cinema_users_db'; // Local "database" of users
 
-export interface User {
-    id: string;
-    email: string;
-    fullName: string;
-    password: string;
-    createdAt: string;
+class AuthService {
+  /**
+   * Generate a simple token (for local auth)
+   */
+  private generateToken(): string {
+    return `token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Generate user ID
+   */
+  private generateUserId(): string {
+    return `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Get all users from local storage
+   */
+  private async getUsersDB(): Promise<Record<string, User & { password: string }>> {
+    try {
+      const usersData = await AsyncStorage.getItem(USERS_DB_KEY);
+      return usersData ? JSON.parse(usersData) : {};
+    } catch (error) {
+      console.error('Error loading users DB:', error);
+      return {};
+    }
+  }
+
+  /**
+   * Save users to local storage
+   */
+  private async saveUsersDB(users: Record<string, User & { password: string }>): Promise<void> {
+    try {
+      await AsyncStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+    } catch (error) {
+      console.error('Error saving users DB:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Login user
+   */
+  async login(credentials: LoginCredentials): Promise<{ user: User; token: string }> {
+    try {
+      console.log('🔐 Logging in user:', credentials.email);
+
+      // Get all users
+      const users = await this.getUsersDB();
+
+      // Find user by email
+      const userEntry = Object.values(users).find(
+        (u) => u.email.toLowerCase() === credentials.email.toLowerCase()
+      );
+
+      // Check if user exists
+      if (!userEntry) {
+        throw new Error('User not found. Please register first.');
+      }
+
+      // Check password
+      if (userEntry.password !== credentials.password) {
+        throw new Error('Invalid password');
+      }
+
+      // Create user object (without password)
+      const user: User = {
+        id: userEntry.id,
+        email: userEntry.email,
+        name: userEntry.name,
+        profileImage: userEntry.profileImage,
+        createdAt: userEntry.createdAt,
+      };
+
+      // Generate token
+      const token = this.generateToken();
+
+      // Store token and user data
+      await this.storeAuthData(token, user);
+
+      console.log('✅ Login successful');
+      return { user, token };
+    } catch (error: any) {
+      console.error('❌ Login error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Register new user
+   */
+  async register(userData: RegisterData): Promise<{ user: User; token: string }> {
+    try {
+      console.log('📝 Registering user:', userData.email);
+
+      // Get all users
+      const users = await this.getUsersDB();
+
+      // Check if email already exists
+      const emailExists = Object.values(users).some(
+        (u) => u.email.toLowerCase() === userData.email.toLowerCase()
+      );
+
+      if (emailExists) {
+        throw new Error('Email already registered');
+      }
+
+      // Create new user
+      const userId = this.generateUserId();
+      const newUser = {
+        id: userId,
+        email: userData.email,
+        name: userData.name,
+        password: userData.password,
+        profileImage: undefined,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Save to users DB
+      users[userId] = newUser;
+      await this.saveUsersDB(users);
+
+      // Create user object (without password)
+      const user: User = {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        profileImage: newUser.profileImage,
+        createdAt: newUser.createdAt,
+      };
+
+      // Generate token
+      const token = this.generateToken();
+
+      // Store token and user data
+      await this.storeAuthData(token, user);
+
+      console.log('✅ Registration successful');
+      return { user, token };
+    } catch (error: any) {
+      console.error('❌ Registration error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Logout user
+   */
+  async logout(): Promise<void> {
+    try {
+      console.log('👋 Logging out user');
+      await AsyncStorage.multiRemove([AUTH_TOKEN_KEY, USER_DATA_KEY]);
+      console.log('✅ Logout successful');
+    } catch (error) {
+      console.error('❌ Logout error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get stored auth token
+   */
+  async getToken(): Promise<string | null> {
+    try {
+      return await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+    } catch (error) {
+      console.error('❌ Error getting token:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get stored user data
+   */
+  async getUserData(): Promise<User | null> {
+    try {
+      const userData = await AsyncStorage.getItem(USER_DATA_KEY);
+      return userData ? JSON.parse(userData) : null;
+    } catch (error) {
+      console.error('❌ Error getting user data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Store auth data (token + user)
+   */
+  private async storeAuthData(token: string, user: User): Promise<void> {
+    await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
+    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+  }
+
+  /**
+   * Update user profile
+   */
+  async updateProfile(userId: string, updates: UpdateProfileData): Promise<User> {
+    try {
+      console.log('✏️ Updating profile for user:', userId);
+
+      // Get all users
+      const users = await this.getUsersDB();
+
+      // Find user
+      if (!users[userId]) {
+        throw new Error('User not found');
+      }
+
+      // Update user data
+      users[userId] = {
+        ...users[userId],
+        ...updates,
+      };
+
+      // Save updated users DB
+      await this.saveUsersDB(users);
+
+      // Create updated user object (without password)
+      const updatedUser: User = {
+        id: users[userId].id,
+        email: users[userId].email,
+        name: users[userId].name,
+        profileImage: users[userId].profileImage,
+        createdAt: users[userId].createdAt,
+      };
+
+      // Update stored user data
+      await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(updatedUser));
+
+      console.log('✅ Profile updated');
+      return updatedUser;
+    } catch (error: any) {
+      console.error('❌ Profile update error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if user is authenticated
+   */
+  async isAuthenticated(): Promise<boolean> {
+    const token = await this.getToken();
+    return !!token;
+  }
+
+  /**
+   * Change password
+   */
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<void> {
+    try {
+      const users = await this.getUsersDB();
+
+      if (!users[userId]) {
+        throw new Error('User not found');
+      }
+
+      // Verify current password
+      if (users[userId].password !== currentPassword) {
+        throw new Error('Current password is incorrect');
+      }
+
+      // Update password
+      users[userId].password = newPassword;
+      await this.saveUsersDB(users);
+
+      console.log('✅ Password changed successfully');
+    } catch (error: any) {
+      console.error('❌ Password change error:', error);
+      throw error;
+    }
+  }
 }
 
-export interface AuthResponse {
-    success: boolean;
-    message: string;
-    user?: Omit<User, 'password'>;
-}
-
-export class AuthService {
-    // Get all users from storage
-    private static async getUsers(): Promise<User[]> {
-        try {
-            const usersJson = await AsyncStorage.getItem(USERS_KEY);
-            return usersJson ? JSON.parse(usersJson) : [];
-        } catch (error) {
-            console.error('Error getting users:', error);
-            return [];
-        }
-    }
-
-    // Save users to storage
-    private static async saveUsers(users: User[]): Promise<void> {
-        try {
-            await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
-        } catch (error) {
-            console.error('Error saving users:', error);
-            throw new Error('Failed to save user data');
-        }
-    }
-
-    // Check if email already exists
-    private static async emailExists(email: string): Promise<boolean> {
-        const users = await this.getUsers();
-        return users.some(user => user.email.toLowerCase() === email.toLowerCase());
-    }
-
-    // Validate email format
-    private static isValidEmail(email: string): boolean {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    // Sign up new user
-    static async signUp(
-        email: string,
-        fullName: string,
-        password: string,
-        confirmPassword: string
-    ): Promise<AuthResponse> {
-        // Validation
-        if (!email || !fullName || !password || !confirmPassword) {
-            return {
-                success: false,
-                message: 'All fields are required',
-            };
-        }
-
-        if (!this.isValidEmail(email)) {
-            return {
-                success: false,
-                message: 'Please enter a valid email address',
-            };
-        }
-
-        if (fullName.length < 2) {
-            return {
-                success: false,
-                message: 'Full name must be at least 2 characters',
-            };
-        }
-
-        if (password.length < 6) {
-            return {
-                success: false,
-                message: 'Password must be at least 6 characters',
-            };
-        }
-
-        if (password !== confirmPassword) {
-            return {
-                success: false,
-                message: 'Passwords do not match',
-            };
-        }
-
-        // Check if email already exists
-        if (await this.emailExists(email)) {
-            return {
-                success: false,
-                message: 'An account with this email already exists',
-            };
-        }
-
-        // Create new user
-        const newUser: User = {
-            id: Date.now().toString(),
-            email: email.toLowerCase(),
-            fullName,
-            password, // In production, this should be hashed
-            createdAt: new Date().toISOString(),
-        };
-
-        try {
-            const users = await this.getUsers();
-            users.push(newUser);
-            await this.saveUsers(users);
-
-            // Set as current user
-            await this.setCurrentUser(newUser);
-
-            // Return user without password
-            const { password: _, ...userWithoutPassword } = newUser;
-
-            return {
-                success: true,
-                message: 'Account created successfully',
-                user: userWithoutPassword,
-            };
-        } catch (error) {
-            return {
-                success: false,
-                message: 'Failed to create account. Please try again.',
-            };
-        }
-    }
-
-    // Set current logged in user
-    private static async setCurrentUser(user: User): Promise<void> {
-        const { password: _, ...userWithoutPassword } = user;
-        await AsyncStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userWithoutPassword));
-    }
-
-    // Get current logged in user
-    static async getCurrentUser(): Promise<Omit<User, 'password'> | null> {
-        try {
-            const userJson = await AsyncStorage.getItem(CURRENT_USER_KEY);
-            return userJson ? JSON.parse(userJson) : null;
-        } catch (error) {
-            console.error('Error getting current user:', error);
-            return null;
-        }
-    }
-
-    // Log out current user
-    static async logout(): Promise<void> {
-        try {
-            await AsyncStorage.removeItem(CURRENT_USER_KEY);
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
-    }
-
-    // Check if user is logged in
-    static async isLoggedIn(): Promise<boolean> {
-        const user = await this.getCurrentUser();
-        return user !== null;
-    }
-}
+export const authService = new AuthService();

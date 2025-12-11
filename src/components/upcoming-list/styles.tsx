@@ -5,10 +5,11 @@ export default StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 100, // Space for footer
   },
+
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 40,
   },
   emptyIcon: {
@@ -17,14 +18,14 @@ export default StyleSheet.create({
   },
   emptyText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
+    color: "#999",
+    textAlign: "center",
   },
 
 })
