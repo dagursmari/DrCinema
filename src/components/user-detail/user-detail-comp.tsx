@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { logoutUser } from "@/src/redux/slices/auth-slice";
-import { getFavourites } from "@/src/services/favourites-storage";
+import { buildUserFavouritesKey, getFavourites } from "@/src/services/favourites-storage";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
@@ -28,7 +28,8 @@ export function UserDetailComp() {
 
     // Load favorites count from AsyncStorage
     const loadFavoritesCount = async () => {
-        const favorites = await getFavourites();
+        const userKey = buildUserFavouritesKey(user);
+        const favorites = await getFavourites(userKey);
         setFavoritesCount(favorites.length);
     };
 

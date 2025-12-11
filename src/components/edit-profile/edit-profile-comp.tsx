@@ -4,7 +4,7 @@ import * as Camera from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View, ScrollView } from "react-native";
 import styles from "./styles";
 
 export function EditProfileComp() {
@@ -75,7 +75,7 @@ export function EditProfileComp() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Profile Image Picker */}
       <TouchableOpacity
         style={styles.profileImageButton}
@@ -122,6 +122,6 @@ export function EditProfileComp() {
           <Text style={styles.editButtonText}>{loading ? "Saving..." : "Save"}</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }

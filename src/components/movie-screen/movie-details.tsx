@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Image, Text, View, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-
 import { useAppSelector } from "@/src/redux/hooks";
 import { RatingsSection } from "../ratings/rating-section";
 import { ShowtimesSection } from "../showtimes/showtimes-section";
@@ -13,11 +12,15 @@ import {
   getFavourites,
   addFavourite,
   removeFavourite,
+  buildUserFavouritesKey,
 } from "@/src/services/favourites-storage";
 import type { Movie } from "@/src/redux/types";
+import { State } from "react-native-gesture-handler";
 
 export default function MovieDetailsComp() {
   const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
+  const userKey = buildUserFavouritesKey(user);
   const { id, cinemaId } =
     useLocalSearchParams<{ id?: string; cinemaId?: string }>();
 
@@ -25,19 +28,27 @@ export default function MovieDetailsComp() {
     state.movies.movies.find((m) => m.id === Number(id))
   );
 
+  const isLoggedIn = useAppSelector(
+  (state) => !!state.auth.user   // or state.auth.isAuthenticated – match your slice
+  );
+
   const [isFavourite, setIsFavourite] = useState(false);
 
   // 🔍 Check if this movie is already in favourites
   useEffect(() => {
     const checkFavourite = async () => {
-      if (!movie) return;
-      const favs = await getFavourites();
+      if (!movie || !userKey) {
+        setIsFavourite(false);
+        return;
+      }
+      const favs = await getFavourites(userKey);
       const exists = favs.some((m) => m.id === movie.id);
       setIsFavourite(exists);
     };
 
     checkFavourite();
-  }, [movie?.id]);
+  }, [movie?.id, userKey]);
+
 
   if (!movie) {
     return <Text>Movie not found</Text>;
@@ -62,18 +73,30 @@ export default function MovieDetailsComp() {
       trailer.name.toLowerCase().includes("official trailer")
     ) ?? null;
 
-  // ❤️ Toggle favourite
   const handleFavoritePress = async () => {
     if (!movie) return;
 
+    if (!isLoggedIn || !userKey) {
+      Alert.alert(
+        "Sign in required",
+        "You need to be signed in to add favourites.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign in", onPress: () => router.push("/login") },
+        ]
+      );
+      return;
+    }
+
     if (isFavourite) {
-      await removeFavourite(movie.id);
+      await removeFavourite(userKey, movie.id);
       setIsFavourite(false);
     } else {
-      await addFavourite(movie);
+      await addFavourite(userKey, movie);
       setIsFavourite(true);
     }
   };
+
 
   const handleBackPress = () => {
     router.back();

@@ -1,13 +1,18 @@
-import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { View, Text, Image, Pressable, Alert } from "react-native";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+
 import styles from "./styles";
+import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
+import { useAppSelector } from "@/src/redux/hooks";
 
 import {
-  addFavourite,
   getFavourites,
-} from "@/src/services/favourites-storage"; // ✅ make sure this exists
+  addFavourite,
+  removeFavourite,
+  buildUserFavouritesKey,
+} from "@/src/services/favourites-storage";
 
 type Props = {
   movie: Movie;
@@ -15,50 +20,79 @@ type Props = {
   onPress?: () => void;
 };
 
-export default function MovieShowtimesCard({
-  movie,
-  cinemaId,
-  onPress,
-}: Props) {
+export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) {
+  const router = useRouter();
+
+  const user = useAppSelector((state) => state.auth.user);
+  const isLoggedIn = !!user;
+  const userKey = buildUserFavouritesKey(user);
+
   const [isFavourite, setIsFavourite] = useState(false);
 
-  // ✅ Load if this movie is already in favourites
-  useEffect(() => {
-    const checkFavourite = async () => {
-      const favs = await getFavourites();
-      const exists = favs.some((m) => m.id === movie.id);
-      setIsFavourite(exists);
-    };
-
-    checkFavourite();
-  }, [movie.id]);
-
+  // All showtime schedule entries for this cinema
   const scheduleEntries: ShowtimeSchedule[] =
     movie.showtimes
       ?.filter((s) => s.cinema.id === cinemaId)
       .flatMap((s) => s.schedule) ?? [];
 
+  // First genre name (Icelandic)
   const firstGenreName = movie.genres?.[0]?.Name;
 
+  // Clean up time string if it has extra stuff (e.g. "18:00 (3D)")
   const formatTime = (raw: string) => raw.split(" ")[0].trim();
 
-  // ✅ Heart press handler
+  // Check if this movie is already in favourites for this user
+  useEffect(() => {
+    const checkFavourite = async () => {
+      if (!userKey) {
+        setIsFavourite(false);
+        return;
+      }
+      const favs = await getFavourites(userKey);
+      const exists = favs.some((m) => m.id === movie.id);
+      setIsFavourite(exists);
+    };
+
+    checkFavourite();
+  }, [movie.id, userKey]);
+
   const handleFavouritePress = async () => {
-    await addFavourite(movie);
-    setIsFavourite(true); // ✅ fill heart immediately
+    if (!isLoggedIn || !userKey) {
+      Alert.alert(
+        "Sign in required",
+        "You need to be signed in to add favourites.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign in", onPress: () => router.push("/login") },
+        ]
+      );
+      return;
+    }
+
+    if (isFavourite) {
+      await removeFavourite(userKey, movie.id);
+      setIsFavourite(false);
+    } else {
+      await addFavourite(userKey, movie);
+      setIsFavourite(true);
+    }
   };
 
   return (
     <Pressable style={styles.card} onPress={onPress}>
+      {/* Poster */}
       <Image source={{ uri: movie.poster }} style={styles.poster} />
 
+      {/* Main content */}
       <View style={styles.content}>
+        {/* Title */}
         <View style={styles.titleRow}>
           <Text style={styles.title} numberOfLines={1}>
             {movie.title}
           </Text>
         </View>
 
+        {/* Year • Genre */}
         <View style={styles.metaRow}>
           <Text style={styles.year}>{movie.year}</Text>
           {firstGenreName && (
@@ -69,26 +103,25 @@ export default function MovieShowtimesCard({
           )}
         </View>
 
+        {/* Showtimes */}
         <View style={styles.showtimesRow}>
           {scheduleEntries.map((entry, index) => (
             <View
               key={`${movie.id}-${cinemaId}-${entry.purchase_url}-${index}`}
               style={styles.chip}
             >
-              <Text style={styles.chipText}>
-                {formatTime(entry.time)}
-              </Text>
+              <Text style={styles.chipText}>{formatTime(entry.time)}</Text>
             </View>
           ))}
         </View>
       </View>
 
-      {/* ❤️ FAVOURITE BUTTON */}
+      {/* Favourite button */}
       <Pressable style={styles.favouriteButton} onPress={handleFavouritePress}>
         <Ionicons
-          name={isFavourite ? "heart" : "heart-outline"}
-          size={20}
-          color={isFavourite ? "#FF748B" : "#D1D1D1"} // ✅ filled vs outline look
+          name= { isFavourite? "heart" : "heart-outline"}
+          size={18}
+          color={isFavourite ? "#E94560" : "#C4C4C4"} // red when fav, grey when not
         />
       </Pressable>
     </Pressable>

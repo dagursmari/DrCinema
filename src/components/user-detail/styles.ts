@@ -13,7 +13,7 @@ export default StyleSheet.create({
     },
 
     image: {
-        marginBottom: 20,
+        marginBottom: 0,
     },
 
     profileImage: {
@@ -71,7 +71,7 @@ export default StyleSheet.create({
         borderRadius: 25,
         alignItems: "center",
         width: "100%",
-        marginBottom: 30,
+        marginBottom: 15,
         shadowColor: mainPink,
         shadowOffset: {
             width: 0,

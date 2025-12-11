@@ -4,6 +4,7 @@ export default StyleSheet.create({
   container: { 
     flex: 1,
     backgroundColor: "#fff",
+    marginBottom: 20,
  },
   emptyText: {
     marginTop: 40,
@@ -15,8 +16,18 @@ export default StyleSheet.create({
     fontSize: 32,
     fontWeight: 800,
     marginBottom: 8,
-    paddingTop: 70,
+    paddingTop: 30,
     marginLeft: 16,
     paddingHorizontal: 16,
-  }
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+
+  listContent: {
+    paddingBottom: 100,
+  },
 });
