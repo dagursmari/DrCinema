@@ -149,21 +149,6 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen
-        name="test-movie"
-        options={{
-          headerShown: true,
-          title: "Test"
-        }}
-      />
-
-      <Stack.Screen
-        name="test-auth"
-        options={{
-          headerShown: true,
-          title: "Test Auth"
-        }}
-      />
 
       <Stack.Screen
         name="upcoming-screen"
