@@ -58,73 +58,74 @@ export function UserDetailComp() {
 
     if (!isAuthenticated || !user) return null;
 
+    // Get bookings count from user object
+    const bookingsCount = user.bookingsCount || 0;
+
     return (
-
         <ScreenWithFooter>
-        <View style={styles.container}>
-            <View style={styles.image}>
-                {/* Profile Image */}
-                {user.profileImage ? (
-                    <Image
-                        source={{ uri: user.profileImage }}
-                        style={styles.profileImage}
+            <View style={styles.container}>
+                <View style={styles.image}>
+                    {/* Profile Image */}
+                    {user.profileImage ? (
+                        <Image
+                            source={{ uri: user.profileImage }}
+                            style={styles.profileImage}
+                        />
+                    ) : (
+                        <View style={styles.altProfileImage}>
+                            <Text style={styles.altProfileText}>
+                                {user.name.charAt(0).toUpperCase()}
+                            </Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Name Input */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Name</Text>
+                    <TextInput
+                        value={user.name}
+                        editable={false}
+                        style={styles.input}
                     />
-                ) : (
-                    <View style={styles.altProfileImage}>
-                        <Text style={styles.altProfileText}>
-                            {user.name.charAt(0).toUpperCase()}
-                        </Text>
-                    </View>
-                )}
-            </View>
+                </View>
 
-            {/* Name Input */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Name</Text>
-                <TextInput
-                    value={user.name}
-                    editable={false}
-                    style={styles.input}
-                />
-            </View>
+                {/* Email Input */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput
+                        value={user.email}
+                        editable={false}
+                        style={styles.input}
+                    />
+                </View>
 
-            {/* Email Input */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                    value={user.email}
-                    editable={false}
-                    style={styles.input}
-                />
-            </View>
-
-            {/* Statistics */}
-            <View style={styles.statisticsContainer}>
-                <Text style={styles.statisticsTitle}>Statistics</Text>
-                <View style={styles.statisticsRow}>
-                    <View style={styles.statItem}>
-                        <Text style={styles.statNumber}>{favoritesCount}</Text>
-                        <Text style={styles.statLabel}>Favorites</Text>
-                    </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                        <Text style={styles.statNumber}>0</Text>
-                        <Text style={styles.statLabel}>Bookings</Text>
+                {/* Statistics */}
+                <View style={styles.statisticsContainer}>
+                    <Text style={styles.statisticsTitle}>Statistics</Text>
+                    <View style={styles.statisticsRow}>
+                        <View style={styles.statItem}>
+                            <Text style={styles.statNumber}>{favoritesCount}</Text>
+                            <Text style={styles.statLabel}>Favorites</Text>
+                        </View>
+                        <View style={styles.statDivider} />
+                        <View style={styles.statItem}>
+                            <Text style={styles.statNumber}>{bookingsCount}</Text>
+                            <Text style={styles.statLabel}>Bookings</Text>
+                        </View>
                     </View>
                 </View>
+
+                {/* Edit Profile Button */}
+                <TouchableOpacity style={styles.editButton} onPress={onEdit}>
+                    <Text style={styles.editButtonText}>Edit Profile</Text>
+                </TouchableOpacity>
+
+                {/* Logout Button */}
+                <TouchableOpacity style={styles.logoutButton} onPress={onLogout}>
+                    <Text style={styles.logoutButtonText}>Logout</Text>
+                </TouchableOpacity>
             </View>
-
-            {/* Edit Profile Button */}
-            <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-                <Text style={styles.editButtonText}>Edit Profile</Text>
-            </TouchableOpacity>
-
-            {/* Logout Button */}
-            <TouchableOpacity style={styles.logoutButton} onPress={onLogout}>
-                <Text style={styles.logoutButtonText}>Logout</Text>
-            </TouchableOpacity>
-        </View>
-
         </ScreenWithFooter>
     );
 }

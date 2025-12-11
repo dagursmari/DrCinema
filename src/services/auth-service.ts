@@ -131,6 +131,7 @@ export class AuthService {
         name: fullName,
         password: password,
         profileImage: profileImage,
+        bookingsCount: 0,
         createdAt: new Date().toISOString(),
       };
 
@@ -144,6 +145,7 @@ export class AuthService {
         email: newUser.email,
         name: newUser.name,
         profileImage: newUser.profileImage,
+        bookingsCount: newUser.bookingsCount,
         createdAt: newUser.createdAt,
       };
 
@@ -200,6 +202,7 @@ export class AuthService {
         email: userEntry.email,
         name: userEntry.name,
         profileImage: userEntry.profileImage,
+        bookingsCount: userEntry.bookingsCount || 0,
         createdAt: userEntry.createdAt,
       };
 
@@ -286,6 +289,7 @@ export class AuthService {
         email: users[userId].email,
         name: users[userId].name,
         profileImage: users[userId].profileImage,
+        bookingsCount: users[userId].bookingsCount,
         createdAt: users[userId].createdAt,
       };
 

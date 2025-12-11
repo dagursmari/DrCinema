@@ -2,33 +2,22 @@ import { mainPink, shadow, white } from "@/src/styles/colors";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  container: {
+  scrollContainer: {
     flex: 1,
-    alignItems: "center",
-    padding: 20,
     backgroundColor: white,
   },
 
-  // Title and subtitle
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#1a1a1a",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: mainPink,
-    marginBottom: 20,
-    textAlign: "center",
+  container: {
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: white,
   },
 
   // Profile Image Styles
   profileImageContainer: {
     alignItems: "center",
     marginBottom: 30,
+    marginTop: 20,
   },
   profileImageButton: {
     width: 120,
@@ -36,6 +25,8 @@ export default StyleSheet.create({
     borderRadius: 60,
     overflow: "hidden",
     marginBottom: 8,
+    borderWidth: 3,
+    borderColor: mainPink,
   },
   profileImage: {
     width: "100%",
@@ -47,9 +38,6 @@ export default StyleSheet.create({
     backgroundColor: "#F0F0F0",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#E9ECEF",
-    borderStyle: "dashed",
   },
   profileImageIcon: {
     fontSize: 40,
@@ -58,6 +46,11 @@ export default StyleSheet.create({
   profileImageText: {
     fontSize: 12,
     color: "#666",
+    fontWeight: "600",
+  },
+  changePhotoText: {
+    fontSize: 14,
+    color: mainPink,
     fontWeight: "600",
   },
 
@@ -87,52 +80,141 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  inputError: {
-    borderColor: "#E94560",
-    borderWidth: 2,
+  inputDisabled: {
+    backgroundColor: "#f5f5f5",
+    color: "#999",
   },
-  errorText: {
-    color: "#E94560",
+  helperText: {
     fontSize: 12,
+    color: "#999",
     marginTop: 4,
-    fontWeight: "500",
+    marginLeft: 5,
   },
 
-  // Buttons
-  editButton: {
-    marginTop: 20,
-    backgroundColor: mainPink,
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 45,
+  // Section (Change Password)
+  sectionContainer: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  sectionHeaderButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E9ECEF",
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1a1a1a",
+  },
+  sectionHeaderIcon: {
+    fontSize: 14,
+    color: mainPink,
+  },
+  passwordSection: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: "#fafafa",
+    borderRadius: 12,
+  },
+  changePasswordButton: {
+    backgroundColor: mainPink,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  changePasswordButtonText: {
+    color: white,
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+
+  // Divider
+  divider: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#E9ECEF",
+    marginVertical: 20,
+  },
+
+  // Clear Buttons
+  clearButton: {
+    width: "100%",
+    backgroundColor: white,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: "#FFA500",
+  },
+  clearButtonText: {
+    color: "#FFA500",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+
+  // Save & Cancel Buttons
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
+    gap: 12,
+  },
+  editButton: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 48,
+  },
+  saveButtonStyle: {
+    backgroundColor: mainPink,
     shadowColor: mainPink,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
+  },
+  cancelButtonStyle: {
+    backgroundColor: white,
+    borderWidth: 2,
+    borderColor: "#888",
   },
   editButtonText: {
     color: white,
     fontSize: 16,
     fontWeight: "bold",
   },
+  cancelButtonText: {
+    color: "#888",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 
-  cancelButton: {
+  // Delete Account Button
+  deleteButton: {
+    width: "100%",
     backgroundColor: white,
     paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 45,
+    paddingHorizontal: 20,
+    borderRadius: 12,
     alignItems: "center",
-    marginTop: 12,
+    marginTop: 20,
     borderWidth: 2,
-    borderColor: mainPink,
-    shadowColor: shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderColor: "#FF4444",
   },
-  cancelButtonText: {
-    color: mainPink,
+  deleteButtonText: {
+    color: "#FF4444",
     fontSize: 16,
     fontWeight: "bold",
   },
