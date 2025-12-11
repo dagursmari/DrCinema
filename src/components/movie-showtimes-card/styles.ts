@@ -1,0 +1,95 @@
+import { StyleSheet } from "react-native";
+
+export default StyleSheet.create({
+  card: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    padding: 12,
+    marginBottom: 16,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    position: "relative",
+  },
+  poster: {
+    width: 90,
+    height: 130,
+    borderRadius: 12,
+    marginRight: 12,
+  },
+  content: {
+    flex: 1,
+    paddingRight: 32,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 2,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#111111",
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  year: {
+    fontSize: 12,
+    color: "#777777",
+  },
+  dot: {
+    fontSize: 12,
+    color: "#777777",
+  },
+  genre: {
+    fontSize: 12,
+    color: "#FF748B",
+  },
+  showtimesRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+    chip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    marginRight: 8,
+    marginBottom: 6,
+    shadowColor: "#000",
+    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    },
+
+    chipText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#111111",
+    },
+  favouriteButton: {
+    position: "absolute",
+    right: 12,
+    top: "50%",
+    marginTop: -18,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+});
