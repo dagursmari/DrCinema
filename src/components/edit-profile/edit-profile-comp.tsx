@@ -1,17 +1,17 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { updateUserProfile, deleteAccount, changePassword } from "@/src/redux/slices/auth-slice";
+import { changePassword, deleteAccount, updateUserProfile } from "@/src/redux/slices/auth-slice";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { 
-  Alert, 
-  Image, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
   ScrollView,
-  ActivityIndicator 
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import styles from "./styles";
 
@@ -23,22 +23,23 @@ export function EditProfileComp() {
 
   const [name, setName] = useState(user?.name || "");
   const [profileImage, setProfileImage] = useState(user?.profileImage || "");
-  
+
   // Password fields
   const [showPasswordSection, setShowPasswordSection] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  
+
   const [loading, setLoading] = useState(false);
 
   if (!isAuthenticated || !user) return null;
 
   const pickFromGallery = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
+
     if (status !== "granted") {
       Alert.alert("Permission Denied", "Gallery access is required to choose a photo.");
+
       return;
     }
 
@@ -56,9 +57,10 @@ export function EditProfileComp() {
 
   const pickFromCamera = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    
+
     if (status !== "granted") {
       Alert.alert("Permission Denied", "Camera access is required to take a photo.");
+
       return;
     }
 
@@ -85,16 +87,20 @@ export function EditProfileComp() {
     // Validate password fields
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       Alert.alert("Error", "Please fill in all password fields");
+
       return;
     }
 
+
     if (newPassword.length < 6) {
       Alert.alert("Error", "New password must be at least 6 characters");
+
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
       Alert.alert("Error", "New passwords do not match");
+
       return;
     }
 
@@ -102,7 +108,7 @@ export function EditProfileComp() {
       setLoading(true);
       await dispatch(changePassword({ currentPassword, newPassword })).unwrap();
       Alert.alert("Success", "Password changed successfully");
-      
+
       // Clear password fields
       setCurrentPassword("");
       setNewPassword("");
@@ -184,6 +190,7 @@ export function EditProfileComp() {
   const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert("Error", "Name cannot be empty");
+
       return;
     }
 
@@ -222,10 +229,10 @@ export function EditProfileComp() {
 
       {/* Name Input */}
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Name</Text>
-        <TextInput 
-          value={name} 
-          onChangeText={setName} 
+      <Text style={styles.label}>Name</Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
           style={styles.input}
           placeholder="Enter your name"
         />
@@ -233,10 +240,10 @@ export function EditProfileComp() {
 
       {/* Email Input (Read-only) */}
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput 
-          value={user.email} 
-          editable={false} 
+      <Text style={styles.label}>Email</Text>
+        <TextInput
+          value={user.email}
+          editable={false}
           style={[styles.input, styles.inputDisabled]}
         />
         <Text style={styles.helperText}>Email cannot be changed</Text>

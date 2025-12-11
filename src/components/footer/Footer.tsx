@@ -1,7 +1,7 @@
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { usePathname, useRouter } from "expo-router";
 import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { useRouter, usePathname } from "expo-router";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Pressable, Text, View } from "react-native";
 import styles from "./styles";
 
 type FooterTab = {
@@ -11,7 +11,7 @@ type FooterTab = {
   iconSet: "Ionicons" | "Feather";
 };
 
-const TABS: FooterTab[] = [
+const tabs: FooterTab[] = [
   {
     label: "Home",
     route: "/home-screen",
@@ -50,7 +50,7 @@ export default function Footer() {
 
   return (
     <View style={styles.container}>
-      {TABS.map((tab) => {
+      {tabs.map((tab) => {
         const isActive = pathname === tab.route;
         const color = isActive ? "#e94560" : "#C4C4C4";
 

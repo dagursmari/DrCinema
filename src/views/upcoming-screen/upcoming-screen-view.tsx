@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
-import { fetchUpcomingMovies } from '@/src/redux/slices/upcomming-slice';
-import { UpcomingList } from '@/src/components/upcoming-list/upcoming-list';
-import { ScreenWithFooter } from '../footer/ScreenWithFooter';
-import styles from './styles';
+import { UpcomingList } from "@/src/components/upcoming-list/upcoming-list";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { fetchUpcomingMovies } from "@/src/redux/slices/upcomming-slice";
+import React, { useEffect } from "react";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
+import styles from "./styles";
 
 export function UpcomingMoviesScreen() {
   const dispatch = useAppDispatch();
-  
+
   // Get data from Redux store
   const { upcomingMovies, loading, error } = useAppSelector(
     (state) => state.upcoming
@@ -17,7 +17,6 @@ export function UpcomingMoviesScreen() {
 
   // Fetch upcoming movies when component mounts
   useEffect(() => {
-    console.log('📅 UpcomingMoviesScreen: Fetching upcoming movies...');
     dispatch(fetchUpcomingMovies());
   }, [dispatch]);
 
@@ -25,7 +24,7 @@ export function UpcomingMoviesScreen() {
   if (loading) {
     return (
       <ScreenWithFooter>
-        <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+        <SafeAreaView style={styles.container} edges={["bottom", "left", "right"]}>
           <Text style={styles.header}>Upcoming</Text>
           <View style={styles.centerContainer}>
             <ActivityIndicator size="large" color="#FF3366" />
@@ -40,7 +39,7 @@ export function UpcomingMoviesScreen() {
   if (error) {
     return (
       <ScreenWithFooter>
-        <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+        <SafeAreaView style={styles.container} edges={["bottom", "left", "right"]}>
           <Text style={styles.header}>Upcoming</Text>
           <View style={styles.centerContainer}>
             <Text style={styles.errorIcon}>❌</Text>
@@ -61,14 +60,14 @@ export function UpcomingMoviesScreen() {
   // Success - render the list
   return (
     <ScreenWithFooter>
-      <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+      <SafeAreaView style={styles.container} edges={["bottom", "left", "right"]}>
         {/* Header */}
         <Text style={styles.header}>Upcoming</Text>
 
         {/* Movie Count */}
         {upcomingMovies.length > 0 && (
           <Text style={styles.subtitle}>
-            {upcomingMovies.length} {upcomingMovies.length === 1 ? 'movie' : 'movies'} coming soon
+            {upcomingMovies.length} {upcomingMovies.length === 1 ? "movie" : "movies"} coming soon
           </Text>
         )}
 

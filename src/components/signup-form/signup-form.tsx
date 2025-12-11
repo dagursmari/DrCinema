@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { clearAuthError, registerUser } from "@/src/redux/slices/auth-slice";
+import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -11,8 +12,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import styles from "./styles";import * as ImagePicker from "expo-image-picker";
-import {Platform } from "react-native";
+import styles from "./styles";
 
 interface SignupFormProps {
     onSuccess: () => void;
@@ -20,7 +20,7 @@ interface SignupFormProps {
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
     const dispatch = useAppDispatch();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const { loading } = useAppSelector((state) => state.auth);
 
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
@@ -38,24 +38,28 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) return "Email is required";
         if (!emailRegex.test(email)) return "Please enter a valid email";
+
         return "";
     };
 
     const validateName = (name: string) => {
         if (!name) return "Name is required";
         if (name.length < 2) return "Name must be at least 2 characters";
+
         return "";
     };
 
     const validatePassword = (password: string) => {
         if (!password) return "Password is required";
         if (password.length < 6) return "Password must be at least 6 characters";
+
         return "";
     };
 
     const validateConfirmPassword = (password: string, confirmPassword: string) => {
         if (!confirmPassword) return "Please confirm your password";
         if (password !== confirmPassword) return "Passwords do not match";
+
         return "";
     };
 
@@ -69,6 +73,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
           alert("Permission required to access photos.");
+
           return;
         }
 
@@ -92,6 +97,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
           alert("Permission required to access camera.");
+
           return;
         }
 
@@ -130,6 +136,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
             setNameError(nameErr);
             setPasswordError(passwordErr);
             setConfirmPasswordError(confirmPasswordErr);
+
             return;
         }
 

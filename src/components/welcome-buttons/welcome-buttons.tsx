@@ -9,8 +9,8 @@ interface WelcomeButtonsProps {
     onTestAuth?: () => void;
 }
 
-export function WelcomeButtons({ 
-    onSignup, 
+export function WelcomeButtons({
+    onSignup,
     onContinueAsGuest,
     showTestButtons = false,
     onTestMovies,

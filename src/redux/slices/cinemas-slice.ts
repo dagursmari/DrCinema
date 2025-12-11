@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { CinemasState, Cinema } from '../types';
-import { apiService } from '../../services/api-service';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { apiService } from "../../services/api-service";
+import { Cinema, CinemasState } from "../types";
 
 // ==========================================
 // INITIAL STATE
@@ -20,22 +20,20 @@ const initialState: CinemasState = {
  * Automatically sorts them alphabetically by name
  */
 export const fetchCinemas = createAsyncThunk(
-  'cinemas/fetchCinemas',
+  "cinemas/fetchCinemas",
   async (_, { rejectWithValue }) => {
     try {
-      console.log('🎭 Fetching cinemas from API...');
       const cinemas = await apiService.getCinemas();
-      
-      // Sort alphabetically by name (required by assignment)
-      const sortedCinemas = cinemas.sort((a, b) => 
-        a.name.localeCompare(b.name, 'is-IS') // Icelandic locale for proper sorting
+
+     // Sort alphabetically by name (required by assignment)
+      const sortedCinemas = cinemas.sort((a, b) =>
+        a.name.localeCompare(b.name, "is-IS") // Icelandic locale for proper sorting
       );
-      
-      console.log(`✅ Fetched ${sortedCinemas.length} cinemas`);
-      return sortedCinemas;
+
+     return sortedCinemas;
     } catch (error: any) {
-      console.error('❌ Failed to fetch cinemas:', error);
-      return rejectWithValue(error.message || 'Failed to fetch cinemas');
+
+      return rejectWithValue(error.message || "Failed to fetch cinemas");
     }
   }
 );
@@ -45,16 +43,14 @@ export const fetchCinemas = createAsyncThunk(
  * (Optional - if you need detailed cinema info)
  */
 export const fetchCinemaById = createAsyncThunk(
-  'cinemas/fetchCinemaById',
+  "cinemas/fetchCinemaById",
   async (cinemaId: number, { rejectWithValue }) => {
     try {
-      console.log(`🎭 Fetching cinema ${cinemaId}...`);
       const cinema = await apiService.getCinemaById(cinemaId);
-      console.log(`✅ Fetched cinema: ${cinema.name}`);
+
       return cinema;
     } catch (error: any) {
-      console.error(`❌ Failed to fetch cinema ${cinemaId}:`, error);
-      return rejectWithValue(error.message || 'Failed to fetch cinema');
+      return rejectWithValue(error.message || "Failed to fetch cinema");
     }
   }
 );
@@ -63,9 +59,9 @@ export const fetchCinemaById = createAsyncThunk(
 // SLICE
 // ==========================================
 const cinemasSlice = createSlice({
-  name: 'cinemas',
-  initialState,
-  
+  name: "cinemas",
+ initialState,
+
   // Synchronous reducers (for manual state updates)
   reducers: {
     /**
@@ -78,13 +74,13 @@ const cinemasSlice = createSlice({
     /**
      * Manually sort cinemas (if needed)
      */
-    sortCinemas: (state, action: PayloadAction<'asc' | 'desc'>) => {
+    sortCinemas: (state, action: PayloadAction<"asc" | "desc">) => {
       const order = action.payload;
       state.cinemas.sort((a, b) => {
-        if (order === 'asc') {
-          return a.name.localeCompare(b.name, 'is-IS');
+        if (order === "asc") {
+          return a.name.localeCompare(b.name, "is-IS");
         } else {
-          return b.name.localeCompare(a.name, 'is-IS');
+          return b.name.localeCompare(a.name, "is-IS");
         }
       });
     },
@@ -97,42 +93,37 @@ const cinemasSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-  },
-  
+ },
+
   // Async action handlers (for thunks)
   extraReducers: (builder) => {
     // ==========================================
     // FETCH ALL CINEMAS
-    // ==========================================
+   // ==========================================
     builder
       .addCase(fetchCinemas.pending, (state) => {
-        console.log('⏳ Loading cinemas...');
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchCinemas.fulfilled, (state, action: PayloadAction<Cinema[]>) => {
-        console.log('✅ Cinemas loaded successfully');
         state.loading = false;
         state.cinemas = action.payload;
       })
       .addCase(fetchCinemas.rejected, (state, action) => {
-        console.log('❌ Failed to load cinemas');
         state.loading = false;
         state.error = action.payload as string;
-      })
-      
+     })
+
     // ==========================================
     // FETCH CINEMA BY ID
     // ==========================================
       .addCase(fetchCinemaById.pending, (state) => {
-        console.log('⏳ Loading cinema details...');
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCinemaById.fulfilled, (state, action: PayloadAction<Cinema>) => {
-        console.log('✅ Cinema details loaded');
-        state.loading = false;
-        
+     .addCase(fetchCinemaById.fulfilled, (state, action: PayloadAction<Cinema>) => {
+       state.loading = false;
+
         // Update cinema in the list if it exists, otherwise add it
         const index = state.cinemas.findIndex(c => c.id === action.payload.id);
         if (index !== -1) {
@@ -140,11 +131,10 @@ const cinemasSlice = createSlice({
         } else {
           state.cinemas.push(action.payload);
           // Re-sort after adding
-          state.cinemas.sort((a, b) => a.name.localeCompare(b.name, 'is-IS'));
+          state.cinemas.sort((a, b) => a.name.localeCompare(b.name, "is-IS"));
         }
-      })
+     })
       .addCase(fetchCinemaById.rejected, (state, action) => {
-        console.log('❌ Failed to load cinema details');
         state.loading = false;
         state.error = action.payload as string;
       });

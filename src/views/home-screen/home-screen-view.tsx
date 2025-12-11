@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
 import { fetchMovies } from "@/src/redux/slices/movies-slice";
 import type { Cinema, Movie } from "@/src/redux/types";
-import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -19,7 +18,6 @@ interface CinemaWithMovies {
 
 export function HomeScreenView() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const [filters, setFilters] = useState<Filters>({});
   const [showFilter, setShowFilter] = useState(false);
@@ -66,19 +64,19 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
           const audienceScore = parseFloat(movie.ratings?.rotten_audience || "0");
           const criticsScore = parseFloat(movie.ratings?.rotten_critics || "0");
           const maxScore = Math.max(audienceScore, criticsScore);
-          
+
           if (maxScore < filters.rottenRating) {
             return false;
           }
         }
 
-        if (filters.actor && !movie.actors_abridged?.some(a => 
+        if (filters.actor && !movie.actors_abridged?.some(a =>
           a.name.toLowerCase().includes(filters.actor!.toLowerCase())
         )) {
           return false;
         }
 
-        if (filters.director && !movie.directors_abridged?.some(d => 
+        if (filters.director && !movie.directors_abridged?.some(d =>
           d.name.toLowerCase().includes(filters.director!.toLowerCase())
         )) {
           return false;
@@ -92,48 +90,48 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
             return false;
           }
         }
-        
+
         if (filters.showtimeFrom || filters.showtimeTo) {
           const showtimeAtCinema = movie.showtimes?.find(st => st.cinema.id === cinema.id);
           const schedule = showtimeAtCinema?.schedule || [];
-          
+
           if (schedule.length === 0) {
             return false;
           }
-          
+
           const timeMatch = schedule.some(sch => {
             let time = sch.time.trim();
-            
+
             if (time.includes(" ")) {
               time = time.split(" ")[0];
             }
             if (time.includes("(")) {
               time = time.split("(")[0].trim();
             }
-            
+
             if (!time.includes(":")) {
               return false;
             }
-            
+
             const timeParts = time.split(":");
             if (timeParts.length < 2) {
               return false;
             }
-            
+
             const hours = timeParts[0].padStart(2, "0");
             const minutes = timeParts[1].padStart(2, "0");
             time = `${hours}:${minutes}`;
-            
+
             if (filters.showtimeFrom && time < filters.showtimeFrom) {
               return false;
             }
             if (filters.showtimeTo && time > filters.showtimeTo) {
               return false;
             }
-            
+
             return true;
           });
-          
+
           if (!timeMatch) {
             return false;
           }
@@ -161,9 +159,6 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
     setSearchText(text);
   };
 
-  const handleFilterPress = () => {
-    setShowFilter((prev) => !prev);
-  };
 
   const isLoading = moviesLoading || cinemasLoading;
   const error = moviesError || cinemasError;
@@ -199,7 +194,7 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
         </View>
 
         {showFilter && (
-          <FilterComp 
+          <FilterComp
             onApplyFilters={(newFilters) => {
               setFilters(newFilters);
               setShowFilter(false);
@@ -227,12 +222,12 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
       </View>
 
       {showFilter && (
-      <TouchableOpacity 
-        activeOpacity={1} 
+      <TouchableOpacity
+        activeOpacity={1}
         onPress={() => Keyboard.dismiss()}
         style={{ marginHorizontal: 0 }}
       >
-        <FilterComp 
+        <FilterComp
           onApplyFilters={(newFilters) => {
             setFilters(newFilters);
             setShowFilter(false);
@@ -241,18 +236,18 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
         />
       </TouchableOpacity>
     )}
-          
+
         <FlatList
           data={filteredCinemas}
           renderItem={({ item }) => (
-            <CinemaSectionComp 
-              cinema={item.cinema} 
+            <CinemaSectionComp
+              cinema={item.cinema}
               movies={item.movies}
             />
           )}
           keyExtractor={(item) => item.cinema.id.toString()}
           style={styles.list}
-          contentContainerStyle={{ 
+          contentContainerStyle={{
             paddingBottom: 100,
           }}
           showsVerticalScrollIndicator={false}

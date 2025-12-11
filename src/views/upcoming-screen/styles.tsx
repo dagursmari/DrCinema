@@ -1,12 +1,12 @@
+import { black, mainPink, white } from "@/src/styles/colors";
 import { StyleSheet } from "react-native";
-import { white, shadow, mainPink, black } from "@/src/styles/colors";
 
 export default StyleSheet.create({
     container: {
     flex: 1,
     backgroundColor: white,
   },
-  
+
   header: {
     fontSize: 32,
     fontWeight: 800,
@@ -71,4 +71,4 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-})
+});

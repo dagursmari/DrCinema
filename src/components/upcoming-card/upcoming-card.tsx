@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Modal, StatusBar } from 'react-native';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import type { UpcomingMovie } from '@/src/redux/types';
-import styles from './styles';
+import type { UpcomingMovie } from "@/src/redux/types";
+import React, { useState } from "react";
+import { Image, Modal, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import YoutubePlayer from "react-native-youtube-iframe";
+import styles from "./styles";
 
 interface UpcomingCardProps {
   movie: UpcomingMovie;
@@ -14,22 +14,23 @@ export function UpcomingCard({ movie }: UpcomingCardProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const months = [
-      'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
-      'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
+      "janúar", "febrúar", "mars", "apríl", "maí", "júní",
+      "júlí", "ágúst", "september", "október", "nóvember", "desember"
     ];
-    
+
     const day = date.getDate();
     const month = months[date.getMonth()];
     const year = date.getFullYear();
-    
+
     return `${day} ${month} ${year}`;
   };
 
   const getFirstGenre = () => {
     if (!movie.genres || movie.genres.length === 0) {
-      return 'Óþekkt';
+      return "Óþekkt";
     }
-    return movie.genres[0].Name || 'Óþekkt';
+
+    return movie.genres[0].Name || "Óþekkt";
   };
 
   const trailers = movie.trailers?.[0]?.results ?? [];

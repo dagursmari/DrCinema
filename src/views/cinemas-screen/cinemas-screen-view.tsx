@@ -6,10 +6,10 @@ import CinemaListItem from "@/src/components/cinema-list-item/CinemaListItem";
 import { normalizeInitial } from "@/src/components/letter-helper/letters";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
-import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 import type { Cinema } from "@/src/redux/types";
 import styles from "./styles";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 interface CinemaSection {
   title: string;

@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { mainPink, black, white } from "@/src/styles/colors";
+import { black, mainPink, white } from "@/src/styles/colors";
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   card: {

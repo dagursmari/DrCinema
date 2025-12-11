@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Image, Text, View, TouchableOpacity, Alert } from "react-native";
+import { useAppSelector } from "@/src/redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useAppSelector } from "@/src/redux/hooks";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { RatingsSection } from "../ratings/rating-section";
 import { ShowtimesSection } from "../showtimes/showtimes-section";
 import { TrailerPlayer } from "../trailer/trailerplayer";
 import styles from "./styles";
 
-import {
-  getFavourites,
-  addFavourite,
-  removeFavourite,
-  buildUserFavouritesKey,
-} from "@/src/services/favourites-storage";
 import type { Movie } from "@/src/redux/types";
-import { State } from "react-native-gesture-handler";
+import {
+  AddFavourite,
+  BuildUserFavouritesKey,
+  GetFavourites,
+  RemoveFavourite,
+} from "@/src/services/favourites-storage";
 
 export default function MovieDetailsComp() {
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
-  const userKey = buildUserFavouritesKey(user);
+  const userKey = BuildUserFavouritesKey(user);
   const { id, cinemaId } =
     useLocalSearchParams<{ id?: string; cinemaId?: string }>();
 
@@ -38,9 +37,10 @@ export default function MovieDetailsComp() {
     const checkFavourite = async () => {
       if (!movie || !userKey) {
         setIsFavourite(false);
+
         return;
       }
-      const favs = await getFavourites(userKey);
+      const favs = await GetFavourites(userKey);
       const exists = favs.some((m) => m.id === movie.id);
       setIsFavourite(exists);
     };
@@ -84,14 +84,15 @@ export default function MovieDetailsComp() {
           { text: "Sign in", onPress: () => router.push("/login") },
         ]
       );
+
       return;
     }
 
     if (isFavourite) {
-      await removeFavourite(userKey, movie.id);
+      await RemoveFavourite(userKey, movie.id);
       setIsFavourite(false);
     } else {
-      await addFavourite(userKey, movie);
+      await AddFavourite(userKey, movie);
       setIsFavourite(true);
     }
   };
@@ -102,36 +103,6 @@ export default function MovieDetailsComp() {
   };
 
   const certificate = movie.omdb?.[0]?.Rated || "N/A";
-
-  const calculateAverageRating = (): string => {
-    const ratings: number[] = [];
-
-    if (movie.ratings?.imdb && !isNaN(Number(movie.ratings.imdb))) {
-      ratings.push(Number(movie.ratings.imdb));
-    }
-
-    if (
-      movie.ratings?.rotten_audience &&
-      !isNaN(Number(movie.ratings.rotten_audience))
-    ) {
-      ratings.push(Number(movie.ratings.rotten_audience) / 10);
-    }
-
-    if (
-      movie.ratings?.rotten_critics &&
-      !isNaN(Number(movie.ratings.rotten_critics))
-    ) {
-      ratings.push(Number(movie.ratings.rotten_critics) / 10);
-    }
-
-    if (ratings.length === 0) {
-      return "N/A";
-    }
-
-    const average =
-      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
-    return average.toFixed(1);
-  };
 
   return (
     <View style={styles.container}>
@@ -159,6 +130,7 @@ export default function MovieDetailsComp() {
       <View style={styles.titleSection}>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
+
 
       <View style={styles.infoBox}>
         <View style={styles.infoItem}>

@@ -1,22 +1,20 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { logoutUser } from "@/src/redux/slices/auth-slice";
-import { buildUserFavouritesKey, getFavourites } from "@/src/services/favourites-storage";
-import { useRouter } from "expo-router";
-import { useState, useEffect } from "react";
-import { Image, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
+import { BuildUserFavouritesKey, GetFavourites } from "@/src/services/favourites-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import type { Movie } from "@/src/redux/types";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import React from "react";
 import { ScreenWithFooter } from "@/src/views/footer/ScreenWithFooter";
 
 export function UserDetailComp() {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    
+
     const user = useAppSelector((state) => state.auth.user);
-    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-    
+   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+
     const [favoritesCount, setFavoritesCount] = useState(0);
 
     useFocusEffect(
@@ -26,8 +24,8 @@ export function UserDetailComp() {
     );
 
     const loadFavoritesCount = async () => {
-        const userKey = buildUserFavouritesKey(user);
-        const favorites = await getFavourites(userKey);
+        const userKey = BuildUserFavouritesKey(user);
+        const favorites = await GetFavourites(userKey);
         setFavoritesCount(favorites.length);
     };
 

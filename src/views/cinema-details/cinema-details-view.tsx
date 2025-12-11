@@ -6,10 +6,10 @@ import { ActivityIndicator, Linking, ScrollView, Text, TouchableOpacity, View } 
 import MovieShowtimesCard from "@/src/components/movie-showtimes-card/MovieShowtimeCard";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemaById } from "@/src/redux/slices/cinemas-slice";
-import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 import type { Cinema, Movie } from "@/src/redux/types";
 import styles from "./styles";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 export function CinemaDetailsScreenView() {
   const dispatch = useAppDispatch();

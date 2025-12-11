@@ -1,6 +1,6 @@
-import { View, StyleSheet } from 'react-native';
-import { RatingCard } from './rating-card';
-import styles from './styles';
+import { View } from "react-native";
+import { RatingCard } from "./rating-card";
+import styles from "./styles";
 
 interface RatingsSectionProps {
   ratings: {
@@ -15,23 +15,23 @@ export function RatingsSection({ ratings }: RatingsSectionProps) {
     <View style={styles.container}>
       {ratings.imdb && (
         <RatingCard
-          logo={require('@/assets/images/imdb-logo.png')}
+          logo={require("@/assets/images/imdb-logo.png")}
           rating={ratings.imdb}
           suffix="/10"
         />
       )}
-      
+
       {ratings.rotten_critics && (
         <RatingCard
-          logo={require('@/assets/images/rotten-logo.png')}
+          logo={require("@/assets/images/rotten-logo.png")}
           rating={ratings.rotten_critics}
           suffix="%"
         />
       )}
-      
+
       {ratings.rotten_audience && (
         <RatingCard
-          logo={require('@/assets/images/rotten-audience-logo.png')}
+          logo={require("@/assets/images/rotten-audience-logo.png")}
           rating={ratings.rotten_audience}
           suffix="%"
         />

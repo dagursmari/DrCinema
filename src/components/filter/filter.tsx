@@ -1,12 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-    Keyboard,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import styles from "./styles";
 
@@ -49,7 +49,7 @@ export function FilterComp({ onApplyFilters, onClose }: FilterCompProps) {
   const handleApply = () => {
     Keyboard.dismiss();
     const filters: Filters = {};
-    
+
     if (imdbRating) filters.imdbRating = parseFloat(imdbRating);
     if (rottenRating) filters.rottenRating = parseFloat(rottenRating);
     if (actor.trim()) filters.actor = actor.trim();
@@ -97,7 +97,7 @@ export function FilterComp({ onApplyFilters, onClose }: FilterCompProps) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.filterContent}
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
@@ -195,14 +195,14 @@ export function FilterComp({ onApplyFilters, onClose }: FilterCompProps) {
       </ScrollView>
 
       <View style={styles.filterActions}>
-        <TouchableOpacity 
-          style={[styles.filterActionButton, styles.clearButton]} 
+        <TouchableOpacity
+          style={[styles.filterActionButton, styles.clearButton]}
           onPress={handleClear}
         >
           <Text style={styles.clearButtonText}>Clear</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.filterActionButton, styles.applyButton]} 
+        <TouchableOpacity
+          style={[styles.filterActionButton, styles.applyButton]}
           onPress={handleApply}
         >
           <Text style={styles.applyButtonText}>Apply</Text>

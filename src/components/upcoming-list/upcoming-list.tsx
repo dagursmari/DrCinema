@@ -1,8 +1,8 @@
-import React from 'react';
-import { FlatList, StyleSheet, View, Text } from 'react-native';
-import { UpcomingCard } from '../upcoming-card/upcoming-card';
-import type { UpcomingMovie } from '@/src/redux/types';
-import styles from './styles';
+import type { UpcomingMovie } from "@/src/redux/types";
+import React from "react";
+import { FlatList, Text, View } from "react-native";
+import { UpcomingCard } from "../upcoming-card/upcoming-card";
+import styles from "./styles";
 
 interface UpcomingListProps {
   movies: UpcomingMovie[];

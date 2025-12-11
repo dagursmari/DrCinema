@@ -1,6 +1,6 @@
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
 import { SignupForm } from "@/src/components/signup-form/signup-form";
+import { useRouter } from "expo-router";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import styles from "./styles";
 
 export function SignupView() {
@@ -24,7 +24,7 @@ export function SignupView() {
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
             >
-                <SignupForm 
+                <SignupForm
                     onSuccess={handleSuccess}
                     onContinueAsGuest={handleContinueAsGuest}
                 />

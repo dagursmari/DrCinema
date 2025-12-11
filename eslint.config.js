@@ -35,7 +35,7 @@ module.exports = defineConfig([
     'quotes': ['error', 'double'],
     'semi': ['error', 'always'],
     'eqeqeq': ['error', 'always'],
-    'max-len': ['error', { code: 115 }],
+    'max-len': ['error', { code: 130 }],
   },
 },  
   {

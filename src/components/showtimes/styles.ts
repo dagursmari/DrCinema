@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 import { shadow, mainPink, black, lightGray, white } from "@/src/styles/colors";
 
 
@@ -81,10 +81,10 @@ export default StyleSheet.create({
   buyButtonDisabled: {
     backgroundColor: "#ccc",
   },
-  
+
   buyButtonText: {
     color: white,
     fontSize: 18,
     fontWeight: 600,
   },
-})
+});

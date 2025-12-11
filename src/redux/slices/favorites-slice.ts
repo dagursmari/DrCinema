@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FavoritesState, Movie } from '../types';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FavoritesState, Movie } from "../types";
 
-const FAVORITES_KEY = '@dr_cinema_favorites';
+const favoritesKey = "@dr_cinema_favorites";
 
 const initialState: FavoritesState = {
   favorites: [],
@@ -13,13 +13,14 @@ const initialState: FavoritesState = {
  * Load favorites from phone storage when app starts
  */
 export const loadFavorites = createAsyncThunk(
-  'favorites/loadFavorites',
+  "favorites/loadFavorites",
   async (_, { rejectWithValue }) => {
     try {
-      const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+      const stored = await AsyncStorage.getItem(favoritesKey);
       if (stored) {
         return JSON.parse(stored) as Movie[];
       }
+
       return [];
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -32,14 +33,13 @@ export const loadFavorites = createAsyncThunk(
  */
 const saveFavorites = async (favorites: Movie[]): Promise<void> => {
   try {
-    await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    await AsyncStorage.setItem(favoritesKey, JSON.stringify(favorites));
   } catch (error) {
-    console.error('Failed to save favorites:', error);
   }
 };
 
 const favoritesSlice = createSlice({
-  name: 'favorites',
+  name: "favorites",
   initialState,
   reducers: {
     /**

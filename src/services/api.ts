@@ -1,13 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { encode as btoa } from "base-64";
 
-const API_BASE_URL = "https://api.kvikmyndir.is";
-const TOKEN_KEY = "@dr_cinema_token";
-const TOKEN_EXPIRY_KEY = "@dr_cinema_token_expiry";
+const apiBaseUrl = "https://api.kvikmyndir.is";
+const tokenKey = "@dr_cinema_token";
+const tokenExpiryKey = "@dr_cinema_token_expiry";
 
 // REPLACE WITH YOUR CREDENTIALS AFTER YOU HAVE REGISTERED
-const USERNAME = "dagursmari";
-const PASSWORD = "dagursmari";
+const username = "dagursmari";
+const password = "dagursmari";
 
 class ApiClient {
   private token: string | null = null;
@@ -15,81 +15,68 @@ class ApiClient {
   async getToken(): Promise<string> {
     //check if there is a cashed token
     if (this.token) {
-      console.log("Using cached token");
+
       return this.token;
     }
 
-    const storedToken = await AsyncStorage.getItem(TOKEN_KEY);
-    const expiryTime = await AsyncStorage.getItem(TOKEN_EXPIRY_KEY);
+    const storedToken = await AsyncStorage.getItem(tokenKey);
+    const expiryTime = await AsyncStorage.getItem(tokenExpiryKey);
 
     //Check if token has expired
     if (storedToken && expiryTime) {
       const now = Date.now();
       if (now < parseInt(expiryTime, 10)) {
-        console.log("Using stored token");
         this.token = storedToken;
+
         return storedToken;
       } else {
-        console.log("Stored token expired");
       }
     }
 
-    console.log("Getting new token...");
     return await this.authenticate();
   }
 
   private async authenticate(): Promise<string> {
-    console.log("Authenticating with Basic Auth...");
-    console.log("Username: ", USERNAME);
-    
-    try {
+
+   try {
       // Create Basic Auth header (same as Postman does)
-      const credentials = `${USERNAME}:${PASSWORD}`;
+      const credentials = `${username}:${password}`;
       const base64Credentials = btoa(credentials);
       const authHeader = `Basic ${base64Credentials}`;
-      
-      console.log("Auth header:", `Basic ${base64Credentials.substring(0, 20)}...`);
-      
+
+
       //Send a post request to API to getu auth key
-      const response = await fetch(`${API_BASE_URL}/authenticate`, {
+      const response = await fetch(`${apiBaseUrl}/authenticate`, {
         method: "POST",
         headers: {
           "Authorization": authHeader,
         },
       });
       //responce from API
-      console.log("Response status:", response.status);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Auth failed: ", errorText);
         throw new Error(`Authentication failed: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("Response:", data);
-      
+
       if (!data.success || !data.token) {
-        console.error("No token received:", data.message);
         throw new Error(data.message || "No token received");
       }
 
     //Store new token in cache
       this.token = data.token;
       const expiryTime = Date.now() + (24 * 60 * 60 * 1000); //Runs out in 24h
-      
-      //Store in AsyncStorage
-      await AsyncStorage.setItem(TOKEN_KEY, data.token);
-      await AsyncStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
 
-      console.log("Authentication successful!");
-      console.log("Token (first 30 chars):", data.token.substring(0, 30) + "...");
-      
+      //Store in AsyncStorage
+      await AsyncStorage.setItem(tokenKey, data.token);
+      await AsyncStorage.setItem(tokenExpiryKey, expiryTime.toString());
+
       //return new token if authentication successful
       return data.token;
 
     } catch (error) {
-      console.error("Authentication error:", error);
       throw error;
     }
   }
@@ -97,47 +84,44 @@ class ApiClient {
     //API get function
   async get<T>(endpoint: string, queryParams?: Record<string, string>): Promise<T> {
     const token = await this.getToken();
-    
-    let url = `${API_BASE_URL}${endpoint}`;
+
+    let url = `${apiBaseUrl}${endpoint}`;
     if (queryParams) {
       const params = new URLSearchParams(queryParams);
       url += `?${params.toString()}`;
     }
-    
-    console.log(`GET: ${url}`);
-    
+
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        'x-access-token': token,
+        "x-access-token": token,
       },
     });
 
-    console.log('Response status:', response.status);
 
     if (!response.ok) {
       if (response.status === 401 || response.status === 403) {
-        console.log('🔄 Token expired, re-authenticating...');
         this.token = null;
-        await AsyncStorage.removeItem(TOKEN_KEY);
-        await AsyncStorage.removeItem(TOKEN_EXPIRY_KEY);
-        
+        await AsyncStorage.removeItem(tokenKey);
+        await AsyncStorage.removeItem(tokenExpiryKey);
+
         const newToken = await this.getToken();
         const retryResponse = await fetch(url, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'x-access-token': newToken,
+            "x-access-token": newToken,
           },
         });
-        
+
         if (!retryResponse.ok) {
           const errorText = await retryResponse.text();
           throw new Error(`API Error: ${retryResponse.status} ${errorText}`);
         }
-        
+
         return await retryResponse.json();
       }
-      
+
       const errorText = await response.text();
       throw new Error(`API Error ${response.status}: ${errorText}`);
     }
@@ -147,9 +131,8 @@ class ApiClient {
 
   async clearToken(): Promise<void> {
     this.token = null;
-    await AsyncStorage.removeItem(TOKEN_KEY);
-    await AsyncStorage.removeItem(TOKEN_EXPIRY_KEY);
-    console.log('🗑️ Token cleared');
+    await AsyncStorage.removeItem(tokenKey);
+    await AsyncStorage.removeItem(tokenExpiryKey);
   }
 }
 

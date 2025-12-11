@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, Pressable, Alert } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 
-import styles from "./styles";
-import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
 import { useAppSelector } from "@/src/redux/hooks";
+import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
+import styles from "./styles";
 
 import {
-  getFavourites,
-  addFavourite,
-  removeFavourite,
-  buildUserFavouritesKey,
+  AddFavourite,
+  BuildUserFavouritesKey,
+  GetFavourites,
+  RemoveFavourite,
 } from "@/src/services/favourites-storage";
 
 type Props = {
@@ -25,7 +25,7 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
 
   const user = useAppSelector((state) => state.auth.user);
   const isLoggedIn = !!user;
-  const userKey = buildUserFavouritesKey(user);
+  const userKey = BuildUserFavouritesKey(user);
 
   const [isFavourite, setIsFavourite] = useState(false);
 
@@ -42,9 +42,10 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
     const checkFavourite = async () => {
       if (!userKey) {
         setIsFavourite(false);
+
         return;
       }
-      const favs = await getFavourites(userKey);
+      const favs = await GetFavourites(userKey);
       const exists = favs.some((m) => m.id === movie.id);
       setIsFavourite(exists);
     };
@@ -62,14 +63,15 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
           { text: "Sign in", onPress: () => router.push("/login") },
         ]
       );
+
       return;
     }
 
     if (isFavourite) {
-      await removeFavourite(userKey, movie.id);
+      await RemoveFavourite(userKey, movie.id);
       setIsFavourite(false);
     } else {
-      await addFavourite(userKey, movie);
+      await AddFavourite(userKey, movie);
       setIsFavourite(true);
     }
   };

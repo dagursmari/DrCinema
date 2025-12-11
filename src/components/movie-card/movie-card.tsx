@@ -1,7 +1,7 @@
-import type { Movie, Cinema } from "@/src/redux/types";
+import type { Cinema, Movie } from "@/src/redux/types";
 import { router } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View, Image } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 
 interface MovieCardProps {
@@ -14,8 +14,9 @@ export default function MovieCard({ movie, cinema }: MovieCardProps) {
     if (!movie.genres || movie.genres.length === 0) {
       return "Unknown";
     }
-    
+
     const genre = movie.genres[0];
+
     return genre["NameEN\t"] || genre.Name || "Unknown";
   };
 
@@ -31,15 +32,15 @@ export default function MovieCard({ movie, cinema }: MovieCardProps) {
           style={styles.poster}
           resizeMode="cover"
         />
-      </View>
-      
+     </View>
+
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>
           {movie.title}
-        </Text>
-        
-        <Text style={styles.year}>{movie.year}</Text>
-        
+       </Text>
+
+       <Text style={styles.year}>{movie.year}</Text>
+
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{getFirstGenre()}</Text>
         </View>

@@ -4,4 +4,4 @@ export default StyleSheet.create({
     container: {
         backgroundColor: "white",
     }
-})
+});

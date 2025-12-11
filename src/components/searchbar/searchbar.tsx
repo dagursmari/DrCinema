@@ -25,10 +25,10 @@ export default function SearchBarComp({ onSearch, }: SearchBarProps) {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        <Ionicons 
-          name="search" 
-          size={20} 
-          color="#999" 
+        <Ionicons
+          name="search"
+          size={20}
+          color="#999"
           style={styles.searchIcon}
         />
         <TextInput

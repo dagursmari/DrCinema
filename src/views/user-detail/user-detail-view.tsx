@@ -7,5 +7,5 @@ export function UserDetailView () {
         <View style={styles.container}>
             <UserDetailComp/>
         </View>
-    )
+    );
 }

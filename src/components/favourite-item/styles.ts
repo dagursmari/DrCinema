@@ -8,18 +8,18 @@ export default StyleSheet.create({
     padding: 14,
     backgroundColor: "#fff",
   },
-  cardActive: { 
-    backgroundColor: "#FFF5F7" 
+  cardActive: {
+    backgroundColor: "#FFF5F7"
   },
 
-  handle: { 
-    marginRight: 10 
+  handle: {
+    marginRight: 10
   },
 
-  poster: { 
-    width: 100, 
-    height: 150, 
-    borderRadius: 8, 
+  poster: {
+    width: 100,
+    height: 150,
+    borderRadius: 8,
     marginRight: 12,
     shadowColor: black,
     shadowOffset: {
@@ -30,28 +30,28 @@ export default StyleSheet.create({
     shadowRadius: 6,
   },
 
-  textContainer: { 
+  textContainer: {
     flex: 1
   },
 
-  title: { 
-    fontSize: 16, 
-    fontWeight: "700" 
+  title: {
+    fontSize: 16,
+    fontWeight: "700"
   },
 
-  metaRow: { 
+  metaRow: {
     flexDirection: "row",
     marginTop: 4
   },
 
-  year: { 
+  year: {
     fontSize: 13,
     color: "#666"
   },
 
-  genre: { 
-    fontSize: 13, 
-    color: mainPink, 
+  genre: {
+    fontSize: 13,
+    color: mainPink,
   },
 
   removeButton: {
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
 
-  removeText: { 
+  removeText: {
     color: mainPink,
     fontWeight: "700",
   },

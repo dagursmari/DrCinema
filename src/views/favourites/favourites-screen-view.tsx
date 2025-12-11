@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
-import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 import FavouriteItem from "@/src/components/favourite-item/FavouriteItem";
 
 import { useAppSelector } from "@/src/redux/hooks";
 import { mainPink } from "@/src/styles/colors";
 
 import {
-  getFavourites,
-  saveFavourites,
-  removeFavourite,
-  buildUserFavouritesKey,
+  BuildUserFavouritesKey,
+  GetFavourites,
+  RemoveFavourite,
+  SaveFavourites,
 } from "@/src/services/favourites-storage";
 
 import type { Movie } from "@/src/redux/types";
 import styles from "./styles";
-import { isAction } from "@reduxjs/toolkit";
+import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 
 export function FavouritesScreenView() {
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
   const isLoggedIn = !!user;
 
-  const userKey = buildUserFavouritesKey(user);
+  const userKey = BuildUserFavouritesKey(user);
 
   const [favourites, setFavourites] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,11 +33,12 @@ export function FavouritesScreenView() {
     if (!isLoggedIn || !userKey) {
       setFavourites([]);
       setLoading(false);
+
       return;
     }
 
     const load = async () => {
-      const favs = await getFavourites(userKey);
+      const favs = await GetFavourites(userKey);
       setFavourites(favs);
       setLoading(false);
     };
@@ -49,7 +49,7 @@ export function FavouritesScreenView() {
   const handleRemove = async (id: number) => {
     if (!isLoggedIn || !userKey) return;
 
-    await removeFavourite(userKey, id);
+    await RemoveFavourite(userKey, id);
 
     const updated = favourites.filter((m) => m.id !== id);
     setFavourites(updated);
@@ -97,7 +97,7 @@ export function FavouritesScreenView() {
             contentContainerStyle={styles.listContent}
             onDragEnd={({ data }) => {
               setFavourites(data);
-              saveFavourites(userKey, data);
+              SaveFavourites(userKey, data);
             }}
             renderItem={({ item, drag, isActive }) => (
               <FavouriteItem

@@ -1,10 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LoginCredentials, RegisterData, User, UpdateProfileData } from '../redux/types';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LoginCredentials, UpdateProfileData, User } from "../redux/types";
 
 // AsyncStorage Keys
-const AUTH_TOKEN_KEY = '@dr_cinema_auth_token';
-const USER_DATA_KEY = '@dr_cinema_user_data';
-const USERS_DB_KEY = '@dr_cinema_users_db';
+const authTokenKey = "@dr_cinema_auth_token";
+const userDataKey = "@dr_cinema_user_data";
+const usersDbKey = "@dr_cinema_users_db";
 
 export class AuthService {
   /**
@@ -26,10 +26,11 @@ export class AuthService {
    */
   private async getUsersDB(): Promise<Record<string, User & { password: string }>> {
     try {
-      const usersData = await AsyncStorage.getItem(USERS_DB_KEY);
+      const usersData = await AsyncStorage.getItem(usersDbKey);
+
       return usersData ? JSON.parse(usersData) : {};
     } catch (error) {
-      console.error('Error loading users DB:', error);
+
       return {};
     }
   }
@@ -39,9 +40,9 @@ export class AuthService {
    */
   private async saveUsersDB(users: Record<string, User & { password: string }>): Promise<void> {
     try {
-      await AsyncStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+      await AsyncStorage.setItem(usersDbKey, JSON.stringify(users));
     } catch (error) {
-      console.error('Error saving users DB:', error);
+
       throw error;
     }
   }
@@ -50,8 +51,8 @@ export class AuthService {
    * Store auth data (token + user)
    */
   private async storeAuthData(token: string, user: User): Promise<void> {
-    await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
-    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+    await AsyncStorage.setItem(authTokenKey, token);
+    await AsyncStorage.setItem(userDataKey, JSON.stringify(user));
   }
 
   /**
@@ -65,13 +66,12 @@ export class AuthService {
     profileImage?: string
   ): Promise<{ success: boolean; message: string; user?: User; token?: string }> {
     try {
-      console.log('📝 Registering user:', email);
 
       // Validate inputs
       if (!email || !fullName || !password || !confirmPassword) {
         return {
           success: false,
-          message: 'All fields are required',
+          message: "All fields are required",
         };
       }
 
@@ -80,7 +80,7 @@ export class AuthService {
       if (!emailRegex.test(email)) {
         return {
           success: false,
-          message: 'Please enter a valid email address',
+          message: "Please enter a valid email address",
         };
       }
 
@@ -88,7 +88,7 @@ export class AuthService {
       if (fullName.length < 2) {
         return {
           success: false,
-          message: 'Name must be at least 2 characters',
+          message: "Name must be at least 2 characters",
         };
       }
 
@@ -96,7 +96,7 @@ export class AuthService {
       if (password.length < 6) {
         return {
           success: false,
-          message: 'Password must be at least 6 characters',
+          message: "Password must be at least 6 characters",
         };
       }
 
@@ -104,7 +104,7 @@ export class AuthService {
       if (password !== confirmPassword) {
         return {
           success: false,
-          message: 'Passwords do not match',
+          message: "Passwords do not match",
         };
       }
 
@@ -119,7 +119,7 @@ export class AuthService {
       if (emailExists) {
         return {
           success: false,
-          message: 'Email already registered',
+          message: "Email already registered",
         };
       }
 
@@ -155,18 +155,16 @@ export class AuthService {
       // Store token and user data
       await this.storeAuthData(token, user);
 
-      console.log('✅ Registration successful');
       return {
         success: true,
-        message: 'Account created successfully',
+        message: "Account created successfully",
         user,
         token,
       };
     } catch (error: any) {
-      console.error('❌ Registration error:', error);
       return {
         success: false,
-        message: error.message || 'Registration failed. Please try again.',
+        message: error.message || "Registration failed. Please try again.",
       };
     }
   }
@@ -176,7 +174,6 @@ export class AuthService {
    */
   async login(credentials: LoginCredentials): Promise<{ user: User; token: string }> {
     try {
-      console.log('🔐 Logging in user:', credentials.email);
 
       // Get all users
       const users = await this.getUsersDB();
@@ -188,12 +185,12 @@ export class AuthService {
 
       // Check if user exists
       if (!userEntry) {
-        throw new Error('User not found. Please register first.');
+        throw new Error("User not found. Please register first.");
       }
 
       // Check password
       if (userEntry.password !== credentials.password) {
-        throw new Error('Invalid password');
+        throw new Error("Invalid password");
       }
 
       // Create user object (without password)
@@ -212,10 +209,8 @@ export class AuthService {
       // Store token and user data
       await this.storeAuthData(token, user);
 
-      console.log('✅ Login successful');
       return { user, token };
     } catch (error: any) {
-      console.error('❌ Login error:', error);
       throw error;
     }
   }
@@ -225,11 +220,8 @@ export class AuthService {
    */
   async logout(): Promise<void> {
     try {
-      console.log('👋 Logging out user');
-      await AsyncStorage.multiRemove([AUTH_TOKEN_KEY, USER_DATA_KEY]);
-      console.log('✅ Logout successful');
+      await AsyncStorage.multiRemove([authTokenKey, userDataKey]);
     } catch (error) {
-      console.error('❌ Logout error:', error);
       throw error;
     }
   }
@@ -239,9 +231,8 @@ export class AuthService {
    */
   async getToken(): Promise<string | null> {
     try {
-      return await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+      return await AsyncStorage.getItem(authTokenKey);
     } catch (error) {
-      console.error('❌ Error getting token:', error);
       return null;
     }
   }
@@ -251,10 +242,10 @@ export class AuthService {
    */
   async getUserData(): Promise<User | null> {
     try {
-      const userData = await AsyncStorage.getItem(USER_DATA_KEY);
+      const userData = await AsyncStorage.getItem(userDataKey);
+
       return userData ? JSON.parse(userData) : null;
     } catch (error) {
-      console.error('❌ Error getting user data:', error);
       return null;
     }
   }
@@ -264,14 +255,13 @@ export class AuthService {
    */
   async updateProfile(userId: string, updates: UpdateProfileData): Promise<User> {
     try {
-      console.log('✏️ Updating profile for user:', userId);
 
       // Get all users
       const users = await this.getUsersDB();
 
       // Find user
       if (!users[userId]) {
-        throw new Error('User not found');
+        throw new Error("User not found");
       }
 
       // Update user data (keep password unchanged)
@@ -294,12 +284,10 @@ export class AuthService {
       };
 
       // Update stored user data
-      await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(updatedUser));
+      await AsyncStorage.setItem(userDataKey, JSON.stringify(updatedUser));
 
-      console.log('✅ Profile updated');
       return updatedUser;
     } catch (error: any) {
-      console.error('❌ Profile update error:', error);
       throw error;
     }
   }
@@ -309,6 +297,7 @@ export class AuthService {
    */
   async isAuthenticated(): Promise<boolean> {
     const token = await this.getToken();
+
     return !!token;
   }
 
@@ -324,26 +313,24 @@ export class AuthService {
       const users = await this.getUsersDB();
 
       if (!users[userId]) {
-        throw new Error('User not found');
+        throw new Error("User not found");
       }
 
       // Verify current password
       if (users[userId].password !== currentPassword) {
-        throw new Error('Current password is incorrect');
+        throw new Error("Current password is incorrect");
       }
 
       // Validate new password
       if (newPassword.length < 6) {
-        throw new Error('New password must be at least 6 characters');
+        throw new Error("New password must be at least 6 characters");
       }
 
       // Update password
       users[userId].password = newPassword;
       await this.saveUsersDB(users);
 
-      console.log('✅ Password changed successfully');
     } catch (error: any) {
-      console.error('❌ Password change error:', error);
       throw error;
     }
   }
@@ -353,12 +340,11 @@ export class AuthService {
    */
   async deleteAccount(userId: string): Promise<void> {
     try {
-      console.log('🗑️ Deleting account:', userId);
 
       const users = await this.getUsersDB();
 
       if (!users[userId]) {
-        throw new Error('User not found');
+        throw new Error("User not found");
       }
 
       // Remove user from database
@@ -368,9 +354,7 @@ export class AuthService {
       // Clear stored auth data
       await this.logout();
 
-      console.log('✅ Account deleted successfully');
     } catch (error: any) {
-      console.error('❌ Account deletion error:', error);
       throw error;
     }
   }

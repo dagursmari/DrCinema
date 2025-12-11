@@ -7,5 +7,5 @@ export function EditProfileView () {
         <View style={styles.container}>
             <EditProfileComp/>
         </View>
-    )
+    );
 }

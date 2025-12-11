@@ -1,14 +1,14 @@
-import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Animated, View, Image, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { loadStoredAuth, logoutUser } from "@/src/redux/slices/auth-slice";
+import { useRouter } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 
 export function Main() {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+    const { user } = useAppSelector((state) => state.auth);
 
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [hasStoredUser, setHasStoredUser] = useState(false);
@@ -22,10 +22,10 @@ export function Main() {
 
     const checkStoredAuth = async () => {
         setIsCheckingAuth(true);
-        
+
         try {
             const result = await dispatch(loadStoredAuth()).unwrap();
-            
+
             if (result && result.user) {
                 setHasStoredUser(true);
             } else {
@@ -34,7 +34,7 @@ export function Main() {
         } catch (error) {
             setHasStoredUser(false);
         }
-        
+
         setIsCheckingAuth(false);
 
         Animated.timing(logoOpacity, {
@@ -64,9 +64,9 @@ export function Main() {
 
     const handleContinueAsGuest = async () => {
         await dispatch(logoutUser());
-        
+
         setHasStoredUser(false);
-        
+
         router.replace("/home-screen");
     };
 

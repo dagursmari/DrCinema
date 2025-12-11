@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { MoviesState, Movie } from "../types";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiService } from "../../services/api-service";
+import { Movie, MoviesState } from "../types";
 
 //Initial "storage" (state)
 const initialState: MoviesState = {
@@ -17,6 +17,7 @@ export const fetchMovies = createAsyncThunk(
       // Call the API
       const movies = await apiService.getMovies();
       // Return the movies (will be sent to the reducer)
+
       return movies;
     } catch (error: any) {
       // If something goes wrong, send error back
@@ -28,15 +29,15 @@ export const fetchMovies = createAsyncThunk(
 //Movie slice
 const moviesSlice = createSlice({
   name: "movies",
-  initialState,
-  
+ initialState,
+
   // Synchronous actions (instant updates)
   reducers: {
     clearMoviesError: (state) => {
       state.error = null;
     },
-  },
-  
+ },
+
   // Async action handlers (for fetchMovies)
   extraReducers: (builder) => {
     builder
@@ -45,15 +46,15 @@ const moviesSlice = createSlice({
         console.log("Loading movies...");
         state.loading = true;
         state.error = null;
-      })
-      
+     })
+
       // When fetchMovies SUCCEEDS
       .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<Movie[]>) => {
         console.log("Movies loaded successfully");
         state.loading = false;
         state.movies = action.payload;  // Save the movies
-      })
-      
+     })
+
       // When fetchMovies FAILS
       .addCase(fetchMovies.rejected, (state, action) => {
         console.log("Failed to load movies");

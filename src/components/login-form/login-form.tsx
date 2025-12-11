@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { loginUser, clearAuthError } from "@/src/redux/slices/auth-slice";
+import { clearAuthError, loginUser } from "@/src/redux/slices/auth-slice";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -18,7 +18,7 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
     const dispatch = useAppDispatch();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const { loading } = useAppSelector((state) => state.auth);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,12 +31,14 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) return "Email is required";
         if (!emailRegex.test(email)) return "Please enter a valid email";
+
         return "";
     };
 
     const validatePassword = (password: string) => {
         if (!password) return "Password is required";
         if (password.length < 6) return "Password must be at least 6 characters";
+
         return "";
     };
 
@@ -51,6 +53,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         if (emailErr || passwordErr) {
             setEmailError(emailErr);
             setPasswordError(passwordErr);
+
             return;
         }
 

@@ -1,9 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Alert, Linking, Text, TouchableOpacity, View } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
-import { incrementBookings } from '@/src/redux/slices/auth-slice';
-import styles from './styles';
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { incrementBookings } from "@/src/redux/slices/auth-slice";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { Alert, Linking, Text, TouchableOpacity, View } from "react-native";
+import styles from "./styles";
 
 interface ShowtimeSchedule {
   time: string;
@@ -33,13 +33,14 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
 
   const handleBuyTickets = async () => {
     if (!selectedShowtime) {
-      Alert.alert('Please select a showtime', 'Choose a time slot before purchasing tickets.');
+      Alert.alert("Please select a showtime", "Choose a time slot before purchasing tickets.");
+
       return;
     }
 
     const url = selectedShowtime.purchase_url;
-    const canOpen = await Linking.canOpenURL(url);
-    
+   const canOpen = await Linking.canOpenURL(url);
+
     if (canOpen) {
       // Increment booking counter if user is logged in
       if (isAuthenticated) {
@@ -49,7 +50,7 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
       // Open the ticket purchase URL
       await Linking.openURL(url);
     } else {
-      Alert.alert('Error', 'Unable to open ticket purchase link');
+      Alert.alert("Error", "Unable to open ticket purchase link");
     }
   };
 
@@ -67,7 +68,7 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
           <View style={styles.timesContainer}>
             {showtime.schedule.map((schedule, timeIndex) => {
               const isSelected = selectedShowtime?.purchase_url === schedule.purchase_url;
-              const displayTime = schedule.time.replace(/\s*\(.*\)/, '');
+              const displayTime = schedule.time.replace(/\s*\(.*\)/, "");
 
               return (
                 <TouchableOpacity
@@ -90,7 +91,7 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
           </View>
 
           {/* Buy Tickets Button */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[
               styles.buyButton,
               !selectedShowtime && styles.buyButtonDisabled

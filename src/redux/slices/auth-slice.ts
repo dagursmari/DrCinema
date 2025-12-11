@@ -1,21 +1,20 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthState, LoginCredentials, RegisterData, User, UpdateProfileData } from '../types';
-import { authService } from '../../services/auth-service';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { authService } from "../../services/auth-service";
+import { AuthState, LoginCredentials, RegisterData, UpdateProfileData, User } from "../types";
 
 // ==========================================
 // CONSTANTS & HELPERS
 // ==========================================
-const USER_DATA_KEY = '@dr_cinema_user_data';
+const userDataKey = "@dr_cinema_user_data";
 
 /**
  * Helper to save user data to AsyncStorage
  */
 const saveUserToStorage = async (user: User): Promise<void> => {
   try {
-    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+    await AsyncStorage.setItem(userDataKey, JSON.stringify(user));
   } catch (error) {
-    console.error('Failed to save user to storage:', error);
   }
 };
 
@@ -38,13 +37,14 @@ const initialState: AuthState = {
  * Login user
  */
 export const loginUser = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       const data = await authService.login(credentials);
+
       return data;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Login failed');
+      return rejectWithValue(error.message || "Login failed");
     }
   }
 );
@@ -53,7 +53,7 @@ export const loginUser = createAsyncThunk(
  * Register user
  */
 export const registerUser = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData: RegisterData, { rejectWithValue }) => {
     try {
       const data = await authService.signUp(
@@ -70,7 +70,7 @@ export const registerUser = createAsyncThunk(
 
       return { user: data.user!, token: data.token! };
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Registration failed');
+      return rejectWithValue(error.message || "Registration failed");
     }
   }
 );
@@ -79,12 +79,12 @@ export const registerUser = createAsyncThunk(
  * Logout user
  */
 export const logoutUser = createAsyncThunk(
-  'auth/logout',
+  "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Logout failed');
+      return rejectWithValue(error.message || "Logout failed");
     }
   }
 );
@@ -93,22 +93,20 @@ export const logoutUser = createAsyncThunk(
  * Load stored auth data on app start
  */
 export const loadStoredAuth = createAsyncThunk(
-  'auth/loadStored',
+  "auth/loadStored",
   async (_, { rejectWithValue }) => {
     try {
       const token = await authService.getToken();
       const user = await authService.getUserData();
 
       if (token && user) {
-        console.log('✅ Loaded stored auth data');
+
         return { token, user };
       }
 
-      console.log('ℹ️ No stored auth data found');
       return null;
     } catch (error: any) {
-      console.error('❌ Failed to load stored auth:', error);
-      return rejectWithValue(error.message || 'Failed to load auth data');
+      return rejectWithValue(error.message || "Failed to load auth data");
     }
   }
 );
@@ -117,20 +115,22 @@ export const loadStoredAuth = createAsyncThunk(
  * Update user profile
  */
 export const updateUserProfile = createAsyncThunk(
-  'auth/updateProfile',
+  "auth/updateProfile",
   async (updates: UpdateProfileData, { getState, rejectWithValue }) => {
     try {
       const state = getState() as { auth: AuthState };
       const user = state.auth.user;
 
       if (!user) {
-        throw new Error('No authenticated user');
+        throw new Error("No authenticated user");
       }
 
       const updatedUser = await authService.updateProfile(user.id, updates);
+
       return updatedUser;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Profile update failed');
+
+      return rejectWithValue(error.message || "Profile update failed");
     }
   }
 );
@@ -139,7 +139,7 @@ export const updateUserProfile = createAsyncThunk(
  * Change password
  */
 export const changePassword = createAsyncThunk(
-  'auth/changePassword',
+  "auth/changePassword",
   async (
     { currentPassword, newPassword }: { currentPassword: string; newPassword: string },
     { getState, rejectWithValue }
@@ -149,12 +149,12 @@ export const changePassword = createAsyncThunk(
       const user = state.auth.user;
 
       if (!user) {
-        throw new Error('No authenticated user');
+        throw new Error("No authenticated user");
       }
 
       await authService.changePassword(user.id, currentPassword, newPassword);
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Password change failed');
+      return rejectWithValue(error.message || "Password change failed");
     }
   }
 );
@@ -163,19 +163,19 @@ export const changePassword = createAsyncThunk(
  * Delete account
  */
 export const deleteAccount = createAsyncThunk(
-  'auth/deleteAccount',
+  "auth/deleteAccount",
   async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState() as { auth: AuthState };
       const user = state.auth.user;
 
       if (!user) {
-        throw new Error('No authenticated user');
+        throw new Error("No authenticated user");
       }
 
       await authService.deleteAccount(user.id);
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Account deletion failed');
+      return rejectWithValue(error.message || "Account deletion failed");
     }
   }
 );
@@ -184,7 +184,7 @@ export const deleteAccount = createAsyncThunk(
 // AUTH SLICE
 // ==========================================
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     /**
@@ -229,19 +229,16 @@ const authSlice = createSlice({
     // ==========================================
     builder
       .addCase(loginUser.pending, (state) => {
-        console.log('⏳ Login pending...');
         state.loading = true;
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log('✅ Login successful');
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        console.log('❌ Login failed');
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -250,19 +247,16 @@ const authSlice = createSlice({
     // REGISTER
     // ==========================================
       .addCase(registerUser.pending, (state) => {
-        console.log('⏳ Registration pending...');
         state.loading = true;
         state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        console.log('✅ Registration successful');
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        console.log('❌ Registration failed');
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -271,11 +265,9 @@ const authSlice = createSlice({
     // LOGOUT
     // ==========================================
       .addCase(logoutUser.pending, (state) => {
-        console.log('⏳ Logout pending...');
         state.loading = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        console.log('✅ Logout successful');
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
@@ -283,7 +275,6 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logoutUser.rejected, (state) => {
-        console.log('❌ Logout failed (clearing state anyway)');
         // Clear state even if logout fails
         state.user = null;
         state.token = null;
@@ -313,17 +304,14 @@ const authSlice = createSlice({
     // UPDATE PROFILE
     // ==========================================
       .addCase(updateUserProfile.pending, (state) => {
-        console.log('⏳ Updating profile...');
         state.loading = true;
         state.error = null;
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
-        console.log('✅ Profile updated');
         state.loading = false;
         state.user = action.payload;
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
-        console.log('❌ Profile update failed');
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -332,16 +320,13 @@ const authSlice = createSlice({
     // CHANGE PASSWORD
     // ==========================================
       .addCase(changePassword.pending, (state) => {
-        console.log('⏳ Changing password...');
         state.loading = true;
         state.error = null;
       })
       .addCase(changePassword.fulfilled, (state) => {
-        console.log('✅ Password changed');
         state.loading = false;
       })
       .addCase(changePassword.rejected, (state, action) => {
-        console.log('❌ Password change failed');
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -350,12 +335,10 @@ const authSlice = createSlice({
     // DELETE ACCOUNT
     // ==========================================
       .addCase(deleteAccount.pending, (state) => {
-        console.log('⏳ Deleting account...');
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteAccount.fulfilled, (state) => {
-        console.log('✅ Account deleted');
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
@@ -363,7 +346,6 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteAccount.rejected, (state, action) => {
-        console.log('❌ Account deletion failed');
         state.loading = false;
         state.error = action.payload as string;
       });

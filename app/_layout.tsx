@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/src/redux/hooks";
 import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
-import { store } from '@/src/redux/store';
+import { store } from "@/src/redux/store";
 import { Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
@@ -69,7 +69,7 @@ function AppStack() {
       screenOptions={{
         headerShown: true,
         headerShadowVisible: false,
-        headerTintColor: 'black',
+        headerTintColor: "black",
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
@@ -84,7 +84,7 @@ function AppStack() {
         headerRight: () => <UserProfileButton />,
       }}
     >
-      <Stack.Screen 
+      <Stack.Screen
         name="index"
         options={{
           headerShown: false,
@@ -92,7 +92,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="home-screen"
         options={{
           headerShown: true,
@@ -102,7 +102,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="signup"
         options={{
           headerShown: false,
@@ -112,7 +112,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="login"
         options={{
           headerShown: false,
@@ -122,7 +122,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="cinemas-screen"
         options={{
           headerShown: true,
@@ -132,7 +132,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="cinema-details"
         options={{
           headerShown: true,
@@ -140,7 +140,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="movie-screen"
         options={{
           headerShown: true,
@@ -149,7 +149,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="test-movie"
         options={{
           headerShown: true,
@@ -157,7 +157,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="test-auth"
         options={{
           headerShown: true,
@@ -165,7 +165,7 @@ function AppStack() {
         }}
       />
 
-      <Stack.Screen 
+      <Stack.Screen
         name="upcoming-screen"
         options={{
           headerShown: true,
@@ -218,32 +218,32 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     borderWidth: 2,
-    borderColor: '#E94560',
+    borderColor: "#E94560",
   },
   profilePlaceholder: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#E94560',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#E94560",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: "#fff",
   },
   profileLetter: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   guestIcon: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#E0E0E0',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#E0E0E0",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
-    borderColor: '#999',
+    borderColor: "#999",
   },
   guestIconText: {
     fontSize: 20,

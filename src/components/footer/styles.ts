@@ -1,6 +1,6 @@
 // src/components/footer/styles.ts
+import { mainPink } from "@/src/styles/colors";
 import { StyleSheet } from "react-native";
-import { black, mainPink } from "@/src/styles/colors";
 
 
 export default StyleSheet.create({

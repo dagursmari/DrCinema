@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, Modal, StatusBar } from "react-native";
-import YoutubePlayer from 'react-native-youtube-iframe';
+import { Modal, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import YoutubePlayer from "react-native-youtube-iframe";
 import styles from "./styles";
 
 interface Trailer {
