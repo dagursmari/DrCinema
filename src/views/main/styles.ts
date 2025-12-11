@@ -1,48 +1,114 @@
 import { StyleSheet } from "react-native";
-import { white, shadow, mainPink } from "@/src/styles/colors";
+import { mainPink, white } from "@/src/styles/colors";
 
 export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: white,
+        justifyContent: "center",
         alignItems: "center",
-        justifyContent: "space-between",
-        paddingTop: 150,
-        paddingBottom: 60,
-        paddingHorizontal: 40,
+        paddingHorizontal: 24,
     },
 
     logoContainer: {
-        flex: 1,
+        marginBottom: 60,
         alignItems: "center",
-        justifyContent: "center",
     },
 
     logo: {
-        width: 600,
-        height: 600,
+        width: 300,
+        height: 120,
     },
 
     buttonsContainer: {
         width: "100%",
-        gap: 16,
-        paddingBottom: 20,
+        maxWidth: 400,
+        alignItems: "center",
     },
 
-    signupButton: {
+    // NEW: "Continue as User" Button (same style as signupButton)
+    continueAsUserButton: {
+        width: "100%",
         backgroundColor: mainPink,
         paddingVertical: 16,
         paddingHorizontal: 32,
-        borderRadius: 25,
+        borderRadius: 50,
         alignItems: "center",
-        shadowColor: mainPink,
+        marginBottom: 16,
+        shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 4,
+            height: 2,
         },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 8,
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+
+    userButtonContent: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    userAvatar: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        marginRight: 12,
+        borderWidth: 2,
+        borderColor: white,
+    },
+
+    userAvatarPlaceholder: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: white,
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 12,
+    },
+
+    userAvatarText: {
+        color: mainPink,
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+
+    userInfo: {
+        alignItems: "flex-start",
+    },
+
+    continueAsText: {
+        color: white,
+        fontSize: 12,
+        opacity: 0.9,
+    },
+
+    userName: {
+        color: white,
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+
+    // Regular Login Button (your existing style)
+    signupButton: {
+        width: "100%",
+        backgroundColor: mainPink,
+        paddingVertical: 16,
+        paddingHorizontal: 32,
+        borderRadius: 50,
+        alignItems: "center",
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
 
     signupButtonText: {
@@ -52,15 +118,18 @@ export default StyleSheet.create({
         textAlign: "center",
     },
 
+    // Guest Button (your existing style)
     guestButton: {
+        width: "100%",
         backgroundColor: white,
         paddingVertical: 16,
         paddingHorizontal: 32,
-        borderRadius: 25,
+        borderRadius: 50,
         alignItems: "center",
+        marginBottom: 20,
         borderWidth: 2,
         borderColor: mainPink,
-        shadowColor: shadow,
+        shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2,
@@ -76,11 +145,12 @@ export default StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+
     subtitle: {
-        fontSize: 16,
-        fontWeight: 600,
+        fontSize: 14,
         color: mainPink,
-        marginBottom: 40,
         textAlign: "center",
+        marginTop: 8,
+        fontWeight: "600",
     },
 });
