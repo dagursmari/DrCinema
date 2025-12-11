@@ -72,7 +72,7 @@ export default function MovieDetailsComp() {
   };
 
   // Get certificate/rating - show N/A if not available
-  const certificate = movie.omdb?.[0]?.Rated || "PG - N/A";
+  const certificate = movie.omdb?.[0]?.Rated || "N/A";
 
   // Calculate average rating from all sources
   const calculateAverageRating = (): string => {
@@ -128,9 +128,6 @@ export default function MovieDetailsComp() {
       {/* Title and Certificate */}
       <View style={styles.titleSection}>
         <Text style={styles.title}>{movie.title}</Text>
-        <View style={styles.certificateBadge}>
-          <Text style={styles.certificateText}>{certificate}</Text>
-        </View>
       </View>
 
       {/* Info Box - with average rating */}
@@ -141,8 +138,8 @@ export default function MovieDetailsComp() {
         </View>
 
         <View style={styles.infoItem}>
-          <Text style={styles.infoNumber}>{averageRating}</Text>
-          <Text style={styles.infoLabel}>Rating</Text>
+          <Text style={styles.infoNumber}>{certificate}</Text>
+          <Text style={styles.infoLabel}>PG-Rating</Text>
         </View>
 
         <View style={styles.infoItem}>
