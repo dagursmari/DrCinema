@@ -264,6 +264,7 @@ export interface RegisterData {
   password: string;
   name: string;
   confirmPassword?: string;
+  profileImage?: string;
 }
 
 export interface UpdateProfileData {
