@@ -82,15 +82,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         }
     };
 
-    const handleForgotPassword = () => {
-        // TODO: Implement forgot password functionality
-        Alert.alert(
-            "Forgot Password",
-            "Password reset will be implemented here",
-            [{ text: "OK" }]
-        );
-    };
-
     const handleSignUp = () => {
         router.push("/signup");
     };
@@ -135,15 +126,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 />
                 {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
             </View>
-
-            {/* Forgot Password Link */}
-            <TouchableOpacity
-                style={styles.forgotPasswordContainer}
-                onPress={handleForgotPassword}
-                activeOpacity={0.7}
-            >
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
 
             <TouchableOpacity
                 style={[styles.loginButton, loading && styles.buttonDisabled]}

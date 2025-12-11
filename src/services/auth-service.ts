@@ -289,6 +289,7 @@ export class AuthService {
         email: users[userId].email,
         name: users[userId].name,
         profileImage: users[userId].profileImage,
+        bookingsCount: users[userId].bookingsCount,
         createdAt: users[userId].createdAt,
       };
 

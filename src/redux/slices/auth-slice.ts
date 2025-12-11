@@ -1,6 +1,23 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthState, LoginCredentials, RegisterData, User, UpdateProfileData } from '../types';
 import { authService } from '../../services/auth-service';
+
+// ==========================================
+// CONSTANTS & HELPERS
+// ==========================================
+const USER_DATA_KEY = '@dr_cinema_user_data';
+
+/**
+ * Helper to save user data to AsyncStorage
+ */
+const saveUserToStorage = async (user: User): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+  } catch (error) {
+    console.error('Failed to save user to storage:', error);
+  }
+};
 
 // ==========================================
 // INITIAL STATE
@@ -194,15 +211,17 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+
+    /**
+     * Increment bookings counter
+     */
     incrementBookings: (state) => {
-    if (state.user) {
-      state.user.bookingsCount = (state.user.bookingsCount || 0) + 1;
-      // Save updated user to AsyncStorage
-      import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
-        AsyncStorage.setItem('@dr_cinema_user_data', JSON.stringify(state.user));
-      });
-    }
-  },
+      if (state.user) {
+        state.user.bookingsCount = (state.user.bookingsCount || 0) + 1;
+        // Save updated user to AsyncStorage (fire and forget)
+        saveUserToStorage(state.user);
+      }
+    },
   },
   extraReducers: (builder) => {
     // ==========================================
