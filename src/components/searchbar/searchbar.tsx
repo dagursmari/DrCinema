@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity } from "react-native";
+import { View, TextInput, ViewStyle, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
 
 type SearchBarProps = {
   onSearch: (text: string) => void;
-  onFilterPress?: () => void;
+  style?:ViewStyle;
 };
 
-export default function SearchBarComp({ onSearch, onFilterPress}: SearchBarProps) {
+export default function SearchBarComp({ onSearch, }: SearchBarProps) {
   const [search, setSearch] = useState("");
 
   const updateSearch = (text: string) => {
@@ -16,13 +16,11 @@ export default function SearchBarComp({ onSearch, onFilterPress}: SearchBarProps
     onSearch(text);
   };
 
-  const handleFilterPress = () => {
-    if (onFilterPress) {
-      onFilterPress();
-    } else {
-      console.log("Filter button pressed - functionality coming soon!");
-    }
+  const clearSearch = () => {
+    setSearch("");
+    onSearch("");
   };
+
 
   return (
     <View style={styles.container}>
@@ -42,15 +40,13 @@ export default function SearchBarComp({ onSearch, onFilterPress}: SearchBarProps
           autoCapitalize="none"
           autoCorrect={false}
         />
-      </View>
 
-      <TouchableOpacity 
-        style={styles.filterButton}
-        onPress={handleFilterPress}
-        activeOpacity={0.7}
-      >
-        <Ionicons name="options-outline" size={24} color="#1a1a1a" />
-      </TouchableOpacity>
+        {search.length > 0 && (
+          <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+            <Ionicons name="close-circle" size={20} color="#999" />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }

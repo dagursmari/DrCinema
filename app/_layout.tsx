@@ -95,7 +95,8 @@ export default function RootLayout() {
         name="movie-screen"
         options={{
           headerShown: true,
-          title: "Movie"
+          title: "Movie",
+          headerBackVisible: false,
         }}
         />
 
@@ -116,7 +117,7 @@ export default function RootLayout() {
         />
 
         <Stack.Screen 
-        name="upcoming"
+        name="upcoming-screen"
         options={{
           headerShown: true,
           title: "Upcoming Movies",
@@ -125,6 +126,15 @@ export default function RootLayout() {
         }}
         />
 
+        <Stack.Screen
+        name="favourites"
+        options={{
+          headerShown:true,
+          title: "Favourites",
+          headerBackVisible: false,
+          gestureEnabled: false,
+        }}
+        />
 
 
     </Stack>

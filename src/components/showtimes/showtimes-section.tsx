@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, Linking, Text, TouchableOpacity, View } from 'react-native';
 import styles from './styles';
+import { mainPink } from "@/src/styles/colors";
+
 
 interface ShowtimeSchedule {
   time: string;
@@ -49,7 +51,7 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
         <View key={cinemaIndex} style={styles.cinemaSection}>
           {/* Cinema Name with Icon */}
           <View style={styles.cinemaHeader}>
-            <Ionicons name="location" size={24} color="#e50914" />
+            <Ionicons name="location" size={24} color="#e94560" />
             <Text style={styles.cinemaName}>{showtime.cinema.name}</Text>
           </View>
 

@@ -1,11 +1,17 @@
+import { mainPink, white } from "@/src/styles/colors";
 import { StyleSheet } from "react-native";
-import { white, mainPink } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: white,
     paddingTop: 10,
+  },
+
+  searchandfilter:{
+    flexDirection:"row",
+    alignItems:"center",
+    marginHorizontal:10
   },
 
   list: {

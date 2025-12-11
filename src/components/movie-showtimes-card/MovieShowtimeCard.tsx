@@ -1,45 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import styles from "./styles";
 import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
 
+import {
+  addFavourite,
+  getFavourites,
+} from "@/src/services/favourites-storage"; // ✅ make sure this exists
+
 type Props = {
   movie: Movie;
   cinemaId: number;
-  onPress?: () => void;      // 👈 NEW
+  onPress?: () => void;
 };
 
-export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) {
-  // All showtime schedule entries for this cinema
+export default function MovieShowtimesCard({
+  movie,
+  cinemaId,
+  onPress,
+}: Props) {
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  // ✅ Load if this movie is already in favourites
+  useEffect(() => {
+    const checkFavourite = async () => {
+      const favs = await getFavourites();
+      const exists = favs.some((m) => m.id === movie.id);
+      setIsFavourite(exists);
+    };
+
+    checkFavourite();
+  }, [movie.id]);
+
   const scheduleEntries: ShowtimeSchedule[] =
     movie.showtimes
       ?.filter((s) => s.cinema.id === cinemaId)
       .flatMap((s) => s.schedule) ?? [];
 
-  // First genre name (Icelandic)
   const firstGenreName = movie.genres?.[0]?.Name;
 
-  // Helper: clean time string, remove "(1)" etc.
-  const formatTime = (raw: string) => {
-    return raw.split(" ")[0].trim();
+  const formatTime = (raw: string) => raw.split(" ")[0].trim();
+
+  // ✅ Heart press handler
+  const handleFavouritePress = async () => {
+    await addFavourite(movie);
+    setIsFavourite(true); // ✅ fill heart immediately
   };
 
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      {/* Poster */}
       <Image source={{ uri: movie.poster }} style={styles.poster} />
 
-      {/* Main content */}
       <View style={styles.content}>
-        {/* Title row */}
         <View style={styles.titleRow}>
           <Text style={styles.title} numberOfLines={1}>
             {movie.title}
           </Text>
         </View>
 
-        {/* Year • Genre */}
         <View style={styles.metaRow}>
           <Text style={styles.year}>{movie.year}</Text>
           {firstGenreName && (
@@ -50,22 +69,27 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
           )}
         </View>
 
-        {/* Showtimes */}
         <View style={styles.showtimesRow}>
           {scheduleEntries.map((entry, index) => (
             <View
               key={`${movie.id}-${cinemaId}-${entry.purchase_url}-${index}`}
               style={styles.chip}
             >
-              <Text style={styles.chipText}>{formatTime(entry.time)}</Text>
+              <Text style={styles.chipText}>
+                {formatTime(entry.time)}
+              </Text>
             </View>
           ))}
         </View>
       </View>
 
-      {/* Favourite button – still separate */}
-      <Pressable style={styles.favouriteButton}>
-        <Feather name="heart" size={18} color="#FF748B" />
+      {/* ❤️ FAVOURITE BUTTON */}
+      <Pressable style={styles.favouriteButton} onPress={handleFavouritePress}>
+        <Feather
+          name={isFavourite ? "heart" : "heart"}
+          size={20}
+          color={isFavourite ? "#FF748B" : "#D1D1D1"} // ✅ filled vs outline look
+        />
       </Pressable>
     </Pressable>
   );
