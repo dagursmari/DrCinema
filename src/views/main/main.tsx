@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Animated, View, Image, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
+import { loadStoredAuth, logoutUser } from "@/src/redux/slices/auth-slice";
 import styles from "./styles";
 
 export function Main() {
@@ -66,8 +66,14 @@ export function Main() {
         router.push("/signup");
     };
 
-    const handleContinueAsGuest = () => {
-        setHasStoredUser(false)
+    const handleContinueAsGuest = async () => {
+        // Logout the current user
+        await dispatch(logoutUser());
+        
+        // Clear the stored user flag
+        setHasStoredUser(false);
+        
+        // Navigate to home screen (as guest, not authenticated)
         router.replace("/home-screen");
     };
 
