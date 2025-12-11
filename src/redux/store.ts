@@ -3,8 +3,9 @@ import { configureStore } from "@reduxjs/toolkit";
 // Import all the reducers
 import moviesReducer from "./slices/movies-slice";
 import favoritesReducer from "./slices/favorites-slice";
-import cinemasReducer from "./slices/cinemas-slice"
-import upcomingReducer from "./slices/upcomming-slice"
+import cinemasReducer from "./slices/cinemas-slice";
+import upcomingReducer from "./slices/upcomming-slice";
+import authReducer from "./slices/auth-slice";
 // TODO: Import upcomingReducer, genresReducer
 
 //This is the STORE - the main warehouse
@@ -16,6 +17,7 @@ export const store = configureStore({
     favorites: favoritesReducer, // Favorites shelf
     cinemas: cinemasReducer,
     upcoming: upcomingReducer,
+    auth: authReducer,
     // TODO: Add other reducers here
     // upcoming: upcomingReducer,
     // genres: genresReducer,

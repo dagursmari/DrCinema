@@ -39,13 +39,10 @@ export function Main() {
         router.push("/home-screen");
     };
 
-    const handleTestMovies = () => {
-        router.push("/test-movie");
+    const handleLogin = () => {
+        router.push("/login"); 
     };
 
-    const handleTestAuth = () => {
-        router.push("/test-auth");
-    };
 
     return (
         <View style={styles.container}>
@@ -70,11 +67,11 @@ export function Main() {
             {showButtons && (
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
-                        onPress={handleSignup}
+                        onPress={handleLogin}
                         style={styles.signupButton}
                         activeOpacity={0.8}
                     >
-                        <Text style={styles.signupButtonText}>Sign up</Text>
+                        <Text style={styles.signupButtonText}>Log in</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -85,20 +82,13 @@ export function Main() {
                         <Text style={styles.guestButtonText}>Continue as guest</Text>
                     </TouchableOpacity>
 
-                    {/* Test buttons */}
                     <TouchableOpacity
-                        onPress={handleTestMovies}
-                        style={styles.testButton}
+                        onPress={handleSignup}
                     >
-                        <Text style={styles.testButtonText}>Test Movies</Text>
+                        <Text style={styles.subtitle}>Dont have an account? Sign up here</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={handleTestAuth}
-                        style={styles.testButton}
-                    >
-                        <Text style={styles.testButtonText}>Test Auth</Text>
-                    </TouchableOpacity>
+
                 </View>
             )}
         </View>
