@@ -101,7 +101,7 @@ export default function MovieDetailsComp() {
     router.back();
   };
 
-  const certificate = movie.omdb?.[0]?.Rated || "PG - N/A";
+  const certificate = movie.omdb?.[0]?.Rated || "N/A";
 
   const calculateAverageRating = (): string => {
     const ratings: number[] = [];
