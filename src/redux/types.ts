@@ -244,6 +244,7 @@ export interface User {
   name: string;
   profileImage?: string;
   createdAt?: string;
+  bookingsCount?: number;
 }
 
 export interface AuthState {

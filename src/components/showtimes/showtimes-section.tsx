@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
+import { incrementBookings } from '@/src/redux/slices/auth-slice';
 import styles from './styles';
-import { mainPink } from "@/src/styles/colors";
-
 
 interface ShowtimeSchedule {
   time: string;
@@ -23,6 +23,8 @@ interface ShowtimesSectionProps {
 }
 
 export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [selectedShowtime, setSelectedShowtime] = useState<ShowtimeSchedule | null>(null);
 
   const handleShowtimePress = (showtime: ShowtimeSchedule) => {
@@ -39,6 +41,12 @@ export function ShowtimesSection({ showtimes }: ShowtimesSectionProps) {
     const canOpen = await Linking.canOpenURL(url);
     
     if (canOpen) {
+      // Increment booking counter if user is logged in
+      if (isAuthenticated) {
+        dispatch(incrementBookings());
+      }
+
+      // Open the ticket purchase URL
       await Linking.openURL(url);
     } else {
       Alert.alert('Error', 'Unable to open ticket purchase link');

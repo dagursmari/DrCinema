@@ -194,6 +194,15 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    incrementBookings: (state) => {
+    if (state.user) {
+      state.user.bookingsCount = (state.user.bookingsCount || 0) + 1;
+      // Save updated user to AsyncStorage
+      import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+        AsyncStorage.setItem('@dr_cinema_user_data', JSON.stringify(state.user));
+      });
+    }
+  },
   },
   extraReducers: (builder) => {
     // ==========================================
@@ -345,5 +354,5 @@ const authSlice = createSlice({
 // ==========================================
 // EXPORTS
 // ==========================================
-export const { clearAuthError, setUser, clearAuthState } = authSlice.actions;
+export const { clearAuthError, setUser, clearAuthState, incrementBookings } = authSlice.actions;
 export default authSlice.reducer;
