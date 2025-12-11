@@ -1,3 +1,3 @@
-import { UpcomingMoviesScreen } from "@/src/views/upcoming-screen/upcoming-screen-view";
+import { UserDetailView } from "@/src/views/user-detail/user-detail-view";
 
-export default UpcomingMoviesScreen;
+export default UserDetailView;
