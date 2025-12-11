@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from "react";
-import { View, Text, ActivityIndicator, ScrollView } from "react-native";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import React, { useEffect, useMemo } from "react";
+import { ActivityIndicator, Linking, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import MovieShowtimesCard from "@/src/components/movie-showtimes-card/MovieShowtimeCard";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemaById } from "@/src/redux/slices/cinemas-slice";
 import { ScreenWithFooter } from "../footer/ScreenWithFooter";
-import MovieShowtimesCard from "@/src/components/movie-showtimes-card/MovieShowtimeCard";
 
-import styles from "./styles";
 import type { Cinema, Movie } from "@/src/redux/types";
+import styles from "./styles";
 
 export function CinemaDetailsScreenView() {
   const dispatch = useAppDispatch();
@@ -66,6 +66,18 @@ export function CinemaDetailsScreenView() {
     });
     };
 
+    const handleWebsitePress = () => {
+      if (!cinema?.website) return;
+
+      let url = cinema.website.trim();
+
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        url = `https://${url}`;
+      }
+
+      Linking.openURL(url);
+    };
+
 
   if (isLoading && !cinema) {
     return (
@@ -119,6 +131,7 @@ export function CinemaDetailsScreenView() {
           </View>
         )}
 
+        <TouchableOpacity onPress={handleWebsitePress}>
         {cinema.website && (
           <View style={styles.infoRow}>
             <Feather name="link-2" size={18} color="#FF748B" />
@@ -127,6 +140,7 @@ export function CinemaDetailsScreenView() {
             </Text>
           </View>
         )}
+        </TouchableOpacity>
 
         {/* Now showing */}
         {nowShowing.length > 0 && (
