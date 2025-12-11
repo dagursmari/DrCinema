@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { shadow, mainPink, black, white } from "@/src/styles/colors";
+import { white } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   filterButton: {

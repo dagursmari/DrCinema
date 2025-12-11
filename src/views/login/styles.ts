@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import { white } from "@/src/styles/colors";
+
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f8f9fa",
+        backgroundColor: white,
     },
     scrollContainer: {
         flexGrow: 1,

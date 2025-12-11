@@ -145,11 +145,12 @@ export function Main() {
                 </TouchableOpacity>
 
                 {/* Sign Up Link */}
-                <TouchableOpacity onPress={handleSignup}>
-                    <Text style={styles.subtitle}>
-                        Dont have an account? Sign up here
-                    </Text>
-                </TouchableOpacity>
+                <View style={styles.signupPrompt}>
+                    <Text style={styles.signupPromptText}>Don't have an account? </Text>
+                    <TouchableOpacity onPress={handleSignup} activeOpacity={0.7}>
+                        <Text style={styles.signupLink}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
             </Animated.View>
         </View>
     );

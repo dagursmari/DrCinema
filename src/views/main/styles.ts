@@ -5,7 +5,7 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: white,
-        //justifyContent: "center",
+        justifyContent: "center",
         alignItems: "center",
         paddingHorizontal: 24,
     },
@@ -16,8 +16,8 @@ export default StyleSheet.create({
     },
 
     logo: {
-        width: 600,
-        height: 600,
+        width: 450,
+        height: 450,
     },
 
     buttonsContainer: {
@@ -152,5 +152,23 @@ export default StyleSheet.create({
         textAlign: "center",
         marginTop: 8,
         fontWeight: "600",
+    },
+    signupPrompt: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 20,
+        marginBottom: 16,
+    },
+
+    signupPromptText: {
+        color: "#666",
+        fontSize: 14,
+    },
+
+    signupLink: {
+        color: mainPink,
+        fontSize: 14,
+        fontWeight: "bold",
     },
 });

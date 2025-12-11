@@ -4,6 +4,7 @@ import { white, shadow, mainPink } from "@/src/styles/colors";
 export default StyleSheet.create({
     formContainer: {
         width: "100%",
+        paddingTop: 40,
     },
 
     title: {

@@ -158,6 +158,14 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 )}
             </TouchableOpacity>
 
+            <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => router.push("/")}
+                activeOpacity={0.8}
+            >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+
             {/* Sign Up Link */}
             <View style={styles.signupPrompt}>
                 <Text style={styles.signupPromptText}>Don't have an account? </Text>
@@ -166,13 +174,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => router.push("/")}
-                activeOpacity={0.8}
-            >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
         </View>
     );
 }

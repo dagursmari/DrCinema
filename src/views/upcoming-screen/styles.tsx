@@ -12,8 +12,10 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: black,
     paddingHorizontal: 16,
-    paddingTop: 16,
     paddingBottom: 8,
+    paddingTop: 70,
+    marginLeft: 16,
+
   },
 
   subtitle: {
@@ -21,7 +23,8 @@ export default StyleSheet.create({
     fontWeight: 500,
     color: mainPink,
     paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingBottom: 4,
+    marginLeft: 16,
   },
 
   centerContainer: {

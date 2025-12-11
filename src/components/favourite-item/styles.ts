@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { black, mainPink } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   card: {
@@ -7,14 +8,52 @@ export default StyleSheet.create({
     padding: 14,
     backgroundColor: "#fff",
   },
-  cardActive: { backgroundColor: "#FFF5F7" },
-  handle: { marginRight: 10 },
-  poster: { width: 70, height: 100, borderRadius: 8, marginRight: 12 },
-  textContainer: { flex: 1 },
-  title: { fontSize: 16, fontWeight: "700" },
-  metaRow: { flexDirection: "row", marginTop: 4 },
-  year: { fontSize: 13, color: "#666" },
-  genre: { fontSize: 13, color: "#FF748B" },
+  cardActive: { 
+    backgroundColor: "#FFF5F7" 
+  },
+
+  handle: { 
+    marginRight: 10 
+  },
+
+  poster: { 
+    width: 100, 
+    height: 150, 
+    borderRadius: 8, 
+    marginRight: 12,
+    shadowColor: black,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+  },
+
+  textContainer: { 
+    flex: 1
+  },
+
+  title: { 
+    fontSize: 16, 
+    fontWeight: "700" 
+  },
+
+  metaRow: { 
+    flexDirection: "row",
+    marginTop: 4
+  },
+
+  year: { 
+    fontSize: 13,
+    color: "#666"
+  },
+
+  genre: { 
+    fontSize: 13, 
+    color: mainPink, 
+  },
+
   removeButton: {
     backgroundColor: "#FFE3EA",
     width: 24,
@@ -23,5 +62,9 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  removeText: { color: "#FF748B", fontWeight: "700" },
+
+  removeText: { 
+    color: mainPink,
+    fontWeight: "700",
+  },
 });

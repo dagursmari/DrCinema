@@ -84,7 +84,7 @@ function AppStack() {
         headerTitle: () => (
           <Image
             source={require("@/assets/images/DrCinemaLogo.png")}
-            style={{ width: 184, height: 60 }}
+            style={{ width: 140, height: 60 }}
           />
         ),
         // Add user button to all screens by default
@@ -112,7 +112,7 @@ function AppStack() {
       <Stack.Screen 
         name="signup"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Sign Up",
           headerBackVisible: false,
           headerRight: () => null, // Hide on signup screen
@@ -122,7 +122,7 @@ function AppStack() {
       <Stack.Screen 
         name="login"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Login",
           headerBackVisible: false,
           headerRight: () => null, // Hide on login screen
@@ -175,7 +175,7 @@ function AppStack() {
       <Stack.Screen 
         name="upcoming-screen"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Upcoming Movies",
           headerBackVisible: false,
           gestureEnabled: false,
@@ -185,7 +185,7 @@ function AppStack() {
       <Stack.Screen
         name="favourites"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Favourites",
           headerBackVisible: false,
           gestureEnabled: false,

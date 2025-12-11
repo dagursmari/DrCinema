@@ -1,5 +1,7 @@
 // src/components/footer/styles.ts
 import { StyleSheet } from "react-native";
+import { black, mainPink } from "@/src/styles/colors";
+
 
 export default StyleSheet.create({
   container: {
@@ -7,20 +9,16 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
 
-    // FIX: footer was too big → give it a fixed, smaller height
     height: 75,
     paddingBottom: 10,
     paddingHorizontal: 24,
 
-    // slight grey so it pops from the white cards and the background
     backgroundColor: "#F9F9F9",
 
-    // rounded corners
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     overflow: "hidden",
 
-    // iOS shadow, only on the top edge
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.08,
@@ -42,7 +40,7 @@ export default StyleSheet.create({
     color: "#C4C4C4",
   },
   labelActive: {
-    color: "#FF748B",
+    color: mainPink,
     fontWeight: "600",
   },
 });

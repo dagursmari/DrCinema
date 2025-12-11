@@ -8,7 +8,7 @@ export default StyleSheet.create({
 
     title: {
         fontSize: 32,
-        fontWeight: "700",
+        fontWeight: 700,
         color: "#1a1a1a",
         marginBottom: 8,
         textAlign: "center",
@@ -16,7 +16,7 @@ export default StyleSheet.create({
 
     subtitle: {
         fontSize: 16,
-        fontWeight: "600",
+        fontWeight: 600,
         color: mainPink,
         marginBottom: 40,
         textAlign: "center",
@@ -78,6 +78,7 @@ export default StyleSheet.create({
         backgroundColor: "#E94560",
         paddingVertical: 16,
         paddingHorizontal: 32,
+        marginBottom: 20,
         borderRadius: 25,
         alignItems: "center",
         marginTop: 10,
