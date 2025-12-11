@@ -9,7 +9,6 @@ interface UpcomingListProps {
 }
 
 export function UpcomingList({ movies }: UpcomingListProps) {
-  // Empty state
   if (movies.length === 0) {
     return (
       <View style={styles.emptyContainer}>

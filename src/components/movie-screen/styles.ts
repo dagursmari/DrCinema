@@ -83,15 +83,6 @@ export default StyleSheet.create({
     marginRight: 12,
   },
 
-  // These are no longer used for the badge next to the title,
-  // but kept here in case you want a badge somewhere else later.
-  certificateBadge: {
-    backgroundColor: "#FFE5E9",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-
   certificateText: {
     color: mainPink,
     fontSize: 14,

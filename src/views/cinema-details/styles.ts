@@ -9,7 +9,7 @@ export default StyleSheet.create({
     marginHorizontal:10,
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 96, // room for footer at the bottom
+    paddingBottom: 96,
   },
   cinemaName: {
     fontSize: 26,

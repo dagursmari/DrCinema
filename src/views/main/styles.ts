@@ -26,7 +26,6 @@ export default StyleSheet.create({
         alignItems: "center",
     },
 
-    // NEW: "Continue as User" Button (same style as signupButton)
     continueAsUserButton: {
         width: "100%",
         backgroundColor: mainPink,
@@ -92,7 +91,6 @@ export default StyleSheet.create({
         fontWeight: "bold",
     },
 
-    // Regular Login Button (your existing style)
     signupButton: {
         width: "100%",
         backgroundColor: mainPink,
@@ -118,7 +116,6 @@ export default StyleSheet.create({
         textAlign: "center",
     },
 
-    // Guest Button (your existing style)
     guestButton: {
         width: "100%",
         backgroundColor: white,

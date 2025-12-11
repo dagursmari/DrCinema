@@ -11,7 +11,6 @@ type ScreenWithFooterProps = {
 export const ScreenWithFooter = ({ children }: { children: React.ReactNode }) => {
   return (
     <View style={styles.root}>
-      {/* no "top" here → header handles the top already */}
       <SafeAreaView style={styles.safeArea} edges={["left", "right", "bottom"]}>
         {children}
       </SafeAreaView>

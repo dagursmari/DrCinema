@@ -4,7 +4,7 @@ import styles from './styles';
 interface RatingCardProps {
   logo: any;
   rating: string;
-  suffix?: string; // "/10" or "%"
+  suffix?: string;
 }
 
 export function RatingCard({ logo, rating, suffix }: RatingCardProps) {

@@ -23,7 +23,6 @@ export default StyleSheet.create({
         textAlign: "center",
     },
 
-    // Profile Image Styles
     profileImageContainer: {
         alignItems: "center",
         marginBottom: 30,

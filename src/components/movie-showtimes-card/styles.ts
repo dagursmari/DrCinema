@@ -22,7 +22,7 @@ export default StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingRight: 32, // give some room so text doesn't go under the heart
+    paddingRight: 32,
   },
   titleRow: {
     flexDirection: "row",
@@ -56,18 +56,15 @@ export default StyleSheet.create({
     flexWrap: "wrap",
     gap: 8,
   },
-  // Make chips pop more
     chip: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 999,
-    backgroundColor: "#FFFFFF",   // back to white
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E5E7EB",        // light gray border
+    borderColor: "#E5E7EB",
     marginRight: 8,
     marginBottom: 6,
-
-    // iOS shadow for pop ✨
     shadowColor: "#000",
     shadowOpacity: 0.12,
     shadowOffset: { width: 0, height: 2 },
@@ -77,14 +74,13 @@ export default StyleSheet.create({
     chipText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#111111",   // back to dark text
+    color: "#111111",
     },
-  // Heart in the middle-right
   favouriteButton: {
     position: "absolute",
     right: 12,
     top: "50%",
-    marginTop: -18, // half of button size to center vertically
+    marginTop: -18,
     width: 36,
     height: 36,
     borderRadius: 18,

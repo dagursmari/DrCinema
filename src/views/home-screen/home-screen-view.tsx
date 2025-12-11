@@ -34,7 +34,6 @@ export function HomeScreenView() {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    console.log("🏠 HomeScreen: Fetching data...");
     dispatch(fetchMovies());
     dispatch(fetchCinemas());
   }, [dispatch]);
@@ -51,13 +50,11 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
 
         if (!hasShowtimeAtCinema) return false;
 
-        // Search filter
         if (lowerSearch) {
           const movieTitle = movie.title.toLowerCase();
           if (!movieTitle.startsWith(lowerSearch)) return false;
         }
 
-        // Rating filters
         if (filters.imdbRating) {
           const imdbRating = parseFloat(movie.ratings?.imdb || "0");
           if (imdbRating < filters.imdbRating) {
@@ -75,37 +72,31 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
           }
         }
 
-        // Actor filter
         if (filters.actor && !movie.actors_abridged?.some(a => 
           a.name.toLowerCase().includes(filters.actor!.toLowerCase())
         )) {
           return false;
         }
 
-        // Director filter
         if (filters.director && !movie.directors_abridged?.some(d => 
           d.name.toLowerCase().includes(filters.director!.toLowerCase())
         )) {
           return false;
         }
 
-        // Certificate filter
         if (filters.certificate) {
           const userValue = parseInt(filters.certificate, 10);
           const movieValue = parseInt(movie.certificate?.number ?? "0", 10);
 
-          // If the movie's rating is higher than the user input → exclude it
           if (movieValue > userValue) {
             return false;
           }
         }
         
-        // Showtime filter - ONLY if user specified a time range
         if (filters.showtimeFrom || filters.showtimeTo) {
           const showtimeAtCinema = movie.showtimes?.find(st => st.cinema.id === cinema.id);
           const schedule = showtimeAtCinema?.schedule || [];
           
-          // If no schedule for this cinema, exclude the movie
           if (schedule.length === 0) {
             return false;
           }
@@ -113,7 +104,6 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
           const timeMatch = schedule.some(sch => {
             let time = sch.time.trim();
             
-            // Remove everything after space or parenthesis
             if (time.includes(" ")) {
               time = time.split(" ")[0];
             }
@@ -121,7 +111,6 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
               time = time.split("(")[0].trim();
             }
             
-            // Validate time format
             if (!time.includes(":")) {
               return false;
             }
@@ -135,7 +124,6 @@ const getFilteredCinemasWithMovies = (): CinemaWithMovies[] => {
             const minutes = timeParts[1].padStart(2, "0");
             time = `${hours}:${minutes}`;
             
-            // Compare times
             if (filters.showtimeFrom && time < filters.showtimeFrom) {
               return false;
             }

@@ -8,7 +8,7 @@ export default StyleSheet.create({
     paddingTop: 0,
   },
   listContent: {
-    paddingBottom: 50, // small gap above the footer
+    paddingBottom: 50,
   },
   sectionHeader: {
     fontSize: 16,

@@ -21,7 +21,7 @@ import { isAction } from "@reduxjs/toolkit";
 
 export function FavouritesScreenView() {
   const router = useRouter();
-  const user = useAppSelector((state) => state.auth.user); // logged in?
+  const user = useAppSelector((state) => state.auth.user);
   const isLoggedIn = !!user;
 
   const userKey = buildUserFavouritesKey(user);

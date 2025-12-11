@@ -19,14 +19,12 @@ export function UserDetailComp() {
     
     const [favoritesCount, setFavoritesCount] = useState(0);
 
-    // Refresh favorites count when screen comes into focus
     useFocusEffect(
         React.useCallback(() => {
             loadFavoritesCount();
         }, [])
     );
 
-    // Load favorites count from AsyncStorage
     const loadFavoritesCount = async () => {
         const userKey = buildUserFavouritesKey(user);
         const favorites = await getFavourites(userKey);
