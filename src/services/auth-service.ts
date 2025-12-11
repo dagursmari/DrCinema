@@ -4,9 +4,9 @@ import { LoginCredentials, RegisterData, User, UpdateProfileData } from '../redu
 // AsyncStorage Keys
 const AUTH_TOKEN_KEY = '@dr_cinema_auth_token';
 const USER_DATA_KEY = '@dr_cinema_user_data';
-const USERS_DB_KEY = '@dr_cinema_users_db'; // Local "database" of users
+const USERS_DB_KEY = '@dr_cinema_users_db';
 
-class AuthService {
+export class AuthService {
   /**
    * Generate a simple token (for local auth)
    */
@@ -43,6 +43,129 @@ class AuthService {
     } catch (error) {
       console.error('Error saving users DB:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Store auth data (token + user)
+   */
+  private async storeAuthData(token: string, user: User): Promise<void> {
+    await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
+    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+  }
+
+  /**
+   * Sign Up - Your existing method signature with profile image
+   */
+  async signUp(
+    email: string,
+    fullName: string,
+    password: string,
+    confirmPassword: string,
+    profileImage?: string
+  ): Promise<{ success: boolean; message: string; user?: User; token?: string }> {
+    try {
+      console.log('📝 Registering user:', email);
+
+      // Validate inputs
+      if (!email || !fullName || !password || !confirmPassword) {
+        return {
+          success: false,
+          message: 'All fields are required',
+        };
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return {
+          success: false,
+          message: 'Please enter a valid email address',
+        };
+      }
+
+      // Validate name length
+      if (fullName.length < 2) {
+        return {
+          success: false,
+          message: 'Name must be at least 2 characters',
+        };
+      }
+
+      // Validate password length
+      if (password.length < 6) {
+        return {
+          success: false,
+          message: 'Password must be at least 6 characters',
+        };
+      }
+
+      // Check passwords match
+      if (password !== confirmPassword) {
+        return {
+          success: false,
+          message: 'Passwords do not match',
+        };
+      }
+
+      // Get all users
+      const users = await this.getUsersDB();
+
+      // Check if email already exists
+      const emailExists = Object.values(users).some(
+        (u) => u.email.toLowerCase() === email.toLowerCase()
+      );
+
+      if (emailExists) {
+        return {
+          success: false,
+          message: 'Email already registered',
+        };
+      }
+
+      // Create new user
+      const userId = this.generateUserId();
+      const newUser = {
+        id: userId,
+        email: email,
+        name: fullName,
+        password: password,
+        profileImage: profileImage,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Save to users DB
+      users[userId] = newUser;
+      await this.saveUsersDB(users);
+
+      // Create user object (without password)
+      const user: User = {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        profileImage: newUser.profileImage,
+        createdAt: newUser.createdAt,
+      };
+
+      // Generate token
+      const token = this.generateToken();
+
+      // Store token and user data
+      await this.storeAuthData(token, user);
+
+      console.log('✅ Registration successful');
+      return {
+        success: true,
+        message: 'Account created successfully',
+        user,
+        token,
+      };
+    } catch (error: any) {
+      console.error('❌ Registration error:', error);
+      return {
+        success: false,
+        message: error.message || 'Registration failed. Please try again.',
+      };
     }
   }
 
@@ -95,63 +218,6 @@ class AuthService {
   }
 
   /**
-   * Register new user
-   */
-  async register(userData: RegisterData): Promise<{ user: User; token: string }> {
-    try {
-      console.log('📝 Registering user:', userData.email);
-
-      // Get all users
-      const users = await this.getUsersDB();
-
-      // Check if email already exists
-      const emailExists = Object.values(users).some(
-        (u) => u.email.toLowerCase() === userData.email.toLowerCase()
-      );
-
-      if (emailExists) {
-        throw new Error('Email already registered');
-      }
-
-      // Create new user
-      const userId = this.generateUserId();
-      const newUser = {
-        id: userId,
-        email: userData.email,
-        name: userData.name,
-        password: userData.password,
-        profileImage: undefined,
-        createdAt: new Date().toISOString(),
-      };
-
-      // Save to users DB
-      users[userId] = newUser;
-      await this.saveUsersDB(users);
-
-      // Create user object (without password)
-      const user: User = {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        profileImage: newUser.profileImage,
-        createdAt: newUser.createdAt,
-      };
-
-      // Generate token
-      const token = this.generateToken();
-
-      // Store token and user data
-      await this.storeAuthData(token, user);
-
-      console.log('✅ Registration successful');
-      return { user, token };
-    } catch (error: any) {
-      console.error('❌ Registration error:', error);
-      throw error;
-    }
-  }
-
-  /**
    * Logout user
    */
   async logout(): Promise<void> {
@@ -191,14 +257,6 @@ class AuthService {
   }
 
   /**
-   * Store auth data (token + user)
-   */
-  private async storeAuthData(token: string, user: User): Promise<void> {
-    await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
-    await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
-  }
-
-  /**
    * Update user profile
    */
   async updateProfile(userId: string, updates: UpdateProfileData): Promise<User> {
@@ -213,7 +271,7 @@ class AuthService {
         throw new Error('User not found');
       }
 
-      // Update user data
+      // Update user data (keep password unchanged)
       users[userId] = {
         ...users[userId],
         ...updates,
@@ -270,6 +328,11 @@ class AuthService {
         throw new Error('Current password is incorrect');
       }
 
+      // Validate new password
+      if (newPassword.length < 6) {
+        throw new Error('New password must be at least 6 characters');
+      }
+
       // Update password
       users[userId].password = newPassword;
       await this.saveUsersDB(users);
@@ -280,6 +343,34 @@ class AuthService {
       throw error;
     }
   }
+
+  /**
+   * Delete account
+   */
+  async deleteAccount(userId: string): Promise<void> {
+    try {
+      console.log('🗑️ Deleting account:', userId);
+
+      const users = await this.getUsersDB();
+
+      if (!users[userId]) {
+        throw new Error('User not found');
+      }
+
+      // Remove user from database
+      delete users[userId];
+      await this.saveUsersDB(users);
+
+      // Clear stored auth data
+      await this.logout();
+
+      console.log('✅ Account deleted successfully');
+    } catch (error: any) {
+      console.error('❌ Account deletion error:', error);
+      throw error;
+    }
+  }
 }
 
+// Export singleton instance
 export const authService = new AuthService();
