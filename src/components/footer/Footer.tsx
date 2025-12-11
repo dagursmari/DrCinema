@@ -53,7 +53,7 @@ export default function Footer() {
     <View style={styles.container}>
       {TABS.map((tab) => {
         const isActive = pathname === tab.route;
-        const color = isActive ? "#FF748B" : "#C4C4C4";
+        const color = isActive ? "#e94560" : "#C4C4C4";
 
         return (
           <Pressable

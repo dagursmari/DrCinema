@@ -4,12 +4,11 @@ import { white, shadow, mainPink } from "@/src/styles/colors";
 export default StyleSheet.create({
     formContainer: {
         width: "100%",
-        paddingTop: 40,
     },
 
     title: {
         fontSize: 32,
-        fontWeight: "700",
+        fontWeight: 700,
         color: "#1a1a1a",
         marginBottom: 8,
         textAlign: "center",
@@ -17,56 +16,9 @@ export default StyleSheet.create({
 
     subtitle: {
         fontSize: 16,
-        fontWeight: "600",
+        fontWeight: 600,
         color: mainPink,
-        marginBottom: 30,
-        textAlign: "center",
-    },
-
-    // Profile Image Styles
-    profileImageContainer: {
-        alignItems: "center",
-        marginBottom: 30,
-    },
-
-    profileImageButton: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        overflow: "hidden",
-        marginBottom: 8,
-    },
-
-    profileImage: {
-        width: "100%",
-        height: "100%",
-    },
-
-    profileImagePlaceholder: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#F0F0F0",
-        justifyContent: "center",
-        alignItems: "center",
-        borderWidth: 2,
-        borderColor: "#E9ECEF",
-        borderStyle: "dashed",
-    },
-
-    profileImageIcon: {
-        fontSize: 40,
-        marginBottom: 4,
-    },
-
-    profileImageText: {
-        fontSize: 12,
-        color: "#666",
-        fontWeight: "600",
-    },
-
-    profileImageHint: {
-        fontSize: 12,
-        color: "#999",
+        marginBottom: 40,
         textAlign: "center",
     },
 
@@ -111,13 +63,25 @@ export default StyleSheet.create({
         fontWeight: "500",
     },
 
-    signupButton: {
+    forgotPasswordContainer: {
+        alignSelf: "flex-end",
+        marginBottom: 20,
+    },
+
+    forgotPasswordText: {
+        color: mainPink,
+        fontSize: 14,
+        fontWeight: "600",
+    },
+
+    loginButton: {
         backgroundColor: "#E94560",
         paddingVertical: 16,
         paddingHorizontal: 32,
+        marginBottom: 20,
         borderRadius: 25,
         alignItems: "center",
-        marginTop: 20,
+        marginTop: 10,
         shadowColor: "#E94560",
         shadowOffset: {
             width: 0,
@@ -131,11 +95,30 @@ export default StyleSheet.create({
         opacity: 0.6,
     },
 
-    signupButtonText: {
+    loginButtonText: {
         color: white,
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "center",
+    },
+
+    signupPrompt: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 20,
+        marginBottom: 16,
+    },
+
+    signupPromptText: {
+        color: "#666",
+        fontSize: 14,
+    },
+
+    signupLink: {
+        color: mainPink,
+        fontSize: 14,
+        fontWeight: "bold",
     },
 
     cancelButton: {
@@ -144,7 +127,6 @@ export default StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 25,
         alignItems: "center",
-        marginTop: 16,
         borderWidth: 2,
         borderColor: "#E94560",
         shadowColor: shadow,

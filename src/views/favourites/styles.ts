@@ -4,7 +4,6 @@ export default StyleSheet.create({
   container: { 
     flex: 1,
     backgroundColor: "#fff",
-    paddingBottom: 80,
  },
   emptyText: {
     marginTop: 40,
@@ -16,6 +15,8 @@ export default StyleSheet.create({
     fontSize: 32,
     fontWeight: 800,
     marginBottom: 8,
-    marginLeft: 10,
+    paddingTop: 70,
+    marginLeft: 16,
+    paddingHorizontal: 16,
   }
 });

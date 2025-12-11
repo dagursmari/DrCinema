@@ -1,10 +1,11 @@
+import { useAppSelector } from "@/src/redux/hooks";
+import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
 import { store } from '@/src/redux/store';
-import { Stack } from "expo-router";
-import { Image } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as StoreProvider } from "react-redux";
-import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
-import { useEffect } from "react";
 
 // Component to load auth on app start
 function AuthLoader() {
@@ -16,12 +17,61 @@ function AuthLoader() {
   return null;
 }
 
-export default function RootLayout() {
-  
+// User Profile Button Component
+function UserProfileButton() {
+  const router = useRouter();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  if (!isAuthenticated || !user) {
+    return null; // Don't show button if not logged in
+  }
+
   return (
-    <StoreProvider store={store}>
-    <AuthLoader />
-    <GestureHandlerRootView>
+    <TouchableOpacity
+      onPress={() => router.push("/user-detail")}
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: "#E94560",
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 10,
+      }}
+      activeOpacity={0.7}
+    >
+      {user.profileImage ? (
+        <Image
+          source={{ uri: user.profileImage }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+          }}
+        />
+      ) : (
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: "#E94560",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
+            {user.name.charAt(0).toUpperCase()}
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+}
+
+// Stack Navigator with Header Right
+function AppStack() {
+  return (
     <Stack
       screenOptions={{
         headerShown: true,
@@ -33,21 +83,23 @@ export default function RootLayout() {
         },
         headerTitle: () => (
           <Image
-          source={require("@/assets/images/DrCinemaLogo.png")}
-          style={{width:184, height:60}}/>
-        )
-        
-      }}>
-
+            source={require("@/assets/images/DrCinemaLogo.png")}
+            style={{ width: 140, height: 60 }}
+          />
+        ),
+        // Add user button to all screens by default
+        headerRight: () => <UserProfileButton />,
+      }}
+    >
       <Stack.Screen 
         name="index"
         options={{
           headerShown: false,
           title: "DrCinema"
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="home-screen"
         options={{
           headerShown: true,
@@ -55,25 +107,29 @@ export default function RootLayout() {
           headerBackVisible: false,
           gestureEnabled: false,
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="signup"
         options={{
           headerShown: false,
-          title: "Sign Up"
+          title: "Sign Up",
+          headerBackVisible: false,
+          headerRight: () => null, // Hide on signup screen
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="login"
         options={{
           headerShown: false,
-          title: "Login"
+          title: "Login",
+          headerBackVisible: false,
+          headerRight: () => null, // Hide on login screen
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="cinemas-screen"
         options={{
           headerShown: true,
@@ -81,65 +137,93 @@ export default function RootLayout() {
           headerBackVisible: false,
           gestureEnabled: false,
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="cinema-details"
         options={{
           headerShown: true,
           title: "Cinema Details"
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="movie-screen"
         options={{
           headerShown: true,
           title: "Movie",
           headerBackVisible: false,
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="test-movie"
         options={{
           headerShown: true,
           title: "Test"
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="test-auth"
         options={{
           headerShown: true,
           title: "Test Auth"
         }}
-        />
+      />
 
-        <Stack.Screen 
+      <Stack.Screen 
         name="upcoming-screen"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Upcoming Movies",
           headerBackVisible: false,
           gestureEnabled: false,
         }}
-        />
+      />
 
-        <Stack.Screen
+      <Stack.Screen
         name="favourites"
         options={{
-          headerShown:true,
+          headerShown: false,
           title: "Favourites",
           headerBackVisible: false,
           gestureEnabled: false,
         }}
-        />
+      />
 
+      <Stack.Screen
+        name="edit-profile"
+        options={{
+          headerShown: true,
+          title: "Favourites",
+          headerBackVisible: true,
+          gestureEnabled: false,
+          headerRight: () => null,
+        }}
+      />
 
+      <Stack.Screen
+        name="user-detail"
+        options={{
+          headerShown: true,
+          title: "Profile",
+          headerBackVisible: true,
+          headerRight: () => null, // Hide on user detail screen (already on profile)
+        }}
+      />
     </Stack>
-    </GestureHandlerRootView>
-    </StoreProvider>
+    
+  );
+}
 
+export default function RootLayout() {
+  return (
+    <StoreProvider store={store}>
+      <AuthLoader />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AppStack />
+      </GestureHandlerRootView>
+    </StoreProvider>
   );
 }

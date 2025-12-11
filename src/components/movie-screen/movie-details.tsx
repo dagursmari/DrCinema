@@ -270,7 +270,6 @@ export default function MovieDetailsComp() {
 
       {/* Trailer */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Watch Trailer</Text>
         <TrailerPlayer trailer={officialTrailer} />
       </View>
     </View>
