@@ -76,4 +76,11 @@ export default StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+    subtitle: {
+        fontSize: 16,
+        fontWeight: 600,
+        color: mainPink,
+        marginBottom: 40,
+        textAlign: "center",
+    },
 });

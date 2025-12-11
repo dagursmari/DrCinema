@@ -2,16 +2,30 @@ import { store } from '@/src/redux/store';
 import { Stack } from "expo-router";
 import { Image } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Provider as StoreProvider } from 'react-redux';
+import { Provider as StoreProvider } from "react-redux";
+import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
+import { useEffect } from "react";
+
+// Component to load auth on app start
+function AuthLoader() {
+  useEffect(() => {
+    // Load stored auth data when app starts
+    store.dispatch(loadStoredAuth());
+  }, []);
+
+  return null;
+}
 
 export default function RootLayout() {
   
   return (
     <StoreProvider store={store}>
+    <AuthLoader />
     <GestureHandlerRootView>
     <Stack
       screenOptions={{
         headerShown: true,
+        headerShadowVisible: false,
         headerTintColor: 'black',
         headerTitleStyle: {
           fontWeight: "bold",

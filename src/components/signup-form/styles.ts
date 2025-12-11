@@ -8,7 +8,7 @@ export default StyleSheet.create({
 
     title: {
         fontSize: 32,
-        fontWeight: 700,
+        fontWeight: "700",
         color: "#1a1a1a",
         marginBottom: 8,
         textAlign: "center",
@@ -16,9 +16,56 @@ export default StyleSheet.create({
 
     subtitle: {
         fontSize: 16,
-        fontWeight: 600,
+        fontWeight: "600",
         color: mainPink,
-        marginBottom: 40,
+        marginBottom: 30,
+        textAlign: "center",
+    },
+
+    // Profile Image Styles
+    profileImageContainer: {
+        alignItems: "center",
+        marginBottom: 30,
+    },
+
+    profileImageButton: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        overflow: "hidden",
+        marginBottom: 8,
+    },
+
+    profileImage: {
+        width: "100%",
+        height: "100%",
+    },
+
+    profileImagePlaceholder: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#F0F0F0",
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 2,
+        borderColor: "#E9ECEF",
+        borderStyle: "dashed",
+    },
+
+    profileImageIcon: {
+        fontSize: 40,
+        marginBottom: 4,
+    },
+
+    profileImageText: {
+        fontSize: 12,
+        color: "#666",
+        fontWeight: "600",
+    },
+
+    profileImageHint: {
+        fontSize: 12,
+        color: "#999",
         textAlign: "center",
     },
 
@@ -28,7 +75,7 @@ export default StyleSheet.create({
 
     label: {
         fontSize: 16,
-        fontWeight: 700,
+        fontWeight: "700",
         color: "#1a1a1a",
         marginBottom: 8,
     },
@@ -49,6 +96,18 @@ export default StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 4,
+    },
+
+    inputError: {
+        borderColor: "#E94560",
+        borderWidth: 2,
+    },
+
+    errorText: {
+        color: "#E94560",
+        fontSize: 12,
+        marginTop: 4,
+        fontWeight: "500",
     },
 
     signupButton: {
