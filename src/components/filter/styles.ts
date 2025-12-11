@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native";
+import { shadow, mainPink, black, white } from "@/src/styles/colors";
 
 export default StyleSheet.create({
   filterButton: {
     padding: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: white,
     borderRadius: 8,
     marginLeft: 8,
   },
   filterContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: white,
     borderRadius: 12,
     padding: 16,
     marginVertical: 10,
@@ -26,7 +27,7 @@ export default StyleSheet.create({
   },
   filterTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 700,
     color: "#1a1a1a",
   },
   filterContent: {
