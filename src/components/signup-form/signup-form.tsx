@@ -1,17 +1,18 @@
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { registerUser, clearAuthError } from "@/src/redux/slices/auth-slice";
+import { clearAuthError, registerUser } from "@/src/redux/slices/auth-slice";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
     ActivityIndicator,
     Alert,
+    Image,
     Text,
     TextInput,
     TouchableOpacity,
     View,
-    Image,
 } from "react-native";
-import styles from "./styles";
+import styles from "./styles";import * as ImagePicker from "expo-image-picker";
+import {Platform } from "react-native";
 
 interface SignupFormProps {
     onSuccess: () => void;
@@ -60,19 +61,55 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
 
     // TODO: Your classmate will implement this function
     const handleSelectProfileImage = () => {
-        Alert.alert(
-            "Profile Image",
-            "Image picker will be implemented here",
-            [{ text: "OK" }]
-        );
-        // TODO: Implement image picker
-        // This function should:
-        // 1. Open image picker (react-native-image-picker or expo-image-picker)
-        // 2. Allow user to select from gallery or take photo
-        // 3. Optionally resize/crop the image
-        // 4. Convert to base64 or upload to storage
-        // 5. Call setProfileImage(imageUri)
-    };
+        Alert.alert("Select Image", "Choose an option", [
+    {
+      text: "Choose from Library",
+      onPress: async () => {
+        // Ask for media library permission
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Permission required to access photos.");
+          return;
+        }
+
+        // Open image picker
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          quality: 0.8,
+        });
+
+        if (!result.canceled) {
+          const asset = result.assets[0];
+          setProfileImage(asset.uri);
+        }
+      },
+    },
+    {
+      text: "Take Photo",
+      onPress: async () => {
+        // Ask for camera permission
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          alert("Permission required to access camera.");
+          return;
+        }
+
+        // Launch camera (iOS native camera)
+        const result = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+          quality: 0.8,
+        });
+
+        if (!result.canceled) {
+          const asset = result.assets[0];
+          setProfileImage(asset.uri);
+        }
+      },
+    },
+    { text: "Cancel", style: "cancel" },
+  ]);
+};
 
     const handleSignup = async () => {
         // Clear previous errors
