@@ -1,14 +1,15 @@
-import React, { useEffect, useMemo } from "react";
-import { View, Text, ActivityIndicator, SectionList } from "react-native";
 import { useRouter } from "expo-router";
+import React, { useEffect, useMemo } from "react";
+import { ActivityIndicator, SectionList, Text, View } from "react-native";
 
+import CinemaListItem from "@/src/components/cinema-list-item/CinemaListItem";
+import { normalizeInitial } from "@/src/components/letter-helper/letters";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemas } from "@/src/redux/slices/cinemas-slice";
 import { ScreenWithFooter } from "../footer/ScreenWithFooter";
-import CinemaListItem from "@/src/components/cinema-list-item/CinemaListItem";
 
-import styles from "./styles";
 import type { Cinema } from "@/src/redux/types";
+import styles from "./styles";
 
 interface CinemaSection {
   title: string;     // e.g. "B", "L", "S"
@@ -33,7 +34,7 @@ export function CinemasScreenView() {
     const groups: Record<string, Cinema[]> = {};
 
     cinemas.forEach((cinema) => {
-      const firstChar = cinema.name?.charAt(0).toUpperCase() || "#";
+      const firstChar = normalizeInitial(cinema.name?.charAt(0).toUpperCase()) || "#";
       const key = firstChar;
 
       if (!groups[key]) {
