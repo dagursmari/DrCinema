@@ -138,6 +138,16 @@ export default function RootLayout() {
         }}
         />
 
+        <Stack.Screen
+        name="user-detail"
+        options={{
+          headerShown:true,
+          title: "User Detail",
+          headerBackVisible: false,
+          gestureEnabled: false,
+        }}
+        />
+
 
     </Stack>
     </GestureHandlerRootView>
