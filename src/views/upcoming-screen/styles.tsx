@@ -9,11 +9,11 @@ export default StyleSheet.create({
   
   header: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 800,
     color: black,
     paddingHorizontal: 16,
     paddingBottom: 8,
-    paddingTop: 70,
+    paddingTop: 30,
     marginLeft: 16,
 
   },

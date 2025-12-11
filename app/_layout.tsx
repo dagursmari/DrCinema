@@ -3,7 +3,7 @@ import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
 import { store } from '@/src/redux/store';
 import { Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as StoreProvider } from "react-redux";
 
@@ -17,52 +17,45 @@ function AuthLoader() {
   return null;
 }
 
-// User Profile Button Component
+// User Profile Button Component (shows for both logged in and guest users)
 function UserProfileButton() {
   const router = useRouter();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
-  if (!isAuthenticated || !user) {
-    return null; // Don't show button if not logged in
-  }
+  const handlePress = () => {
+    if (isAuthenticated && user) {
+      // User is logged in -> go to profile
+      router.push("/user-detail");
+    } else {
+      // Guest user -> go to login
+      router.push("/login");
+    }
+  };
 
   return (
     <TouchableOpacity
-      onPress={() => router.push("/user-detail")}
-      style={{
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: "#E94560",
-        justifyContent: "center",
-        alignItems: "center",
-        marginRight: 10,
-      }}
+      onPress={handlePress}
+      style={styles.profileButton}
       activeOpacity={0.7}
     >
-      {user.profileImage ? (
-        <Image
-          source={{ uri: user.profileImage }}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-          }}
-        />
+      {isAuthenticated && user ? (
+        // Logged in user: Show profile image or initial
+        user.profileImage ? (
+          <Image
+            source={{ uri: user.profileImage }}
+            style={styles.profileImage}
+          />
+        ) : (
+          <View style={styles.profilePlaceholder}>
+            <Text style={styles.profileLetter}>
+              {user.name.charAt(0).toUpperCase()}
+            </Text>
+          </View>
+        )
       ) : (
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: "#E94560",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
-            {user.name.charAt(0).toUpperCase()}
-          </Text>
+        // Guest user: Show guest icon
+        <View style={styles.guestIcon}>
+          <Text style={styles.guestIconText}>👤</Text>
         </View>
       )}
     </TouchableOpacity>
@@ -175,7 +168,7 @@ function AppStack() {
       <Stack.Screen 
         name="upcoming-screen"
         options={{
-          headerShown: false,
+          headerShown: true,
           title: "Upcoming Movies",
           headerBackVisible: false,
           gestureEnabled: false,
@@ -185,7 +178,7 @@ function AppStack() {
       <Stack.Screen
         name="favourites"
         options={{
-          headerShown: false,
+          headerShown: true,
           title: "Favourites",
           headerBackVisible: false,
           gestureEnabled: false,
@@ -196,7 +189,7 @@ function AppStack() {
         name="edit-profile"
         options={{
           headerShown: true,
-          title: "Favourites",
+          title: "Edit Profile",
           headerBackVisible: true,
           gestureEnabled: false,
           headerRight: () => null,
@@ -208,14 +201,54 @@ function AppStack() {
         options={{
           headerShown: true,
           title: "Profile",
-          headerBackVisible: true,
+          headerBackVisible: false,
           headerRight: () => null, // Hide on user detail screen (already on profile)
         }}
       />
     </Stack>
-    
   );
 }
+
+const styles = StyleSheet.create({
+  profileButton: {
+    marginRight: 16,
+  },
+  profileImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: '#E94560',
+  },
+  profilePlaceholder: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#E94560',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  profileLetter: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  guestIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#999',
+  },
+  guestIconText: {
+    fontSize: 20,
+  },
+});
 
 export default function RootLayout() {
   return (
