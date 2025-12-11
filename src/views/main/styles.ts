@@ -5,19 +5,19 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: white,
-        justifyContent: "center",
+        //justifyContent: "center",
         alignItems: "center",
         paddingHorizontal: 24,
     },
 
     logoContainer: {
-        marginBottom: 60,
+        marginBottom: 0,
         alignItems: "center",
     },
 
     logo: {
-        width: 300,
-        height: 120,
+        width: 600,
+        height: 600,
     },
 
     buttonsContainer: {

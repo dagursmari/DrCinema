@@ -67,6 +67,7 @@ export function Main() {
     };
 
     const handleContinueAsGuest = () => {
+        setHasStoredUser(false)
         router.replace("/home-screen");
     };
 
