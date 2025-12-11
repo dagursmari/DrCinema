@@ -41,12 +41,10 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     };
 
     const handleLogin = async () => {
-        // Clear previous errors
         setEmailError("");
         setPasswordError("");
         dispatch(clearAuthError());
 
-        // Validate fields
         const emailErr = validateEmail(email);
         const passwordErr = validatePassword(password);
 
@@ -57,7 +55,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         }
 
         try {
-            // Dispatch Redux action
             await dispatch(
                 loginUser({
                     email,
@@ -65,9 +62,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 })
             ).unwrap();
 
-            // Success!
             Alert.alert(
-                "Welcome Back! 👋",
+                "Welcome Back!",
                 "You have successfully logged in!",
                 [
                     {
@@ -77,7 +73,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 ]
             );
         } catch (error: any) {
-            // Error is already in Redux state
             Alert.alert("Login Failed", error || "Please check your credentials and try again");
         }
     };

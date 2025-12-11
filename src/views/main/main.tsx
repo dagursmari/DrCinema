@@ -24,10 +24,8 @@ export function Main() {
         setIsCheckingAuth(true);
         
         try {
-            // Load stored auth data
             const result = await dispatch(loadStoredAuth()).unwrap();
             
-            // Check if we found a stored user
             if (result && result.user) {
                 setHasStoredUser(true);
             } else {
@@ -39,7 +37,6 @@ export function Main() {
         
         setIsCheckingAuth(false);
 
-        // Start animations after checking auth
         Animated.timing(logoOpacity, {
             toValue: 1,
             duration: 1000,
@@ -54,7 +51,6 @@ export function Main() {
     };
 
     const handleContinueAsStoredUser = () => {
-        // User is already loaded in Redux
         router.replace("/home-screen");
     };
 
@@ -67,13 +63,10 @@ export function Main() {
     };
 
     const handleContinueAsGuest = async () => {
-        // Logout the current user
         await dispatch(logoutUser());
         
-        // Clear the stored user flag
         setHasStoredUser(false);
         
-        // Navigate to home screen (as guest, not authenticated)
         router.replace("/home-screen");
     };
 

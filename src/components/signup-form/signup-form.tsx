@@ -134,20 +134,18 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         }
 
         try {
-            // Dispatch Redux action with profile image
             await dispatch(
                 registerUser({
                     email,
                     name: fullName,
                     password,
                     confirmPassword,
-                    profileImage, // Include profile image (can be undefined)
+                    profileImage,
                 })
             ).unwrap();
 
-            // Success!
             Alert.alert(
-                "Success! 🎉",
+                "Success!",
                 "Your account has been created successfully!",
                 [
                     {

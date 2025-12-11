@@ -62,7 +62,7 @@ export function FilterComp({ onApplyFilters, onClose }: FilterCompProps) {
   };
 
   const formatTime = (text: string) => {
-  const cleaned = text.replace(/\D/g, ""); // numbers only
+  const cleaned = text.replace(/\D/g, "");
 
     if (cleaned.length <= 2) {
         return cleaned;
@@ -191,7 +191,6 @@ export function FilterComp({ onApplyFilters, onClose }: FilterCompProps) {
             />
             </View>
 
-        {/* Add extra padding at bottom for scrolling */}
         <View style={{ height: 20 }} />
       </ScrollView>
 

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     listContent: {
     paddingTop: 16,
-    paddingBottom: 100, // Space for footer
+    paddingBottom: 100,
   },
 
   emptyContainer: {

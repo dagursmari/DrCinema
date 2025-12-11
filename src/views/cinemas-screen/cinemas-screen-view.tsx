@@ -12,7 +12,7 @@ import type { Cinema } from "@/src/redux/types";
 import styles from "./styles";
 
 interface CinemaSection {
-  title: string;     // e.g. "B", "L", "S"
+  title: string;
   data: Cinema[];
 }
 
@@ -22,14 +22,12 @@ export function CinemasScreenView() {
 
   const { cinemas, loading, error } = useAppSelector((state) => state.cinemas);
 
-  // Fetch cinemas when screen mounts (if not already loaded)
   useEffect(() => {
     if (!cinemas || cinemas.length === 0) {
       dispatch(fetchCinemas());
     }
   }, [dispatch, cinemas.length]);
 
-  // Group cinemas by first letter of name: B, L, S...
   const sections: CinemaSection[] = useMemo(() => {
     const groups: Record<string, Cinema[]> = {};
 
@@ -57,8 +55,6 @@ export function CinemasScreenView() {
       params: { id: cinema.id.toString() },
     });
   };
-
-  // ---------- RENDER ----------
 
   return (
     <ScreenWithFooter>

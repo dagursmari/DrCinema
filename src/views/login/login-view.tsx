@@ -7,7 +7,6 @@ export function LoginView() {
     const router = useRouter();
 
     const handleSuccess = () => {
-        // Navigate to home screen after successful login
         router.replace("/home-screen");
     };
 

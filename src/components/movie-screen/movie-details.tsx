@@ -29,12 +29,11 @@ export default function MovieDetailsComp() {
   );
 
   const isLoggedIn = useAppSelector(
-  (state) => !!state.auth.user   // or state.auth.isAuthenticated – match your slice
+  (state) => !!state.auth.user
   );
 
   const [isFavourite, setIsFavourite] = useState(false);
 
-  // 🔍 Check if this movie is already in favourites
   useEffect(() => {
     const checkFavourite = async () => {
       if (!movie || !userKey) {
@@ -102,19 +101,15 @@ export default function MovieDetailsComp() {
     router.back();
   };
 
-  // Certificate / rating label (PG etc.)
   const certificate = movie.omdb?.[0]?.Rated || "PG - N/A";
 
-  // Average rating (kept just for the cards that use it if needed elsewhere)
   const calculateAverageRating = (): string => {
     const ratings: number[] = [];
 
-    // IMDB rating string -> number
     if (movie.ratings?.imdb && !isNaN(Number(movie.ratings.imdb))) {
       ratings.push(Number(movie.ratings.imdb));
     }
 
-    // Rotten Tomatoes audience (0-100) -> 0-10
     if (
       movie.ratings?.rotten_audience &&
       !isNaN(Number(movie.ratings.rotten_audience))
@@ -122,7 +117,6 @@ export default function MovieDetailsComp() {
       ratings.push(Number(movie.ratings.rotten_audience) / 10);
     }
 
-    // Rotten Tomatoes critics (0-100) -> 0-10
     if (
       movie.ratings?.rotten_critics &&
       !isNaN(Number(movie.ratings.rotten_critics))
@@ -139,11 +133,8 @@ export default function MovieDetailsComp() {
     return average.toFixed(1);
   };
 
-  const averageRating = calculateAverageRating(); // still available if you want it
-
   return (
     <View style={styles.container}>
-      {/* Back and Favorite buttons */}
       <View style={styles.headerButtons}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
@@ -156,22 +147,19 @@ export default function MovieDetailsComp() {
           <Ionicons
             name={isFavourite ? "heart" : "heart-outline"}
             size={28}
-            color={isFavourite ? "#E94560" : "#C4C4C4"} // grey outline when not fav, red filled when fav
+            color={isFavourite ? "#E94560" : "#C4C4C4"}
           />
         </TouchableOpacity>
       </View>
 
-      {/* Poster */}
       <View style={styles.posterContainer}>
         <Image style={styles.poster} source={{ uri: movie.poster }} />
       </View>
 
-      {/* Title (certificate badge removed from here) */}
       <View style={styles.titleSection}>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
 
-      {/* Info Box - Minutes | Certificate | Year */}
       <View style={styles.infoBox}>
         <View style={styles.infoItem}>
           <Text style={styles.infoNumber}>{movie.durationMinutes}</Text>
@@ -250,12 +238,10 @@ export default function MovieDetailsComp() {
         </View>
       </View>
 
-      {/* Showtimes */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Showtimes</Text>
 
         {hasCinemaParam ? (
-          // 🎯 CASE 1: We have a specific cinemaId → only that cinema
           cinemaShowtime ? (
             <ShowtimesSection
               showtimes={[
@@ -270,7 +256,7 @@ export default function MovieDetailsComp() {
               No showtimes available for this cinema
             </Text>
           )
-        ) : // 🎯 CASE 2: No cinemaId → show all cinemas with showtimes
+        ) :
         movie.showtimes && movie.showtimes.length > 0 ? (
           movie.showtimes.map((st) => (
             <View key={st.cinema.id} style={styles.cinemaShowtimesBlock}>

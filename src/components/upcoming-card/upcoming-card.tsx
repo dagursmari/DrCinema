@@ -11,7 +11,6 @@ interface UpcomingCardProps {
 export function UpcomingCard({ movie }: UpcomingCardProps) {
   const [showTrailer, setShowTrailer] = useState(false);
 
-  // Format date to "20 desember 2025"
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const months = [
@@ -26,7 +25,6 @@ export function UpcomingCard({ movie }: UpcomingCardProps) {
     return `${day} ${month} ${year}`;
   };
 
-  // Get first genre name in Icelandic
   const getFirstGenre = () => {
     if (!movie.genres || movie.genres.length === 0) {
       return 'Óþekkt';
@@ -34,7 +32,6 @@ export function UpcomingCard({ movie }: UpcomingCardProps) {
     return movie.genres[0].Name || 'Óþekkt';
   };
 
-  // Get ONLY official trailer
   const trailers = movie.trailers?.[0]?.results ?? [];
   const officialTrailer = trailers.find(trailer =>
     trailer.name.toLowerCase().includes("official trailer")
@@ -85,7 +82,7 @@ export function UpcomingCard({ movie }: UpcomingCardProps) {
             </Text>
           </View>
 
-          {/* Watch Trailer Button - ONLY show if official trailer exists */}
+          {/* Watch Trailer Button */}
           {trailerKey && (
             <TouchableOpacity
               style={styles.trailerButton}

@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import { mainPink, black, white } from "@/src/styles/colors";
 
 export default StyleSheet.create({
-  // Card Styles
   card: {
     flexDirection: "row",
     backgroundColor: white,
@@ -89,8 +88,6 @@ export default StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
   },
-
-  // Modal Styles (Simple & Centered)
   fullScreenModal: {
     flex: 1,
     backgroundColor: "#000",

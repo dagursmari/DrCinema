@@ -88,7 +88,6 @@ export default StyleSheet.create({
         fontWeight: "bold",
     },
 
-    // Statistics Styles
     statisticsContainer: {
         width: "100%",
         backgroundColor: "#f9f9f9",
@@ -137,7 +136,6 @@ export default StyleSheet.create({
         backgroundColor: "#E9ECEF",
     },
 
-    // Logout Button
     logoutButton: {
         backgroundColor: white,
         paddingVertical: 16,

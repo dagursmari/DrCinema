@@ -29,19 +29,15 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
 
   const [isFavourite, setIsFavourite] = useState(false);
 
-  // All showtime schedule entries for this cinema
   const scheduleEntries: ShowtimeSchedule[] =
     movie.showtimes
       ?.filter((s) => s.cinema.id === cinemaId)
       .flatMap((s) => s.schedule) ?? [];
 
-  // First genre name (Icelandic)
   const firstGenreName = movie.genres?.[0]?.Name;
 
-  // Clean up time string if it has extra stuff (e.g. "18:00 (3D)")
   const formatTime = (raw: string) => raw.split(" ")[0].trim();
 
-  // Check if this movie is already in favourites for this user
   useEffect(() => {
     const checkFavourite = async () => {
       if (!userKey) {
@@ -121,7 +117,7 @@ export default function MovieShowtimesCard({ movie, cinemaId, onPress }: Props) 
         <Ionicons
           name= { isFavourite? "heart" : "heart-outline"}
           size={18}
-          color={isFavourite ? "#E94560" : "#C4C4C4"} // red when fav, grey when not
+          color={isFavourite ? "#E94560" : "#C4C4C4"}
         />
       </Pressable>
     </Pressable>

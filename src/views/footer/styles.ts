@@ -8,9 +8,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   footerOverlay: {
-    // full-screen overlay
     ...StyleSheet.absoluteFillObject,
-    // stick children to the bottom
     justifyContent: "flex-end",
   },
 });
