@@ -1,8 +1,11 @@
-import { View, Text } from "react-native";
-
+import { UserDetailComp } from "@/src/components/user-detail/user-detail-comp";
+import { View } from "react-native";
+import styles from "./styles";
 
 export function UserDetailView () {
-    <View>
-        <Text> USER DETAIL PAGE </Text>
-    </View>
+    return(
+        <View style={styles.container}>
+            <UserDetailComp/>
+        </View>
+    )
 }

@@ -1,11 +1,11 @@
+import { useAppSelector } from "@/src/redux/hooks";
+import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
 import { store } from '@/src/redux/store';
 import { Stack, useRouter } from "expo-router";
-import { Image, TouchableOpacity, View, Text } from "react-native";
+import { useEffect } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider as StoreProvider } from "react-redux";
-import { loadStoredAuth } from "@/src/redux/slices/auth-slice";
-import { useEffect } from "react";
-import { useAppSelector } from "@/src/redux/hooks";
 
 // Component to load auth on app start
 function AuthLoader() {
@@ -193,6 +193,17 @@ function AppStack() {
       />
 
       <Stack.Screen
+        name="edit-profile"
+        options={{
+          headerShown: true,
+          title: "Favourites",
+          headerBackVisible: true,
+          gestureEnabled: false,
+          headerRight: () => null,
+        }}
+      />
+
+      <Stack.Screen
         name="user-detail"
         options={{
           headerShown: true,
@@ -202,6 +213,7 @@ function AppStack() {
         }}
       />
     </Stack>
+    
   );
 }
 
