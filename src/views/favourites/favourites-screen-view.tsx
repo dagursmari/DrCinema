@@ -45,6 +45,7 @@ export function FavouritesScreenView() {
   return (
     <ScreenWithFooter>
       <View style={styles.container}>
+        <Text style={styles.title}>Favourites</Text>
         {loading ? (
           <ActivityIndicator size="large" color="#e50914" />
         ) : favourites.length === 0 ? (

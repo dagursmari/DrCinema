@@ -8,8 +8,8 @@ export default StyleSheet.create({
     justifyContent: "space-around",
 
     // FIX: footer was too big → give it a fixed, smaller height
-    height: 64,
-
+    height: 75,
+    paddingBottom: 10,
     paddingHorizontal: 24,
 
     // slight grey so it pops from the white cards and the background
