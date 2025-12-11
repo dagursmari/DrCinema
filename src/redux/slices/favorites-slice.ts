@@ -9,9 +9,7 @@ const initialState: FavoritesState = {
   loading: false,
 };
 
-/**
- * Load favorites from phone storage when app starts
- */
+//Load favorites from phone storage when app starts
 export const loadFavorites = createAsyncThunk(
   "favorites/loadFavorites",
   async (_, { rejectWithValue }) => {
@@ -28,9 +26,7 @@ export const loadFavorites = createAsyncThunk(
   }
 );
 
-/**
- * Helper function to save favorites to phone storage
- */
+//Helper function to save favorites to phone storage
 const saveFavorites = async (favorites: Movie[]): Promise<void> => {
   try {
     await AsyncStorage.setItem(favoritesKey, JSON.stringify(favorites));
@@ -42,9 +38,7 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   reducers: {
-    /**
-     * Add a movie to favorites
-     */
+    //Add a movie to favorites
     addFavorite: (state, action: PayloadAction<Movie>) => {
       // Don't add if already exists
       const exists = state.favorites.find(m => m.id === action.payload.id);
@@ -54,17 +48,13 @@ const favoritesSlice = createSlice({
       }
     },
 
-    /**
-     * Remove a movie from favorites
-     */
+    //Remove a movie from favorites
     removeFavorite: (state, action: PayloadAction<number>) => {
       state.favorites = state.favorites.filter(m => m.id !== action.payload);
       saveFavorites(state.favorites);  // Save to phone
     },
 
-    /**
-     * Reorder favorites (drag and drop)
-     */
+    //Reorder favorites (drag and drop)
     reorderFavorites: (state, action: PayloadAction<Movie[]>) => {
       state.favorites = action.payload;
       saveFavorites(state.favorites);  // Save to phone

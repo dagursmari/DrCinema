@@ -3,14 +3,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { authService } from "../../services/auth-service";
 import { AuthState, LoginCredentials, RegisterData, UpdateProfileData, User } from "../types";
 
-// ==========================================
 // CONSTANTS & HELPERS
-// ==========================================
 const userDataKey = "@dr_cinema_user_data";
 
-/**
- * Helper to save user data to AsyncStorage
- */
+//Helper to save user data to AsyncStorage
 const saveUserToStorage = async (user: User): Promise<void> => {
   try {
     await AsyncStorage.setItem(userDataKey, JSON.stringify(user));
@@ -18,9 +14,7 @@ const saveUserToStorage = async (user: User): Promise<void> => {
   }
 };
 
-// ==========================================
 // INITIAL STATE
-// ==========================================
 const initialState: AuthState = {
   user: null,
   token: null,
@@ -29,13 +23,9 @@ const initialState: AuthState = {
   error: null,
 };
 
-// ==========================================
 // ASYNC THUNKS
-// ==========================================
 
-/**
- * Login user
- */
+//Login user
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials: LoginCredentials, { rejectWithValue }) => {
@@ -49,9 +39,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-/**
- * Register user
- */
+//Register user
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (userData: RegisterData, { rejectWithValue }) => {
@@ -75,9 +63,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-/**
- * Logout user
- */
+//Logout user
 export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
@@ -89,9 +75,7 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-/**
- * Load stored auth data on app start
- */
+//Load stored auth data on app start
 export const loadStoredAuth = createAsyncThunk(
   "auth/loadStored",
   async (_, { rejectWithValue }) => {
@@ -111,9 +95,7 @@ export const loadStoredAuth = createAsyncThunk(
   }
 );
 
-/**
- * Update user profile
- */
+//Update user profile
 export const updateUserProfile = createAsyncThunk(
   "auth/updateProfile",
   async (updates: UpdateProfileData, { getState, rejectWithValue }) => {
@@ -180,30 +162,23 @@ export const deleteAccount = createAsyncThunk(
   }
 );
 
-// ==========================================
 // AUTH SLICE
-// ==========================================
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    /**
-     * Clear auth error
-     */
+
+    //Clear auth error
     clearAuthError: (state) => {
       state.error = null;
     },
 
-    /**
-     * Set user manually (if needed)
-     */
+    //Set user manually (if needed)
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
 
-    /**
-     * Clear all auth state (for testing/debugging)
-     */
+    //Clear all auth state (for testing/debugging)
     clearAuthState: (state) => {
       state.user = null;
       state.token = null;
@@ -212,9 +187,7 @@ const authSlice = createSlice({
       state.error = null;
     },
 
-    /**
-     * Increment bookings counter
-     */
+    //Increment bookings counter
     incrementBookings: (state) => {
       if (state.user) {
         state.user.bookingsCount = (state.user.bookingsCount || 0) + 1;
@@ -224,9 +197,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // ==========================================
     // LOGIN
-    // ==========================================
     builder
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -243,9 +214,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
-    // ==========================================
     // REGISTER
-    // ==========================================
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -261,9 +230,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
-    // ==========================================
     // LOGOUT
-    // ==========================================
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
       })
@@ -282,9 +249,7 @@ const authSlice = createSlice({
         state.loading = false;
       })
 
-    // ==========================================
     // LOAD STORED AUTH
-    // ==========================================
       .addCase(loadStoredAuth.pending, (state) => {
         state.loading = true;
       })
@@ -300,9 +265,7 @@ const authSlice = createSlice({
         state.loading = false;
       })
 
-    // ==========================================
     // UPDATE PROFILE
-    // ==========================================
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -316,9 +279,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
-    // ==========================================
     // CHANGE PASSWORD
-    // ==========================================
       .addCase(changePassword.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -331,9 +292,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
-    // ==========================================
     // DELETE ACCOUNT
-    // ==========================================
       .addCase(deleteAccount.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -352,8 +311,6 @@ const authSlice = createSlice({
   },
 });
 
-// ==========================================
 // EXPORTS
-// ==========================================
 export const { clearAuthError, setUser, clearAuthState, incrementBookings } = authSlice.actions;
 export default authSlice.reducer;

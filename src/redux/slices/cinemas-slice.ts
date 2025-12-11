@@ -2,23 +2,17 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { apiService } from "../../services/api-service";
 import { Cinema, CinemasState } from "../types";
 
-// ==========================================
 // INITIAL STATE
-// ==========================================
 const initialState: CinemasState = {
   cinemas: [],
   loading: false,
   error: null,
 };
 
-// ==========================================
 // ASYNC THUNKS (API Calls)
-// ==========================================
 
-/**
- * Fetch all cinemas from the API
- * Automatically sorts them alphabetically by name
- */
+//Fetch all cinemas from the API
+//Automatically sorts them alphabetically by name
 export const fetchCinemas = createAsyncThunk(
   "cinemas/fetchCinemas",
   async (_, { rejectWithValue }) => {
@@ -38,10 +32,8 @@ export const fetchCinemas = createAsyncThunk(
   }
 );
 
-/**
- * Fetch a specific cinema by ID
- * (Optional - if you need detailed cinema info)
- */
+//Fetch a specific cinema by ID
+//(Optional, if we need detailed cinema info)
 export const fetchCinemaById = createAsyncThunk(
   "cinemas/fetchCinemaById",
   async (cinemaId: number, { rejectWithValue }) => {
@@ -55,25 +47,22 @@ export const fetchCinemaById = createAsyncThunk(
   }
 );
 
-// ==========================================
 // SLICE
-// ==========================================
 const cinemasSlice = createSlice({
   name: "cinemas",
  initialState,
 
   // Synchronous reducers (for manual state updates)
   reducers: {
-    /**
-     * Clear any error message
-     */
+
+    //Clear any error message
+
     clearCinemasError: (state) => {
       state.error = null;
     },
 
-    /**
-     * Manually sort cinemas (if needed)
-     */
+    //Manually sort cinemas (if needed)
+
     sortCinemas: (state, action: PayloadAction<"asc" | "desc">) => {
       const order = action.payload;
       state.cinemas.sort((a, b) => {
@@ -85,9 +74,9 @@ const cinemasSlice = createSlice({
       });
     },
 
-    /**
-     * Reset cinemas state to initial
-     */
+
+    //Reset cinemas state to initial
+
     resetCinemas: (state) => {
       state.cinemas = [];
       state.loading = false;
@@ -97,9 +86,7 @@ const cinemasSlice = createSlice({
 
   // Async action handlers (for thunks)
   extraReducers: (builder) => {
-    // ==========================================
     // FETCH ALL CINEMAS
-   // ==========================================
     builder
       .addCase(fetchCinemas.pending, (state) => {
         state.loading = true;
@@ -114,9 +101,7 @@ const cinemasSlice = createSlice({
         state.error = action.payload as string;
      })
 
-    // ==========================================
     // FETCH CINEMA BY ID
-    // ==========================================
       .addCase(fetchCinemaById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -141,8 +126,6 @@ const cinemasSlice = createSlice({
   },
 });
 
-// ==========================================
 // EXPORTS
-// ==========================================
 export const { clearCinemasError, sortCinemas, resetCinemas } = cinemasSlice.actions;
 export default cinemasSlice.reducer;

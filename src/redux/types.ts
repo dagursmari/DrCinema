@@ -1,6 +1,4 @@
-// ==========================================
 // MAIN API TYPES - Based on actual API response
-// ==========================================
 
 export interface Movie {
   _id: string;
@@ -115,10 +113,7 @@ export interface OmdbData {
   Response: string;
 }
 
-// ==========================================
 // CINEMA TYPES
-// ==========================================
-
 export interface Cinema {
   id: number;
   name: string;
@@ -130,10 +125,7 @@ export interface Cinema {
   google_map: string;
 }
 
-// ==========================================
 // UPCOMING MOVIE TYPES
-// ==========================================
-
 export interface UpcomingMovie {
   _id: string;
   id: number;
@@ -155,10 +147,7 @@ export interface UpcomingMovie {
   poster: string;
 }
 
-// ==========================================
 // ADDITIONAL IMAGE TYPES (from /images endpoint)
-// ==========================================
-
 export interface ImageData {
   imdbid: string;
   results: {
@@ -178,10 +167,7 @@ export interface ImageItem {
   width: number;
 }
 
-// ==========================================
 // SEARCH TYPES
-// ==========================================
-
 export interface SearchResult {
   success: boolean;
   query: string;
@@ -190,10 +176,7 @@ export interface SearchResult {
   results: (Movie | UpcomingMovie)[];
 }
 
-// ==========================================
 // REDUX STATE TYPES
-// ==========================================
-
 export interface MoviesState {
   movies: Movie[];
   loading: boolean;
@@ -223,10 +206,7 @@ export interface FavoritesState {
   loading: boolean;
 }
 
-// ==========================================
 // FILTER TYPES (for Home screen filtering)
-// ==========================================
-
 export interface MovieFilters {
   title?: string;
   imdbRating?: number;
