@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { shadow, mainPink, black, white, lighterGray } from "@/src/styles/colors";
 
-
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -84,6 +83,8 @@ export default StyleSheet.create({
     marginRight: 12,
   },
 
+  // These are no longer used for the badge next to the title,
+  // but kept here in case you want a badge somewhere else later.
   certificateBadge: {
     backgroundColor: "#FFE5E9",
     paddingHorizontal: 12,
@@ -194,5 +195,17 @@ export default StyleSheet.create({
     fontSize: 15,
     color: "#6c757d",
     fontStyle: "italic",
+  },
+
+  // 🔽 NEW styles for grouped showtimes by cinema
+  cinemaShowtimesBlock: {
+    marginBottom: 16,
+  },
+
+  cinemaShowtimesTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1a1a1a",
+    marginBottom: 6,
   },
 });

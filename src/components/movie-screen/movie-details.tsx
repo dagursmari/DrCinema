@@ -13,13 +13,15 @@ import {
   getFavourites,
   addFavourite,
   removeFavourite,
-} from "@/src/services/favourites-storage"; // 👈 favourites helpers
+} from "@/src/services/favourites-storage";
+import type { Movie } from "@/src/redux/types";
 
 export default function MovieDetailsComp() {
   const router = useRouter();
-  const { id, cinemaId } = useLocalSearchParams<{ id: string; cinemaId: string }>();
+  const { id, cinemaId } =
+    useLocalSearchParams<{ id?: string; cinemaId?: string }>();
 
-  const movie = useAppSelector((state) =>
+  const movie: Movie | undefined = useAppSelector((state) =>
     state.movies.movies.find((m) => m.id === Number(id))
   );
 
@@ -42,17 +44,23 @@ export default function MovieDetailsComp() {
   }
 
   const omdbData = movie.omdb?.[0];
-  const writers = omdbData?.Writer ? omdbData.Writer.split(",").map((w) => w.trim()) : [];
+  const writers = omdbData?.Writer
+    ? omdbData.Writer.split(",").map((w) => w.trim())
+    : [];
 
-  const cinemaShowtime = movie.showtimes?.find(
-    (st) => st.cinema.id === Number(cinemaId)
-  );
+  const hasCinemaParam = !!cinemaId;
+  const selectedCinemaId = cinemaId ? Number(cinemaId) : null;
+
+  const cinemaShowtime = hasCinemaParam
+    ? movie.showtimes?.find((st) => st.cinema.id === selectedCinemaId)
+    : undefined;
 
   const trailers = movie.trailers?.[0]?.results ?? [];
 
   const officialTrailer =
-    trailers.find((trailer) => trailer.name.toLowerCase().includes("official trailer")) ??
-    null;
+    trailers.find((trailer) =>
+      trailer.name.toLowerCase().includes("official trailer")
+    ) ?? null;
 
   // ❤️ Toggle favourite
   const handleFavoritePress = async () => {
@@ -71,25 +79,31 @@ export default function MovieDetailsComp() {
     router.back();
   };
 
-  // Get certificate/rating - show N/A if not available
-  const certificate = movie.omdb?.[0]?.Rated || "N/A";
+  // Certificate / rating label (PG etc.)
+  const certificate = movie.omdb?.[0]?.Rated || "PG - N/A";
 
-  // Calculate average rating from all sources
+  // Average rating (kept just for the cards that use it if needed elsewhere)
   const calculateAverageRating = (): string => {
     const ratings: number[] = [];
 
-    // IMDB rating (string -> number if possible)
+    // IMDB rating string -> number
     if (movie.ratings?.imdb && !isNaN(Number(movie.ratings.imdb))) {
       ratings.push(Number(movie.ratings.imdb));
     }
 
-    // Rotten Tomatoes audience (percentage string -> number)
-    if (movie.ratings?.rotten_audience && !isNaN(Number(movie.ratings.rotten_audience))) {
+    // Rotten Tomatoes audience (0-100) -> 0-10
+    if (
+      movie.ratings?.rotten_audience &&
+      !isNaN(Number(movie.ratings.rotten_audience))
+    ) {
       ratings.push(Number(movie.ratings.rotten_audience) / 10);
     }
 
-    // Rotten Tomatoes critics
-    if (movie.ratings?.rotten_critics && !isNaN(Number(movie.ratings.rotten_critics))) {
+    // Rotten Tomatoes critics (0-100) -> 0-10
+    if (
+      movie.ratings?.rotten_critics &&
+      !isNaN(Number(movie.ratings.rotten_critics))
+    ) {
       ratings.push(Number(movie.ratings.rotten_critics) / 10);
     }
 
@@ -97,11 +111,12 @@ export default function MovieDetailsComp() {
       return "N/A";
     }
 
-    const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    const average =
+      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
     return average.toFixed(1);
   };
 
-  const averageRating = calculateAverageRating();
+  const averageRating = calculateAverageRating(); // still available if you want it
 
   return (
     <View style={styles.container}>
@@ -111,11 +126,14 @@ export default function MovieDetailsComp() {
           <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.favoriteButton} onPress={handleFavoritePress}>
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={handleFavoritePress}
+        >
           <Ionicons
-            name={isFavourite ? "heart" : "heart-outline"} // 👈 filled when favourited
+            name={isFavourite ? "heart" : "heart-outline"}
             size={28}
-            color={isFavourite ? "#E94560" : "#C4C4C4"}
+            color={isFavourite ? "#E94560" : "#C4C4C4"} // grey outline when not fav, red filled when fav
           />
         </TouchableOpacity>
       </View>
@@ -125,12 +143,12 @@ export default function MovieDetailsComp() {
         <Image style={styles.poster} source={{ uri: movie.poster }} />
       </View>
 
-      {/* Title and Certificate */}
+      {/* Title (certificate badge removed from here) */}
       <View style={styles.titleSection}>
         <Text style={styles.title}>{movie.title}</Text>
       </View>
 
-      {/* Info Box - with average rating */}
+      {/* Info Box - Minutes | Certificate | Year */}
       <View style={styles.infoBox}>
         <View style={styles.infoItem}>
           <Text style={styles.infoNumber}>{movie.durationMinutes}</Text>
@@ -139,7 +157,7 @@ export default function MovieDetailsComp() {
 
         <View style={styles.infoItem}>
           <Text style={styles.infoNumber}>{certificate}</Text>
-          <Text style={styles.infoLabel}>PG-Rating</Text>
+          <Text style={styles.infoLabel}>Rating</Text>
         </View>
 
         <View style={styles.infoItem}>
@@ -185,7 +203,9 @@ export default function MovieDetailsComp() {
         </View>
         <View style={styles.creditRow}>
           <Text style={styles.creditLabel}>Country:</Text>
-          <Text style={styles.creditValue}>{movie.omdb?.[0]?.Country ?? "N/A"}</Text>
+          <Text style={styles.creditValue}>
+            {movie.omdb?.[0]?.Country ?? "N/A"}
+          </Text>
         </View>
       </View>
 
@@ -210,18 +230,40 @@ export default function MovieDetailsComp() {
       {/* Showtimes */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Showtimes</Text>
-        {cinemaShowtime ? (
-          <ShowtimesSection
-            showtimes={[
-              {
-                cinema: cinemaShowtime.cinema,
-                schedule: cinemaShowtime.schedule,
-              },
-            ]}
-          />
+
+        {hasCinemaParam ? (
+          // 🎯 CASE 1: We have a specific cinemaId → only that cinema
+          cinemaShowtime ? (
+            <ShowtimesSection
+              showtimes={[
+                {
+                  cinema: cinemaShowtime.cinema,
+                  schedule: cinemaShowtime.schedule,
+                },
+              ]}
+            />
+          ) : (
+            <Text style={styles.noShowtimesText}>
+              No showtimes available for this cinema
+            </Text>
+          )
+        ) : // 🎯 CASE 2: No cinemaId → show all cinemas with showtimes
+        movie.showtimes && movie.showtimes.length > 0 ? (
+          movie.showtimes.map((st) => (
+            <View key={st.cinema.id} style={styles.cinemaShowtimesBlock}>
+              <ShowtimesSection
+                showtimes={[
+                  {
+                    cinema: st.cinema,
+                    schedule: st.schedule,
+                  },
+                ]}
+              />
+            </View>
+          ))
         ) : (
           <Text style={styles.noShowtimesText}>
-            No showtimes available for this cinema
+            No showtimes available.
           </Text>
         )}
       </View>
