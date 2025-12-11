@@ -4,7 +4,6 @@ import { apiClient } from "./api";
 export const apiService = {
   // Fetch all movies currently playing
   async getMovies(): Promise<Movie[]> {
-    console.log("Fetching movies...");
 
     return await apiClient.get<Movie[]>("/movies");
   },
@@ -19,7 +18,6 @@ export const apiService = {
     //Note: The API doesn't have a /theaters/:id endpoint,
     //so we fetch all and filter
   async getCinemaById(id: number): Promise<Cinema> {
-    console.log(`Fetching cinema ${id}...`);
     const cinemas = await apiClient.get<Cinema[]>("/theaters");
     const cinema = cinemas.find(c => c.id === id);
 

@@ -43,21 +43,18 @@ const moviesSlice = createSlice({
     builder
       // When fetchMovies STARTS
       .addCase(fetchMovies.pending, (state) => {
-        console.log("Loading movies...");
         state.loading = true;
         state.error = null;
      })
 
       // When fetchMovies SUCCEEDS
       .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<Movie[]>) => {
-        console.log("Movies loaded successfully");
         state.loading = false;
         state.movies = action.payload;  // Save the movies
      })
 
       // When fetchMovies FAILS
       .addCase(fetchMovies.rejected, (state, action) => {
-        console.log("Failed to load movies");
         state.loading = false;
         state.error = action.payload as string;
       });
