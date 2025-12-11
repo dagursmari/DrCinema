@@ -17,7 +17,7 @@ export default function CinemaListItem({ cinema, onPress }: Props) {
           {cinema.name}
         </Text>
         <Text style={styles.address} numberOfLines={1}>
-          {cinema.address}
+          {cinema.website}
         </Text>
       </View>
 

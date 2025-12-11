@@ -137,7 +137,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
             <TouchableOpacity
                 style={styles.cancelButton}
-                onPress={() => router.push("/")}
+                onPress={() => router.back()}
                 activeOpacity={0.8}
             >
                 <Text style={styles.cancelButtonText}>Cancel</Text>

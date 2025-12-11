@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
@@ -7,6 +7,7 @@ import { ScreenWithFooter } from "../footer/ScreenWithFooter";
 import FavouriteItem from "@/src/components/favourite-item/FavouriteItem";
 
 import { useAppSelector } from "@/src/redux/hooks";
+import { mainPink } from "@/src/styles/colors";
 
 import {
   getFavourites,
@@ -60,6 +61,9 @@ export function FavouritesScreenView() {
       params: { id: movie.id.toString() },
     });
   };
+  const handleLogin = () => {
+        router.push("/login");
+    };
 
   return (
     <ScreenWithFooter>
@@ -73,6 +77,10 @@ export function FavouritesScreenView() {
             <Text style={styles.emptyText}>
               You must be logged in to save favourites.
             </Text>
+            <TouchableOpacity
+            onPress={handleLogin}>
+              <Text style={{ color:mainPink }}>Press to Log In</Text>
+            </TouchableOpacity>
           </View>
         ) : loading ? (
           <View style={styles.centerContainer}>
