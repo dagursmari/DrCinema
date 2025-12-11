@@ -6,14 +6,15 @@ export default StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   contentContainer: {
+    marginHorizontal:10,
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 96, // room for footer at the bottom
   },
   cinemaName: {
-    fontSize: 24,
-    fontWeight: "700",
-    marginBottom: 4,
+    fontSize: 26,
+    fontWeight: "800",
+    marginBottom: 10,
     color: "#111111",
   },
   description: {
@@ -22,13 +23,15 @@ export default StyleSheet.create({
     marginBottom: 12,
   },
   infoRow: {
+    marginTop:8,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 6,
   },
   infoText: {
     marginLeft: 8,
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight:"400",
     color: "#444444",
     flexShrink: 1,
   },

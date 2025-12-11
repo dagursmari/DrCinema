@@ -5,29 +5,23 @@ import styles from "./styles";
 
 export function Main() {
     const router = useRouter();
-    const [showButtons, setShowButtons] = useState(false);
 
-    const logoScale = useRef(new Animated.Value(0.3)).current;
     const logoOpacity = useRef(new Animated.Value(0)).current;
+    const buttonsOpacity = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        Animated.sequence([
-            Animated.parallel([
-                Animated.timing(logoOpacity, {
-                    toValue: 1,
-                    duration: 800,
-                    useNativeDriver: true,
-                }),
-                Animated.spring(logoScale, {
-                    toValue: 1,
-                    tension: 50,
-                    friction: 7,
-                    useNativeDriver: true,
-                }),
-            ]),
-            Animated.delay(400),
-        ]).start(() => {
-            setShowButtons(true);
+        // Fade in logo first
+        Animated.timing(logoOpacity, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start(() => {
+            // Fade in buttons after logo
+            Animated.timing(buttonsOpacity, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            }).start();
         });
     }, []);
 
@@ -43,7 +37,6 @@ export function Main() {
         router.push("/login"); 
     };
 
-
     return (
         <View style={styles.container}>
             {/* Logo Section */}
@@ -52,7 +45,6 @@ export function Main() {
                     styles.logoContainer,
                     {
                         opacity: logoOpacity,
-                        transform: [{ scale: logoScale }],
                     },
                 ]}
             >
@@ -64,8 +56,14 @@ export function Main() {
             </Animated.View>
 
             {/* Buttons Section */}
-            {showButtons && (
-                <View style={styles.buttonsContainer}>
+            <Animated.View 
+                style={[
+                    styles.buttonsContainer,
+                    {
+                        opacity: buttonsOpacity,
+                    },
+                ]}
+            >
                     <TouchableOpacity
                         onPress={handleLogin}
                         style={styles.signupButton}
@@ -87,10 +85,7 @@ export function Main() {
                     >
                         <Text style={styles.subtitle}>Dont have an account? Sign up here</Text>
                     </TouchableOpacity>
-
-
-                </View>
-            )}
+                </Animated.View>
         </View>
     );
 }

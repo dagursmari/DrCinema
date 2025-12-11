@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from "react";
-import { View, Text, ActivityIndicator, ScrollView } from "react-native";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import React, { useEffect, useMemo } from "react";
+import { ActivityIndicator, Linking, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import MovieShowtimesCard from "@/src/components/movie-showtimes-card/MovieShowtimeCard";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { fetchCinemaById } from "@/src/redux/slices/cinemas-slice";
 import { ScreenWithFooter } from "../footer/ScreenWithFooter";
-import MovieShowtimesCard from "@/src/components/movie-showtimes-card/MovieShowtimeCard";
 
-import styles from "./styles";
 import type { Cinema, Movie } from "@/src/redux/types";
+import styles from "./styles";
 
 export function CinemaDetailsScreenView() {
   const dispatch = useAppDispatch();
@@ -54,6 +54,17 @@ export function CinemaDetailsScreenView() {
 
     return Array.from(uniqueMap.values());
   }, [movies, cinemaId]);
+
+  const handleOpenWebsite = () => {
+  let url = cinema.website;
+  
+  // Add https:// if the URL doesn't start with http:// or https://
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  
+  Linking.openURL(url);
+};
 
   const isLoading = cinemasLoading || moviesLoading;
   const error = cinemasError || moviesError;
@@ -110,25 +121,25 @@ export function CinemaDetailsScreenView() {
         {/* Info rows */}
         {cinema.address && (
           <View style={styles.infoRow}>
-            <Ionicons name="location-outline" size={18} color="#FF748B" />
+            <Ionicons name="location-outline" size={22} color="#FF748B" />
             <Text style={styles.infoText}>{cinema.address}</Text>
           </View>
         )}
 
         {cinema.phone && (
           <View style={styles.infoRow}>
-            <Feather name="phone" size={18} color="#FF748B" />
+            <Feather name="phone" size={22} color="#FF748B" />
             <Text style={styles.infoText}>{cinema.phone}</Text>
           </View>
         )}
 
         {cinema.website && (
-          <View style={styles.infoRow}>
-            <Feather name="link-2" size={18} color="#FF748B" />
+          <TouchableOpacity style={styles.infoRow} onPress={handleOpenWebsite}>
+            <Feather name="link-2" size={22} color="#FF748B" />
             <Text style={[styles.infoText, styles.linkText]} numberOfLines={1}>
               {cinema.website}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
 
         {/* Now showing */}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import styles from "./styles";
 import type { Movie, ShowtimeSchedule } from "@/src/redux/types";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Image, Pressable, Text, View } from "react-native";
+import styles from "./styles";
 
 import {
   addFavourite,
@@ -85,8 +85,8 @@ export default function MovieShowtimesCard({
 
       {/* ❤️ FAVOURITE BUTTON */}
       <Pressable style={styles.favouriteButton} onPress={handleFavouritePress}>
-        <Feather
-          name={isFavourite ? "heart" : "heart"}
+        <Ionicons
+          name={isFavourite ? "heart" : "heart-outline"}
           size={20}
           color={isFavourite ? "#FF748B" : "#D1D1D1"} // ✅ filled vs outline look
         />

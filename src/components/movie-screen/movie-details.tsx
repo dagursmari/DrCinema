@@ -1,11 +1,19 @@
-import { useAppSelector } from "@/src/redux/hooks";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+
+import { useAppSelector } from "@/src/redux/hooks";
 import { RatingsSection } from "../ratings/rating-section";
 import { ShowtimesSection } from "../showtimes/showtimes-section";
 import { TrailerPlayer } from "../trailer/trailerplayer";
 import styles from "./styles";
+
+import {
+  getFavourites,
+  addFavourite,
+  removeFavourite,
+} from "@/src/services/favourites-storage"; // 👈 favourites helpers
 
 export default function MovieDetailsComp() {
   const router = useRouter();
@@ -14,6 +22,20 @@ export default function MovieDetailsComp() {
   const movie = useAppSelector((state) =>
     state.movies.movies.find((m) => m.id === Number(id))
   );
+
+  const [isFavourite, setIsFavourite] = useState(false);
+
+  // 🔍 Check if this movie is already in favourites
+  useEffect(() => {
+    const checkFavourite = async () => {
+      if (!movie) return;
+      const favs = await getFavourites();
+      const exists = favs.some((m) => m.id === movie.id);
+      setIsFavourite(exists);
+    };
+
+    checkFavourite();
+  }, [movie?.id]);
 
   if (!movie) {
     return <Text>Movie not found</Text>;
@@ -29,10 +51,20 @@ export default function MovieDetailsComp() {
   const trailers = movie.trailers?.[0]?.results ?? [];
 
   const officialTrailer =
-    trailers.find((trailer) => trailer.name.toLowerCase().includes("official trailer")) ?? null;
+    trailers.find((trailer) => trailer.name.toLowerCase().includes("official trailer")) ??
+    null;
 
-  const handleFavoritePress = () => {
-    console.log("Favorite button pressed - functionality coming soon!");
+  // ❤️ Toggle favourite
+  const handleFavoritePress = async () => {
+    if (!movie) return;
+
+    if (isFavourite) {
+      await removeFavourite(movie.id);
+      setIsFavourite(false);
+    } else {
+      await addFavourite(movie);
+      setIsFavourite(true);
+    }
   };
 
   const handleBackPress = () => {
@@ -44,21 +76,21 @@ export default function MovieDetailsComp() {
 
   // Calculate average rating from all sources
   const calculateAverageRating = (): string => {
-    const ratings = [];
-    
-    // IMDB rating (out of 10)
-    if (movie.ratings?.imdb && typeof movie.ratings.imdb === 'number') {
-      ratings.push(movie.ratings.imdb);
+    const ratings: number[] = [];
+
+    // IMDB rating (string -> number if possible)
+    if (movie.ratings?.imdb && !isNaN(Number(movie.ratings.imdb))) {
+      ratings.push(Number(movie.ratings.imdb));
     }
-    
-    // Rotten Tomatoes (convert from percentage to 10 scale)
-    if (movie.ratings && 'rottenTomatoes' in movie.ratings && typeof movie.ratings.rottenTomatoes === 'number') {
-      ratings.push(movie.ratings.rottenTomatoes / 10);
+
+    // Rotten Tomatoes audience (percentage string -> number)
+    if (movie.ratings?.rotten_audience && !isNaN(Number(movie.ratings.rotten_audience))) {
+      ratings.push(Number(movie.ratings.rotten_audience) / 10);
     }
-    
-    // Metacritic (convert from 100 scale to 10 scale)
-    if (movie.ratings && 'metacritic' in movie.ratings && typeof movie.ratings.metacritic === 'number') {
-      ratings.push(movie.ratings.metacritic / 10);
+
+    // Rotten Tomatoes critics
+    if (movie.ratings?.rotten_critics && !isNaN(Number(movie.ratings.rotten_critics))) {
+      ratings.push(Number(movie.ratings.rotten_critics) / 10);
     }
 
     if (ratings.length === 0) {
@@ -80,7 +112,11 @@ export default function MovieDetailsComp() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.favoriteButton} onPress={handleFavoritePress}>
-          <Ionicons name="heart-outline" size={28} color="#E94560" />
+          <Ionicons
+            name={isFavourite ? "heart" : "heart-outline"} // 👈 filled when favourited
+            size={28}
+            color={isFavourite ? "#E94560" : "#C4C4C4"}
+          />
         </TouchableOpacity>
       </View>
 
@@ -187,7 +223,9 @@ export default function MovieDetailsComp() {
             ]}
           />
         ) : (
-          <Text style={styles.noShowtimesText}>No showtimes available for this cinema</Text>
+          <Text style={styles.noShowtimesText}>
+            No showtimes available for this cinema
+          </Text>
         )}
       </View>
 
